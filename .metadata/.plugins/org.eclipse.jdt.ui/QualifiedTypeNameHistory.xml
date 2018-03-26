@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<qualifiedTypeNameHistroy>
+<fullyQualifiedTypeName name="com.dropbox.core.DbxRequestConfig"/>
+<fullyQualifiedTypeName name="com.dropbox.core.v2.DbxClientV2"/>
+<fullyQualifiedTypeName name="com.dropbox.core.v2.users.FullAccount"/>
+<fullyQualifiedTypeName name="com.dropbox.core.v2.files.ListFolderResult"/>
+<fullyQualifiedTypeName name="java.io.InputStream"/>
+<fullyQualifiedTypeName name="java.io.FileInputStream"/>
+<fullyQualifiedTypeName name="com.dropbox.core.v2.files.FileMetadata"/>
+<fullyQualifiedTypeName name="java.io.FileNotFoundException"/>
+<fullyQualifiedTypeName name="com.dropbox.core.v2.files.Metadata"/>
+<fullyQualifiedTypeName name="com.drew.metadata.Metadata"/>
+<fullyQualifiedTypeName name="com.drew.metadata.Directory"/>
+<fullyQualifiedTypeName name="com.drew.metadata.Tag"/>
+<fullyQualifiedTypeName name="java.awt.event.ItemListener"/>
+<fullyQualifiedTypeName name="java.awt.GridLayout"/>
+<fullyQualifiedTypeName name="javax.swing.border.Border"/>
+<fullyQualifiedTypeName name="javax.swing.border.EmptyBorder"/>
+<fullyQualifiedTypeName name="javax.swing.event.ChangeListener"/>
+<fullyQualifiedTypeName name="java.awt.GridBagLayout"/>
+</qualifiedTypeNameHistroy>
