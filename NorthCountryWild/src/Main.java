@@ -17,6 +17,7 @@ public class Main {
 			while(thread.isUploading());  // wait for it to be done uploading files
 			loading.close();
 			upload.setUploading(false);
+			//remi was here
 		}
 	}
 
