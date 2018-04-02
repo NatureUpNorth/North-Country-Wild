@@ -25,7 +25,7 @@ public class UploadThread extends Thread {
 	
 	private String filePath = "";
 	private String destinationPath = "";
-	private static final String ACCESS_TOKEN = "kdJxVuoW-DAAAAAAAAAAuiFgKgc_hrg7LQKz1NCWNcwcDv3v5yLnTUIZpkWLkgXQ";
+	private static final String ACCESS_TOKEN = "kdJxVuoW-DAAAAAAAAAAy1rT5ZR_igk0LTGaB4vMf19XhI7mzYBHWcvf-C_Sbgev";
 	private volatile boolean uploading;
 	private static ArrayList<Metadata> meta = new ArrayList<Metadata>();
 	private LoadingWindow loading;
@@ -37,11 +37,10 @@ public class UploadThread extends Thread {
 		loading = new LoadingWindow();
 	}
 	
-	private void write(ArrayList<Metadata> meta, String method) {
+	private void write(ArrayList<Metadata> meta, String method, String fileName) {
 
     	FileWriter fileWriter = null; 
     	try{
-    		String fileName = filePath;
     		fileWriter = new FileWriter(fileName + "/metadata.csv");
 
     		for (Directory directory : meta.get(0).getDirectories()) {
@@ -111,7 +110,7 @@ public class UploadThread extends Thread {
 	    			meta.add(metadata);
     			}
     		}
-    		write(meta, "Using ImageMetadataReader");
+    		write(meta, "Using ImageMetadataReader", filePath);
             
         } catch (ImageProcessingException e) {
         } catch (IOException e) {
@@ -124,7 +123,7 @@ public class UploadThread extends Thread {
         		try {
 					client.files().uploadBuilder("/" + destinationPath + "/" + file.getName()).uploadAndFinish(in);
 					count++;
-					loading.changeBar(total_files, count);
+					loading.changeBar(total_files, count, file.getAbsolutePath());
 				} catch (DbxException e) {
 				}
         	} catch (FileNotFoundException e) {

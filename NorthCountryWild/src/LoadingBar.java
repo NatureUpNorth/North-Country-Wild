@@ -9,22 +9,28 @@ import javax.swing.*;
 
 public class LoadingBar extends JPanel {
 	private int total_files = 0;
-	private int uploaded = 0;
+	private int uploaded_files = 0;
+	private String filePath = "";
 
-	protected void paintComponent(Graphics g) {
+	public void paintComponent(Graphics g) {
         super.paintComponent(g);
         g.drawRect(10, 10, 320, 20);
         if (total_files > 0) {
-        	g.setColor(Color.blue);
-        	g.fillRect(10, 10, (uploaded / total_files) * 320, 20);
+        	g.setColor(Color.BLUE);
+        	g.fillRect(10, 10, (int)(((double) uploaded_files / total_files) * 320), 20);
         }
+        g.setColor(Color.black);
+        g.drawString("Uploading " + filePath + "...", 10, 60);
     }
 	
 	// for incrementing the loading bar as progress is made
 	// total = total number of files to upload (always the same whenever it's called)
 	// uploaded = number of files already uploaded when it's called
-	public void increment(int total, int uploaded) {
-		repaint();
+	public void increment(int total, int uploaded, String path) {
+		total_files = total;
+		uploaded_files = uploaded;
+		filePath = path;
+		this.repaint();
 	}
 
 }

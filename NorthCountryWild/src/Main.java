@@ -2,10 +2,13 @@
 public class Main {
 
 	public static void main(String[] args) {
+		/*
 		LoginWindow login = new LoginWindow();
 		while (login.isOpen());  // wait for them to submit before closing the window
 		String name = login.getName();
 		login.close();
+		*/
+		String name = "Guinevere Gilman";
 		UploadWindow upload = new UploadWindow();
 		while (true) {
 			while (!upload.isUploading());  // wait for them to hit submit
