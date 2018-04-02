@@ -85,11 +85,10 @@ public class UploadThread extends Thread {
 	
 	
 	public void run() {
-		uploading = true;
-		upload(filePath, destinationPath);
+		upload();
 	}
 	
-	public void upload(String filePath, String destinationPath) {
+	public void upload() {
 		// Create Dropbox client
 		LoadingWindow loading = new LoadingWindow();
 		int total_files = 0;
@@ -102,7 +101,7 @@ public class UploadThread extends Thread {
         	dir = new File(filePath);
     		for(File file: dir.listFiles()){
     			if (file.isDirectory()) {
-    				upload(file.getAbsolutePath(), destinationPath);
+    				UploadThread thread = new UploadThread(file.getAbsolutePath(), destinationPath);
     			}
     			
     			else if (file.getName().endsWith(".JPG")) {
@@ -139,7 +138,7 @@ public class UploadThread extends Thread {
 			e.printStackTrace();
 		}
         uploading = false;
-		loading.close();
+		
 	}
 	
 	public boolean isUploading() {

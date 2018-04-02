@@ -139,7 +139,7 @@ public class UploadThread extends Thread {
 			e.printStackTrace();
 		}
         uploading = false;
-		loading.close();
+		
 	}
 	
 	public boolean isUploading() {
