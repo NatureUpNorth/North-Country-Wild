@@ -7,11 +7,12 @@ import javax.swing.JPanel;
 public class LoadingWindow {
 	// instance variables
 		private JFrame frame;
+		private LoadingBar bar;
 		
 		public LoadingWindow() {
 			// set up the components
 			frame = new JFrame("Uploading");
-			JPanel panel = new LoadingBar();
+			bar = new LoadingBar();
 			
 			// set window size
 			frame.setPreferredSize(new Dimension(350, 100));
@@ -22,7 +23,7 @@ public class LoadingWindow {
 			frame.setLocation(dim.width/2-175, dim.height/2-50);
 			
 			// add all the components to the frame
-			frame.add(panel);
+			frame.add(bar);
 			frame.pack();
 			frame.setVisible(true);
 			frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -32,8 +33,8 @@ public class LoadingWindow {
 			frame.dispose();
 		}
 		
-		public static void main(String[] args) {
-			new LoadingWindow();
+		public void changeBar(int total, int uploaded) {
+			bar.increment(total, uploaded);
 		}
 
 }

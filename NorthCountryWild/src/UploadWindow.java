@@ -33,7 +33,7 @@ public class UploadWindow implements ActionListener, ItemListener, ChangeListene
 	private String endDateStr;
 	private String latitude;
 	private String longitude;
-	private ArrayList<String> habitats;
+	private ArrayList<String> habitats = new ArrayList<String>();
 	private volatile boolean uploading = false;
 	
 	// these ones are for directory browsing (drives only)

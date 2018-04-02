@@ -25,7 +25,7 @@ public class UploadThread extends Thread {
 	
 	private String filePath = "";
 	private String destinationPath = "";
-	private static final String ACCESS_TOKEN = "kdJxVuoW-DAAAAAAAAAADR6XusrUze5Zz-H40SyBBAOLazBmHvzNP8_qZbH_18Bx";
+	private static final String ACCESS_TOKEN = "kdJxVuoW-DAAAAAAAAAAuiFgKgc_hrg7LQKz1NCWNcwcDv3v5yLnTUIZpkWLkgXQ";
 	private volatile boolean uploading;
 	private static ArrayList<Metadata> meta = new ArrayList<Metadata>();
 	
@@ -56,11 +56,6 @@ public class UploadThread extends Thread {
     			for(Directory directory : metadata.getDirectories()){
     				for(Tag tag : directory.getTags()){
     					if(tag.getDescription()!=null){
-//    						if(tag.getTagName().equals("Model")){
-//    							if(!tag.getDescription().equals("HC600 HYPERFIREv")){
-//    								System.out.println(tag.getDescription());
-//    							}
-//    						}
     						fileWriter.append(tag.getDescription().replaceAll(",", " ")+",");
     					} else {
     						fileWriter.append(",");
@@ -72,35 +67,6 @@ public class UploadThread extends Thread {
     			}
     			fileWriter.append("\n");
     		}
-    		
-//			for (Directory directory : meta.get(0).getDirectories()) {
-//				if(directories.contains(directory.getName())){
-//					for (Tag tag : directory.getTags()) {
-//						fileWriter.append(tag.getTagName()+",");
-//					}
-//				}
-//			}
-//			
-//			fileWriter.append("\n");
-//    		
-//    		for(Metadata metadata : meta){    			
-//    			for(Directory directory : metadata.getDirectories()){
-//    				if(directories.contains(directory.getName())){
-//    					//fileWriter.append(directory.getName()+",");
-//    					for(Tag tag : directory.getTags()){
-//    						if(tag.getDescription()!=null){
-//    							fileWriter.append(tag.getDescription().replaceAll(",", " ")+",");
-//    						} else{
-//    							fileWriter.append(",");
-//    						}
-//    					}
-//    				}
-//    				for (String error : directory.getErrors()) {
-//    					System.err.println("ERROR: " + error);
-//        			}
-//    		}
-//    			fileWriter.append("\n");
-//    		}
 
     	} 
     	catch(Exception e){
@@ -119,11 +85,27 @@ public class UploadThread extends Thread {
 	
 	
 	public void run() {
+		upload();
+	}
+	
+	public void upload() {
+		// Create Dropbox client
+		LoadingWindow loading = new LoadingWindow();
+		int total_files = 0;
+		
+        DbxRequestConfig config = new DbxRequestConfig("dropbox/java-tutorial", "en_US");
+        DbxClientV2 client = new DbxClientV2(config, ACCESS_TOKEN);  
+		
 		File dir = null;
 		try {
         	dir = new File(filePath);
     		for(File file: dir.listFiles()){
-    			if (file.getName().endsWith(".JPG")) {
+    			if (file.isDirectory()) {
+    				UploadThread thread = new UploadThread(file.getAbsolutePath(), destinationPath);
+    			}
+    			
+    			else if (file.getName().endsWith(".JPG")) {
+    				total_files++;
 	    			Metadata metadata = ImageMetadataReader.readMetadata(file);
 	    			meta.add(metadata);
     			}
@@ -132,17 +114,16 @@ public class UploadThread extends Thread {
             
         } catch (ImageProcessingException e) {
         } catch (IOException e) {
-        }
-		
-		// Create Dropbox client
-        DbxRequestConfig config = new DbxRequestConfig("dropbox/java-tutorial", "en_US");
-        DbxClientV2 client = new DbxClientV2(config, ACCESS_TOKEN);       
+        }     
         
-        // upload pics and csv file to dropbox client
+		// upload pics and csv file to dropbox client
+		int count = 0;
         for(File file: dir.listFiles()) {
         	try (InputStream in = new FileInputStream(file.getAbsolutePath())) {
         		try {
-					client.files().uploadBuilder(destinationPath + "/" + file.getName()).uploadAndFinish(in);
+					client.files().uploadBuilder("/" + destinationPath + "/" + file.getName()).uploadAndFinish(in);
+					count++;
+					loading.changeBar(total_files, count);
 				} catch (DbxException e) {
 				}
         	} catch (FileNotFoundException e) {
@@ -157,6 +138,7 @@ public class UploadThread extends Thread {
 			e.printStackTrace();
 		}
         uploading = false;
+		
 	}
 	
 	public boolean isUploading() {
