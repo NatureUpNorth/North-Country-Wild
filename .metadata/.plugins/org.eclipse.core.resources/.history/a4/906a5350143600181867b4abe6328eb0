@@ -136,6 +136,7 @@ public class UploadThread extends Thread {
         try {
 			Files.deleteIfExists(Paths.get(filePath + "/metadata.csv"));
 		} catch (IOException e) {
+			e.printStackTrace();
 		}
         if (filePath.equals(this.filePath)) {
         	uploading = false;

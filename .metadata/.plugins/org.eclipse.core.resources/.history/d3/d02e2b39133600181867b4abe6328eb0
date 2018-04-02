@@ -61,9 +61,10 @@ public class LoginWindow implements ActionListener {
 	public void actionPerformed(ActionEvent evt) {
 		// parse the username/password entered
 		password = passField.getText();
+		System.out.println(password);
 		username = userField.getText();
+		System.out.println(username);
 		if (password.isEmpty() || username.isEmpty()) {
-			System.out.println("?");
 			JOptionPane.showMessageDialog(frame, "Invalid username/password error! Please contact the developer. \nThank you, and sorry for your inconvenience.");
 		}
 		else {

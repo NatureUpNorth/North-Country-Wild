@@ -28,13 +28,11 @@ public class UploadThread extends Thread {
 	private static final String ACCESS_TOKEN = "kdJxVuoW-DAAAAAAAAAAuiFgKgc_hrg7LQKz1NCWNcwcDv3v5yLnTUIZpkWLkgXQ";
 	private volatile boolean uploading;
 	private static ArrayList<Metadata> meta = new ArrayList<Metadata>();
-	private LoadingWindow loading;
 	
 	UploadThread(String path, String destination) {
 		filePath = path;
 		destinationPath = destination;
 		uploading = true;
-		loading = new LoadingWindow();
 	}
 	
 	private void write(ArrayList<Metadata> meta, String method) {
@@ -87,11 +85,13 @@ public class UploadThread extends Thread {
 	
 	
 	public void run() {
+		uploading = true;
 		upload(filePath, destinationPath);
 	}
 	
 	public void upload(String filePath, String destinationPath) {
 		// Create Dropbox client
+		LoadingWindow loading = new LoadingWindow();
 		int total_files = 0;
 		
         DbxRequestConfig config = new DbxRequestConfig("dropbox/java-tutorial", "en_US");
@@ -136,10 +136,10 @@ public class UploadThread extends Thread {
         try {
 			Files.deleteIfExists(Paths.get(filePath + "/metadata.csv"));
 		} catch (IOException e) {
+			e.printStackTrace();
 		}
-        if (filePath.equals(this.filePath)) {
-        	uploading = false;
-        }
+        uploading = false;
+		loading.close();
 	}
 	
 	public boolean isUploading() {

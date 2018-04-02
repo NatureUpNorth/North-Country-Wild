@@ -63,7 +63,6 @@ public class LoginWindow implements ActionListener {
 		password = passField.getText();
 		username = userField.getText();
 		if (password.isEmpty() || username.isEmpty()) {
-			System.out.println("?");
 			JOptionPane.showMessageDialog(frame, "Invalid username/password error! Please contact the developer. \nThank you, and sorry for your inconvenience.");
 		}
 		else {
