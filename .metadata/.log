@@ -5406,3 +5406,16 @@ Java Model Exception: Java Model Status [changeBar(int, int) [in LoadingWindow [
 	at org.eclipse.jface.text.TextViewerHoverManager$4.run(TextViewerHoverManager.java:166)
 !SUBENTRY 1 org.eclipse.jdt.core 4 969 2018-04-01 21:28:17.156
 !MESSAGE changeBar(int, int) [in LoadingWindow [in [Working copy] LoadingWindow.java [in <default> [in src [in NorthCountryWild]]]]] does not exist
+!SESSION 2018-04-04 22:49:52.859 -----------------------------------------------
+eclipse.buildId=4.7.2.M20171130-0510
+java.version=1.8.0_121
+java.vendor=Oracle Corporation
+BootLoader constants: OS=macosx, ARCH=x86_64, WS=cocoa, NL=en_US
+Framework arguments:  -product org.eclipse.epp.package.java.product -keyring /Users/remileblanc/.eclipse_keyring
+Command-line arguments:  -os macosx -ws cocoa -arch x86_64 -product org.eclipse.epp.package.java.product -keyring /Users/remileblanc/.eclipse_keyring
+
+!ENTRY org.eclipse.core.resources 2 10035 2018-04-04 22:49:59.898
+!MESSAGE The workspace exited with unsaved changes in the previous session; refreshing workspace to recover changes.
+
+!ENTRY org.eclipse.core.net 1 0 2018-04-04 22:50:04.207
+!MESSAGE System property http.nonProxyHosts has been set to local|*.local|169.254/16|*.169.254/16 by an external source. This value will be overwritten using the values from the preferences

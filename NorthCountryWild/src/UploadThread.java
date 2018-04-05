@@ -25,7 +25,7 @@ public class UploadThread extends Thread {
 	
 	private String filePath = "";
 	private String destinationPath = "";
-	private static final String ACCESS_TOKEN = "kdJxVuoW-DAAAAAAAAAAy1rT5ZR_igk0LTGaB4vMf19XhI7mzYBHWcvf-C_Sbgev";
+	private static final String ACCESS_TOKEN = "Ot337FVMgnAAAAAAAAAAsbxu_FAGR3s-rifTdgzY9-mIjanUH1hPKX6f9Jnb4pAP";//"kdJxVuoW-DAAAAAAAAAAy1rT5ZR_igk0LTGaB4vMf19XhI7mzYBHWcvf-C_Sbgev";
 	private volatile boolean uploading;
 	private static ArrayList<Metadata> meta = new ArrayList<Metadata>();
 	private LoadingWindow loading;
@@ -49,8 +49,7 @@ public class UploadThread extends Thread {
     				fileWriter.append(tag.getTagName()+",");
     			}
     		}
-    		
-
+    		fileWriter.append("Affilation,Longitude,Latitude,Habitat,Start Date,End Date");
     		fileWriter.append("\n");
     		
     		for(Metadata metadata : meta){
@@ -66,6 +65,17 @@ public class UploadThread extends Thread {
     					System.err.println("ERROR: " + error);
         			}
     			}
+    			UploadWindow uw = new UploadWindow();
+    			ArrayList<String> habitats= uw.getHabitats();
+    			String hab = "";
+    			String lat = uw.getLat();
+    			String lon = uw.getLon();
+    			String startDate = uw.getStartDate();
+    			String endDate = uw.getEndDate();
+    			for(String s: habitats) {
+    				hab = hab.concat(s+ " ");
+    			}			
+    			fileWriter.append("---,"+lat+","+lon+","+hab+","+startDate+","+endDate);
     			fileWriter.append("\n");
     		}
 

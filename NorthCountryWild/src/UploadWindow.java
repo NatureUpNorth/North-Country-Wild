@@ -5,7 +5,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Hashtable;
 
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
@@ -20,6 +22,7 @@ public class UploadWindow implements ActionListener, ItemListener, ChangeListene
 	private JButton fileButton;
 	private JLabel fileLabel;
 	private JButton submit;
+	private JButton change;
 	private JCheckBox one;
 	private JCheckBox two;
 	private JCheckBox three;
@@ -35,6 +38,8 @@ public class UploadWindow implements ActionListener, ItemListener, ChangeListene
 	private String longitude;
 	private ArrayList<String> habitats = new ArrayList<String>();
 	private volatile boolean uploading = false;
+	private final String DEGREE  = "\u00b0";
+	private boolean changeToDMS = false;
 	
 	// these ones are for directory browsing (drives only)
 	private JFileChooser fc; 
@@ -49,6 +54,7 @@ public class UploadWindow implements ActionListener, ItemListener, ChangeListene
 		JPanel habitatPanel = new JPanel();
 		JPanel datePanel = new JPanel();
 		JPanel submitPanel = new JPanel();
+		JPanel changePanel = new JPanel();
 		
 		JLabel groupLabel = new JLabel("Select your affiliation:");
 		JComboBox<String> groups = new JComboBox<String>(groupList);
@@ -58,6 +64,13 @@ public class UploadWindow implements ActionListener, ItemListener, ChangeListene
 		submit = new JButton("Submit");
 		fileButton.addActionListener(this);
 		submit.addActionListener(this);
+		change = new JButton();
+		if(changeToDMS) {
+			change.setText("Convert to Decimal degrees");
+		} else {
+			change.setText("Convert to Degrees, Minutes, Seconds");
+		}
+		change.addActionListener(this);
 		
 		one = new JCheckBox("Habitat one");
 		two = new JCheckBox("Habitat two");
@@ -79,30 +92,60 @@ public class UploadWindow implements ActionListener, ItemListener, ChangeListene
 		filePanel.add(filePath);
 		filePanel.add(fileButton);
 		submitPanel.add(submit);
+		changePanel.add(change);
 		
 		groupPanel.add(groupLabel);
 		groupPanel.add(groups);
 		
 		JPanel latPanel = new JPanel();
 		JPanel lonPanel = new JPanel();
-		lat = new JSlider(JSlider.HORIZONTAL, -90, 90, 0);
+		lat = new JSlider(JSlider.HORIZONTAL, -9000, 9000, 0);
 		lat.setPreferredSize(new Dimension(300, 50));
 		lat.addChangeListener(this);
 		latLabel = new JTextField(10);
 		latLabel.addActionListener(this);
-		lat.setMajorTickSpacing(20);
-		lat.setMinorTickSpacing(5);
+		lat.setMajorTickSpacing(2000);
+		lat.setMinorTickSpacing(500);
 		lat.setPaintTicks(true);
 		lat.setPaintLabels(true);
-		lon = new JSlider(JSlider.HORIZONTAL, -180, 180, 0);
+		lon = new JSlider(JSlider.HORIZONTAL, -18000, 18000, 0);
 		lon.setPreferredSize(new Dimension(300, 50));
 		lonLabel = new JTextField(10);
 		lonLabel.addActionListener(this);
 		lon.addChangeListener(this);
-		lon.setMajorTickSpacing(40);
-		lon.setMinorTickSpacing(10);
+		lon.setMajorTickSpacing(4000);
+		lon.setMinorTickSpacing(1000);
 		lon.setPaintTicks(true);
 		lon.setPaintLabels(true);
+		
+		//Create the label table
+		Hashtable latTable = new Hashtable();
+		latTable.put( new Integer( 9000 ), new JLabel("90") );
+		latTable.put( new Integer( 7000 ), new JLabel("70") );
+		latTable.put( new Integer( 5000 ), new JLabel("50") );
+		latTable.put( new Integer( 3000 ), new JLabel("30") );
+		latTable.put( new Integer( 1000 ), new JLabel("10") );
+		latTable.put( new Integer( -7000 ), new JLabel("-70") );
+		latTable.put( new Integer( -5000 ), new JLabel("-50") );
+		latTable.put( new Integer( -3000 ), new JLabel("-30") );
+		latTable.put( new Integer( -1000 ), new JLabel("-10") );
+		latTable.put( new Integer( -9000 ), new JLabel("-90") );
+		lat.setLabelTable( latTable );
+		lat.setPaintLabels(true);
+		Hashtable lonTable = new Hashtable();
+		lonTable.put( new Integer( 18000 ), new JLabel("180")); 
+		lonTable.put( new Integer( 14000 ), new JLabel("140")); 
+		lonTable.put( new Integer( 10000 ), new JLabel("100")); 
+		lonTable.put( new Integer( 6000 ), new JLabel("60")); 
+		lonTable.put( new Integer( 2000 ), new JLabel("20")); 
+		lonTable.put( new Integer( -14000 ), new JLabel("-140")); 
+		lonTable.put( new Integer( -10000 ), new JLabel("-100")); 
+		lonTable.put( new Integer( -6000 ), new JLabel("-60")); 
+		lonTable.put( new Integer( -2000 ), new JLabel("-20")); 
+		lonTable.put( new Integer( -18000 ), new JLabel("-180")); 
+		lon.setLabelTable( lonTable );
+		lon.setPaintLabels(true);
+		
 		latPanel.add(new JLabel(" Select the latitude:"));
 		latPanel.add(latLabel);
 		latPanel.add(lat);
@@ -130,10 +173,11 @@ public class UploadWindow implements ActionListener, ItemListener, ChangeListene
 		datePanel.add(startPanel);
 		datePanel.add(endPanel);
 		
-		panel.setLayout(new GridLayout(6, 1));
+		panel.setLayout(new GridLayout(7, 1));
 		panel.add(filePanel);
 		panel.add(groupPanel);
 		panel.add(locationPanel);
+		panel.add(changePanel);
 		panel.add(habitatPanel);
 		panel.add(datePanel);
 		panel.add(submitPanel);
@@ -187,6 +231,21 @@ public class UploadWindow implements ActionListener, ItemListener, ChangeListene
 			endDateStr = endDate.getText();
 			setUploading(true);
 		}
+		if(evt.getSource() == change) {
+			if(latLabel.getText().contains(".") || lonLabel.getText().contains(".")) {
+				String lati = DDtoDMS(latLabel.getText());
+				String longi = DDtoDMS(lonLabel.getText());
+				latLabel.setText(lati);
+				lonLabel.setText(longi);
+				change.setText("Convert to Decimal degrees");
+			} else if (latLabel.getText().contains("\"") || lonLabel.getText().contains("\"")) {
+				String lati = DMStoDD(latLabel.getText());
+				String longi = DMStoDD(lonLabel.getText());
+				latLabel.setText(lati);
+				lonLabel.setText(longi);
+				change.setText("Convert to Degrees, Minutes, Seconds");
+			}
+		}
 	}
 	
 	public String getFilepath() {
@@ -224,9 +283,9 @@ public class UploadWindow implements ActionListener, ItemListener, ChangeListene
 	public void stateChanged(ChangeEvent e) {
 		JSlider source = (JSlider) e.getSource();
 		if (source == lat) {
-			latLabel.setText("" + source.getValue());
+			latLabel.setText("" + source.getValue()/100.0);
 		} else if (source == lon) {
-			lonLabel.setText("" + source.getValue());
+			lonLabel.setText("" + source.getValue()/100.0);
 		}
 	}
 	
@@ -248,6 +307,33 @@ public class UploadWindow implements ActionListener, ItemListener, ChangeListene
 	
 	public ArrayList<String> getHabitats() {
 		return habitats;
+	}
+	
+	public String DMStoDD(String dms) {
+		int x = dms.indexOf(DEGREE);
+		String deg = dms.substring(0, x);
+		int y = dms.indexOf("'");
+		String min = dms.substring(x+1, y);
+		int z = dms.indexOf("\"");
+		String sec = dms.substring(y+1, z);
+		double d = Double.parseDouble(deg);
+		double m = Double.parseDouble(min);
+		double s = Double.parseDouble(sec);
+		Double dd = d + (m/60.0) + (s/3600.0);
+		DecimalFormat df4 = new DecimalFormat("#.##");
+		dd = Double.valueOf(df4.format(dd));
+		return dd.toString();
+	}
+		
+	public String DDtoDMS(String dd) {
+		double ddDouble = Double.parseDouble(dd);
+		int deg = (int) ddDouble;
+		double minD = (ddDouble-deg)*60;
+		int min = (int) minD;
+		double secD = (ddDouble - deg - (min/60.0)) * 3600;
+		int sec = (int) secD;
+		String dms = deg+DEGREE+" "+min+"' "+sec+"\"";
+		return dms;
 	}
 
 }

@@ -36,7 +36,7 @@ public class DrupalJSONAuth implements UserAuthentication {
 	// unsuccessful authentication
 	
 	// constants
-	private static final String host = "natureupnorth.org";
+	private static final String host = "www.natureupnorth.org";
 	private static final String authPath = "/user/login?_format=json";
 	private static final String protocol = "https";
 	private static final String errorMessage = " Please contact the developer. Thank you, and sorry for your inconvenience.";
@@ -62,7 +62,9 @@ public class DrupalJSONAuth implements UserAuthentication {
 			byte[] authBytes;
 			
 			// construct a JSON object containing the username and password
-			String authString = "{\"name\":\"" + username + "\", \"pass\":\"" + password + "\"}";
+			//String authString = "{\"name\":\"" + username + "\", \"pass\":\"" + password + "\"}";
+			String authString = "{\"name\":\""+username+"\",\"mail\":\"" + username + "\", \"pass\":\"" + password + "\"}";
+
 
 			// convert the username/password data to UTF-8 bytes
 			try {
