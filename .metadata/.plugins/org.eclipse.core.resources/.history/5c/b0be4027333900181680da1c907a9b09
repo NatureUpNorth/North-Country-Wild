@@ -52,7 +52,7 @@ public class UploadThread extends Thread {
     				fileWriter.append(tag.getTagName()+",");
     			}
     		}
-    		fileWriter.append("Affiliation,Longitude,Latitude,Habitat,Start Date,End Date");
+    		fileWriter.append("Affilation,Longitude,Latitude,Habitat,Start Date,End Date");
     		fileWriter.append("\n");
     		
     		for(Metadata metadata : meta){
@@ -68,20 +68,17 @@ public class UploadThread extends Thread {
     					System.err.println("ERROR: " + error);
         			}
     			}
-    			ArrayList<String> habitats= upload.getHabitats();
+    			UploadWindow uw = new UploadWindow();
+    			ArrayList<String> habitats= uw.getHabitats();
     			String hab = "";
-    			String affiliation = upload.getAffiliation();
-    			String lat = upload.getLat();
-    			String lon = upload.getLon();
-    			String startDate = upload.getStartDate();
-    			String endDate = upload.getEndDate();
+    			String lat = uw.getLat();
+    			String lon = uw.getLon();
+    			String startDate = uw.getStartDate();
+    			String endDate = uw.getEndDate();
     			for(String s: habitats) {
-    				hab = hab.concat(s+ " / ");
-    			}
-    			if(hab.length()>3) {
-    				hab = hab.substring(0, hab.length()-3);
-    			}
-    			fileWriter.append(affiliation+","+lat+","+lon+","+hab+","+startDate+","+endDate);
+    				hab = hab.concat(s+ " ");
+    			}			
+    			fileWriter.append("---,"+lat+","+lon+","+hab+","+startDate+","+endDate);
     			fileWriter.append("\n");
     		}
 

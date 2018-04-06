@@ -36,7 +36,6 @@ public class UploadWindow implements ActionListener, ItemListener, ChangeListene
 	private String endDateStr;
 	private String latitude;
 	private String longitude;
-	JComboBox<String> groups; 
 	private ArrayList<String> habitats = new ArrayList<String>();
 	private volatile boolean uploading = false;
 	private final String DEGREE  = "\u00b0";
@@ -58,7 +57,7 @@ public class UploadWindow implements ActionListener, ItemListener, ChangeListene
 		JPanel changePanel = new JPanel();
 		
 		JLabel groupLabel = new JLabel("Select your affiliation:");
-		groups = new JComboBox<String>(groupList);
+		JComboBox<String> groups = new JComboBox<String>(groupList);
 		fileLabel = new JLabel("Select the pictures to be uploaded:");
 		filePath = new JTextField(20);
 		fileButton = new JButton("Browse");
@@ -308,10 +307,6 @@ public class UploadWindow implements ActionListener, ItemListener, ChangeListene
 	
 	public ArrayList<String> getHabitats() {
 		return habitats;
-	}
-	
-	public String getAffiliation() {
-		return groups.getSelectedItem().toString();
 	}
 	
 	public String DMStoDD(String dms) {
