@@ -25,18 +25,22 @@ public class UploadThread extends Thread {
 	
 	private String filePath = "";
 	private String destinationPath = "";
-	private static final String ACCESS_TOKEN = "Ot337FVMgnAAAAAAAAAAsbxu_FAGR3s-rifTdgzY9-mIjanUH1hPKX6f9Jnb4pAP";//"kdJxVuoW-DAAAAAAAAAAy1rT5ZR_igk0LTGaB4vMf19XhI7mzYBHWcvf-C_Sbgev";
+	private int total_files;
+	private int count;
+	private static final String ACCESS_TOKEN = "kdJxVuoW-DAAAAAAAAAA15HtUot88rO-JjNXvFlyZ-jEyadtfk3bCyCGoihbHqn3";//"Ot337FVMgnAAAAAAAAAAsbxu_FAGR3s-rifTdgzY9-mIjanUH1hPKX6f9Jnb4pAP";
 	private volatile boolean uploading;
 	private static ArrayList<Metadata> meta = new ArrayList<Metadata>();
 	private LoadingWindow loading;
 	private UploadWindow upload;
+	private volatile boolean running = true;
 	
-	UploadThread(String path, String destination, UploadWindow uw) {	
+	UploadThread(String path, String destination, UploadWindow uw, int files) {	
 		filePath = path;
 		destinationPath = destination;
 		uploading = true;
 		loading = new LoadingWindow();
 		upload = uw;
+		total_files = files;
 	}
 	
 	private void write(ArrayList<Metadata> meta, String method, String fileName) {
@@ -102,13 +106,16 @@ public class UploadThread extends Thread {
 	
 	
 	public void run() {
+		count = 0;
 		upload(filePath, destinationPath);
+	}
+	
+	public void terminate() {
+		running = false;
 	}
 	
 	public void upload(String filePath, String destinationPath) {
 		// Create Dropbox client
-		int total_files = 0;
-		
         DbxRequestConfig config = new DbxRequestConfig("dropbox/java-tutorial", "en_US");
         DbxClientV2 client = new DbxClientV2(config, ACCESS_TOKEN);  
 		
@@ -121,29 +128,45 @@ public class UploadThread extends Thread {
     			}
     			
     			else if (file.getName().endsWith(".JPG")) {
-    				total_files++;
 	    			Metadata metadata = ImageMetadataReader.readMetadata(file);
 	    			meta.add(metadata);
     			}
     		}
-    		write(meta, "Using ImageMetadataReader", filePath);
             
         } catch (ImageProcessingException e) {
         } catch (IOException e) {
         }     
         
 		// upload pics and csv file to dropbox client
-		int count = 0;
         for(File file: dir.listFiles()) {
         	try (InputStream in = new FileInputStream(file.getAbsolutePath())) {
         		try {
-					client.files().uploadBuilder("/" + destinationPath + "/" + file.getName()).uploadAndFinish(in);
-					count++;
-					loading.changeBar(total_files, count, file.getAbsolutePath());
+        			if (running) {
+						client.files().uploadBuilder("/" + destinationPath + "/" + file.getName()).uploadAndFinish(in);
+						count++;
+						loading.changeBar(total_files, count, file.getAbsolutePath());
+        			} else {
+        				loading.close();
+        				break;
+        			}
 				} catch (DbxException e) {
 				}
         	} catch (FileNotFoundException e) {
 			} catch (IOException e) {
+			}
+		}
+        
+        if (count == total_files) {
+			write(meta, "Using ImageMetadataReader", filePath);
+			InputStream in = null;
+			try {
+				in = new FileInputStream(filePath + "/metadata.csv");
+			} catch (FileNotFoundException e1) {
+				e1.printStackTrace();
+			}
+			try {
+				client.files().uploadBuilder("/" + destinationPath + "/metadata.csv").uploadAndFinish(in);
+			} catch (DbxException | IOException e) {
 			}
 		}
         

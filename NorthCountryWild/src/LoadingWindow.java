@@ -15,12 +15,12 @@ public class LoadingWindow {
 			bar = new LoadingBar();
 			
 			// set window size
-			frame.setPreferredSize(new Dimension(350, 100));
+			frame.setPreferredSize(new Dimension(500, 100));
 			frame.setResizable(false);
 			
 			// make window appear in middle of screen
 			Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-			frame.setLocation(dim.width/2-175, dim.height/2-50);
+			frame.setLocation(dim.width/2-250, dim.height/2-50);
 			
 			// add all the components to the frame
 			frame.add(bar);
@@ -35,6 +35,9 @@ public class LoadingWindow {
 		
 		public void changeBar(int total, int uploaded, String path) {
 			bar.increment(total, uploaded, path);
+			if (total == uploaded) {
+				frame.dispose();
+			}
 		}
 
 }

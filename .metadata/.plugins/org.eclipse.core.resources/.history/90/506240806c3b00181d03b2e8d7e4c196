@@ -1,0 +1,165 @@
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.attribute.BasicFileAttributes;
+import java.nio.file.attribute.FileTime;
+import java.util.ArrayList;
+
+import com.drew.imaging.ImageMetadataReader;
+import com.drew.imaging.ImageProcessingException;
+import com.drew.metadata.Directory;
+import com.drew.metadata.Metadata;
+import com.drew.metadata.Tag;
+import com.dropbox.core.DbxException;
+import com.dropbox.core.DbxRequestConfig;
+import com.dropbox.core.v2.DbxClientV2;
+import com.dropbox.core.v2.files.UploadErrorException;
+
+public class UploadThread extends Thread {
+	
+	private String filePath = "";
+	private String destinationPath = "";
+	private static final String ACCESS_TOKEN = "kdJxVuoW-DAAAAAAAAAAy1rT5ZR_igk0LTGaB4vMf19XhI7mzYBHWcvf-C_Sbgev";//"Ot337FVMgnAAAAAAAAAAsbxu_FAGR3s-rifTdgzY9-mIjanUH1hPKX6f9Jnb4pAP";
+	private volatile boolean uploading;
+	private static ArrayList<Metadata> meta = new ArrayList<Metadata>();
+	private LoadingWindow loading;
+	private UploadWindow upload;
+	
+	UploadThread(String path, String destination, UploadWindow uw) {	
+		filePath = path;
+		destinationPath = destination;
+		uploading = true;
+		loading = new LoadingWindow();
+		upload = uw;
+	}
+	
+	private void write(ArrayList<Metadata> meta, String method, String fileName) {
+
+    	FileWriter fileWriter = null; 
+    	
+    	try{
+    		fileWriter = new FileWriter(fileName + "/metadata.csv");
+
+    		for (Directory directory : meta.get(0).getDirectories()) {
+
+    			for (Tag tag : directory.getTags()) {
+    				fileWriter.append(tag.getTagName()+",");
+    			}
+    		}
+    		fileWriter.append("Affiliation,Longitude,Latitude,Habitat,Start Date,End Date");
+    		fileWriter.append("\n");
+    		
+    		for(Metadata metadata : meta){
+    			for(Directory directory : metadata.getDirectories()){
+    				for(Tag tag : directory.getTags()){
+    					if(tag.getDescription()!=null){
+    						fileWriter.append(tag.getDescription().replaceAll(",", " ")+",");
+    					} else {
+    						fileWriter.append(",");
+    					}
+    				}
+    				for (String error : directory.getErrors()) {
+    					System.err.println("ERROR: " + error);
+        			}
+    			}
+    			ArrayList<String> habitats= upload.getHabitats();
+    			String hab = "";
+    			String affiliation = upload.getAffiliation();
+    			String lat = upload.getLat();
+    			String lon = upload.getLon();
+    			String startDate = upload.getStartDate();
+    			String endDate = upload.getEndDate();
+    			for(String s: habitats) {
+    				hab = hab.concat(s+ " / ");
+    			}
+    			if(hab.length()>3) {
+    				hab = hab.substring(0, hab.length()-3);
+    			}
+    			fileWriter.append(affiliation+","+lat+","+lon+","+hab+","+startDate+","+endDate);
+    			fileWriter.append("\n");
+    		}
+
+    	} 
+    	catch(Exception e){
+    		System.out.println("Error in CsvFileWriter");
+    		e.printStackTrace();
+    	} finally{
+    		try{
+    			fileWriter.flush();
+    			fileWriter.close();
+    		} catch(IOException e){
+    			System.out.println("Error while flushing/closing fileWriter");
+    			e.printStackTrace();
+    		}
+    	}
+	}
+	
+	
+	public void run() {
+		upload(filePath, destinationPath);
+	}
+	
+	public void upload(String filePath, String destinationPath) {
+		// Create Dropbox client
+		int total_files = 0;
+		
+        DbxRequestConfig config = new DbxRequestConfig("dropbox/java-tutorial", "en_US");
+        DbxClientV2 client = new DbxClientV2(config, ACCESS_TOKEN);  
+		
+		File dir = null;
+		try {
+        	dir = new File(filePath);
+    		for(File file: dir.listFiles()){
+    			if (file.isDirectory()) {
+    				upload(file.getAbsolutePath(), destinationPath);
+    			}
+    			
+    			else if (file.getName().endsWith(".JPG")) {
+    				total_files++;
+	    			Metadata metadata = ImageMetadataReader.readMetadata(file);
+	    			meta.add(metadata);
+    			}
+    		}
+    		write(meta, "Using ImageMetadataReader", filePath);
+            
+        } catch (ImageProcessingException e) {
+        } catch (IOException e) {
+        }     
+        
+		// upload pics and csv file to dropbox client
+		int count = 0;
+        for(File file: dir.listFiles()) {
+        	try (InputStream in = new FileInputStream(file.getAbsolutePath())) {
+        		try {
+					client.files().uploadBuilder("/" + destinationPath + "/" + file.getName()).uploadAndFinish(in);
+					count++;
+					loading.changeBar(total_files, count, file.getAbsolutePath());
+					System.out.println(file.getName());
+				} catch (DbxException e) {
+				}
+        	} catch (FileNotFoundException e) {
+			} catch (IOException e) {
+			}
+		}
+        
+        // delete the csv from the user's files
+        try {
+			Files.deleteIfExists(Paths.get(filePath + "/metadata.csv"));
+		} catch (IOException e) {
+		}
+        if (filePath.equals(this.filePath)) {
+        	uploading = false;
+        }
+	}
+	
+	public boolean isUploading() {
+		return uploading;
+	}
+	
+}

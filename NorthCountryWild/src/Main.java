@@ -17,10 +17,15 @@ public class Main {
 		while (true) {
 			while (!upload.isUploading());  // wait for them to hit submit
 			String date = upload.getStartDate();
-			String destination = name + "/" + date;
-			UploadThread thread = new UploadThread(upload.getFilepath(), destination, upload);
+			String affiliation = upload.getAffiliation();
+			String destination = affiliation + "/" + name + "/" + date;
+			UploadThread thread = new UploadThread(upload.getFilepath(), destination, upload, upload.getCount());
 			thread.start();
-			while(thread.isUploading());  // wait for it to be done uploading files
+			while(thread.isUploading()) {
+				if (!upload.isUploading()) {
+					thread.terminate();
+				}
+			};  // wait for it to be done uploading files
 			upload.setUploading(false);
 		}
 	}

@@ -5,6 +5,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.io.File;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Hashtable;
@@ -41,6 +42,7 @@ public class UploadWindow implements ActionListener, ItemListener, ChangeListene
 	private volatile boolean uploading = false;
 	private final String DEGREE  = "\u00b0";
 	private boolean changeToDMS = false;
+	private int count;
 	
 	// these ones are for directory browsing (drives only)
 	private JFileChooser fc; 
@@ -101,7 +103,7 @@ public class UploadWindow implements ActionListener, ItemListener, ChangeListene
 		JPanel latPanel = new JPanel();
 		JPanel lonPanel = new JPanel();
 		lat = new JSlider(JSlider.HORIZONTAL, -9000, 9000, 0);
-		lat.setPreferredSize(new Dimension(300, 50));
+		lat.setPreferredSize(new Dimension(300, 45));
 		lat.addChangeListener(this);
 		latLabel = new JTextField(10);
 		latLabel.addActionListener(this);
@@ -110,7 +112,7 @@ public class UploadWindow implements ActionListener, ItemListener, ChangeListene
 		lat.setPaintTicks(true);
 		lat.setPaintLabels(true);
 		lon = new JSlider(JSlider.HORIZONTAL, -18000, 18000, 0);
-		lon.setPreferredSize(new Dimension(300, 50));
+		lon.setPreferredSize(new Dimension(300, 45));
 		lonLabel = new JTextField(10);
 		lonLabel.addActionListener(this);
 		lon.addChangeListener(this);
@@ -223,14 +225,28 @@ public class UploadWindow implements ActionListener, ItemListener, ChangeListene
 			*/
 			if (fc.showOpenDialog(fc) == JFileChooser.APPROVE_OPTION) {
 				filePath.setText(fc.getSelectedFile().toString());
+				count = 0;
+				checkDirectory(getFilepath());
+				JFrame optionFrame = new JFrame();
+				String[] options = {"Yes", "No"};
+				int n = JOptionPane.showOptionDialog(
+					    frame, "This folder has approximately " + count + " files to be uploaded in it. Is this correct?",
+					    "Warning", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
+				if (n == 1) {
+					fileButton.doClick();
+				}
 			}
 		}
-		if (evt.getSource() == submit && !uploading) {
-			latitude = latLabel.getText();
-			longitude = lonLabel.getText();
-			startDateStr = startDate.getText();
-			endDateStr = endDate.getText();
-			setUploading(true);
+		if (evt.getSource() == submit) {
+			if (!uploading) {
+				latitude = latLabel.getText();
+				longitude = lonLabel.getText();
+				startDateStr = startDate.getText();
+				endDateStr = endDate.getText();
+				this.setUploading(true);
+			} else if (uploading) {
+				this.setUploading(false);
+			}
 		}
 		if(evt.getSource() == change) {
 			if(latLabel.getText().contains(".") || lonLabel.getText().contains(".")) {
@@ -253,8 +269,22 @@ public class UploadWindow implements ActionListener, ItemListener, ChangeListene
 		return filePath.getText();
 	}
 	
-	public static void main(String[] args) {
-		new UploadWindow();
+	public int getCount() {
+		return count;
+	}
+	
+	public void checkDirectory(String path) {
+		File dir = new File(path);
+		
+		for (File file: dir.listFiles()) {
+			if (file.isDirectory()) {
+				checkDirectory(file.getAbsolutePath());
+			} else {
+				if (file.getName().endsWith(".JPG")) {
+					count++;
+				}
+			}
+		}
 	}
 
 	@Override
