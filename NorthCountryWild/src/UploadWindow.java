@@ -230,7 +230,7 @@ public class UploadWindow implements ActionListener, ItemListener, ChangeListene
 				JFrame optionFrame = new JFrame();
 				String[] options = {"Yes", "No"};
 				int n = JOptionPane.showOptionDialog(
-					    frame, "This folder has approximately " + count + " files to be uploaded in it. Is this correct?",
+					    optionFrame, "This folder has approximately " + count + " files to be uploaded in it. Is this correct?",
 					    "Warning", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
 				if (n == 1) {
 					fileButton.doClick();
@@ -243,7 +243,27 @@ public class UploadWindow implements ActionListener, ItemListener, ChangeListene
 				longitude = lonLabel.getText();
 				startDateStr = startDate.getText();
 				endDateStr = endDate.getText();
-				this.setUploading(true);
+				if (startDateStr.length() == 10 && endDateStr.length() == 10) {
+					for (int i = 0; i < 10; i++) {
+						if (i == 2 || i == 5) {
+							if (startDateStr.charAt(i) != '-' || endDateStr.charAt(i) != '-') {
+								JOptionPane.showMessageDialog(new JFrame(),
+									    "Incorrect date format. Please enter a date in the format: MM-DD-YYYY");
+								break;
+							}
+						} else {
+							if (!Character.isDigit(startDateStr.charAt(i)) || !Character.isDigit(endDateStr.charAt(i))) {
+								JOptionPane.showMessageDialog(new JFrame(),
+									    "Incorrect date format. Please enter a date in the format: MM-DD-YYYY");
+								break;
+							}
+						}
+					}
+					this.setUploading(true);
+				} else {
+					JOptionPane.showMessageDialog(new JFrame(),
+						    "Incorrect date format. Please enter a date in the format: MM-DD-YYYY");
+				}
 			} else if (uploading) {
 				this.setUploading(false);
 			}

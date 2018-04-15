@@ -2,13 +2,20 @@
 <section name="Workbench">
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog">
 		<item value="false" key="isRegEx"/>
-		<item value="Loading" key="selection"/>
+		<item value="meta " key="selection"/>
 		<item value="false" key="casesensitive"/>
 		<item value="false" key="incremental"/>
 		<item value="true" key="wrap"/>
 		<item value="false" key="wholeword"/>
 		<list key="findhistory">
+			<item value="meta "/>
+			<item value="meta"/>
+			<item value="filepath"/>
 			<item value="loading"/>
+			<item value="load"/>
+			<item value="upload"/>
+			<item value="setUp"/>
+			<item value="uploading"/>
 			<item value="path"/>
 		</list>
 		<list key="replacehistory">
