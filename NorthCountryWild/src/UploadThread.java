@@ -27,7 +27,7 @@ public class UploadThread extends Thread {
 	private String destinationPath = "";
 	private int total_files;
 	private int count;
-	private static final String ACCESS_TOKEN = "kdJxVuoW-DAAAAAAAAAA15HtUot88rO-JjNXvFlyZ-jEyadtfk3bCyCGoihbHqn3";//"Ot337FVMgnAAAAAAAAAAsbxu_FAGR3s-rifTdgzY9-mIjanUH1hPKX6f9Jnb4pAP";
+	private static final String ACCESS_TOKEN = "Ot337FVMgnAAAAAAAAAAsbxu_FAGR3s-rifTdgzY9-mIjanUH1hPKX6f9Jnb4pAP";//"kdJxVuoW-DAAAAAAAAAA15HtUot88rO-JjNXvFlyZ-jEyadtfk3bCyCGoihbHqn3";
 	private volatile boolean uploading;
 	private static ArrayList<Metadata> meta = new ArrayList<Metadata>();
 	private LoadingWindow loading;
@@ -74,7 +74,7 @@ public class UploadThread extends Thread {
     			}
     			ArrayList<String> habitats= upload.getHabitats();
     			String hab = "";
-    			String affiliation = upload.getAffiliation();
+    			String affiliation = upload.getGroup();
     			String lat = upload.getLat();
     			String lon = upload.getLon();
     			String startDate = upload.getStartDate();

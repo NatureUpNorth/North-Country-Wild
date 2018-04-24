@@ -17,7 +17,7 @@ public class Main {
 		while (true) {
 			while (!upload.isUploading());  // wait for them to hit submit
 			String date = upload.getStartDate();
-			String affiliation = upload.getAffiliation();
+			String affiliation = upload.getGroup();
 			String destination = affiliation + "/" + name + "/" + date;
 			UploadThread thread = new UploadThread(upload.getFilepath(), destination, upload, upload.getCount());
 			thread.start();

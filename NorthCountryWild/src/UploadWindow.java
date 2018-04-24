@@ -1,3 +1,4 @@
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.Toolkit;
@@ -5,6 +6,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.io.File;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -14,7 +17,7 @@ import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-public class UploadWindow implements ActionListener, ItemListener, ChangeListener {
+public class UploadWindow implements ActionListener, ItemListener, ChangeListener, MouseListener {
 	
 	// instance variables
 	private JFrame frame;
@@ -42,7 +45,24 @@ public class UploadWindow implements ActionListener, ItemListener, ChangeListene
 	private volatile boolean uploading = false;
 	private final String DEGREE  = "\u00b0";
 	private boolean changeToDMS = false;
+	private boolean completed = false;
 	private int count;
+	
+	private JTextField selectFolderHelp;
+	private JTextField groupHelp;
+	private JTextField lonlatHelp;
+	private JTextField habitatHelp;
+	private JTextField datesHelp;
+	private JTextField selectFolderHelpText;
+	private JTextField groupHelpText;
+	private JTextField lonlatHelpText;
+	private JTextField habitatHelpText;
+	private JTextField datesHelpText;
+	JPanel datesHelpPanel= new JPanel();
+	JPanel folderHelpPanel = new JPanel();
+	JPanel groupHelpPanel = new JPanel();
+	JPanel lonlatHelpPanel = new JPanel();
+	JPanel habitatHelpPanel = new JPanel();
 	
 	// these ones are for directory browsing (drives only)
 	private JFileChooser fc; 
@@ -74,6 +94,65 @@ public class UploadWindow implements ActionListener, ItemListener, ChangeListene
 			change.setText("Convert to Degrees, Minutes, Seconds");
 		}
 		change.addActionListener(this);
+
+		JLabel redStarFile = new JLabel("*");
+		JLabel redStarStart = new JLabel("*");
+		JLabel redStarEnd = new JLabel("*");
+		JLabel redStarGroup = new JLabel("*");
+		JLabel redStarHabitat = new JLabel("*");
+		redStarFile.setForeground(Color.RED);
+		redStarStart.setForeground(Color.RED);
+		redStarEnd.setForeground(Color.RED);
+		redStarGroup.setForeground(Color.RED);
+		redStarHabitat.setForeground(Color.RED);
+		
+		
+		selectFolderHelp = new JTextField(" ?");
+		selectFolderHelp.setEditable(false);
+		selectFolderHelp.setPreferredSize(new Dimension(23, 20));
+		selectFolderHelp.addMouseListener(this);
+		groupHelp = new JTextField(" ?");
+		groupHelp.setEditable(false);
+		groupHelp.setPreferredSize(new Dimension(23, 20));
+		groupHelp.addMouseListener(this);
+		lonlatHelp = new JTextField(" ?");
+		lonlatHelp.setEditable(false);
+		lonlatHelp.setPreferredSize(new Dimension(23, 20));
+		lonlatHelp.addMouseListener(this);
+		habitatHelp = new JTextField(" ?");
+		habitatHelp.setEditable(false);
+		habitatHelp.setPreferredSize(new Dimension(23, 20));
+		habitatHelp.addMouseListener(this);
+		datesHelp = new JTextField(" ?");
+		datesHelp.setEditable(false);
+		datesHelp.setPreferredSize(new Dimension(23, 20));
+		datesHelp.addMouseListener(this);
+		
+		selectFolderHelpText = new JTextField();
+		selectFolderHelpText.setEditable(false);
+		selectFolderHelpText.setText("Select folder");
+		selectFolderHelpText.setSize(100,25);
+		
+		groupHelpText = new JTextField();
+		groupHelpText.setEditable(false);
+		groupHelpText.setText("Choose an affiliation");
+		groupHelpText.setSize(100,25);
+		
+		lonlatHelpText = new JTextField();
+		lonlatHelpText.setEditable(false);
+		lonlatHelpText.setText("Enter lon and lat");
+		lonlatHelpText.setSize(100,25);
+		
+		habitatHelpText = new JTextField();
+		habitatHelpText.setEditable(false);
+		habitatHelpText.setText("Pick habitat(s)");
+		habitatHelpText.setSize(100,25);
+		
+		datesHelpText = new JTextField();
+		datesHelpText.setEditable(false);
+		datesHelpText.setText("Enter dates");
+		datesHelpText.setSize(100,25);
+
 		
 		one = new JCheckBox("Habitat one");
 		two = new JCheckBox("Habitat two");
@@ -91,14 +170,19 @@ public class UploadWindow implements ActionListener, ItemListener, ChangeListene
 		frame.setLocation(dim.width/2-350, dim.height/2-350);
 		
 		// add components to panels
+		filePanel.add(redStarFile);
 		filePanel.add(fileLabel);
 		filePanel.add(filePath);
 		filePanel.add(fileButton);
+		filePanel.add(selectFolderHelp);
 		submitPanel.add(submit);
 		changePanel.add(change);
+		changePanel.add(lonlatHelp);
 		
+		groupPanel.add(redStarGroup);
 		groupPanel.add(groupLabel);
 		groupPanel.add(groups);
+		groupPanel.add(groupHelp);
 		
 		JPanel latPanel = new JPanel();
 		JPanel lonPanel = new JPanel();
@@ -160,21 +244,26 @@ public class UploadWindow implements ActionListener, ItemListener, ChangeListene
 		locationPanel.add(lonPanel);
 		
 		habitatPanel.setLayout(new GridLayout());
+		habitatPanel.add(redStarHabitat);
 		habitatPanel.add(new JLabel("Select the habitat:"));
 		habitatPanel.add(one);
 		habitatPanel.add(two);
 		habitatPanel.add(three);
+		habitatPanel.add(habitatHelp);
 		
 		JPanel startPanel = new JPanel();
 		JPanel endPanel = new JPanel();
 		startDate = new JTextField(20);
 		endDate = new JTextField(20);
+		startPanel.add(redStarStart);
 		startPanel.add(new JLabel("Enter the start date of deployment (MM-DD-YYYY):"));
 		startPanel.add(startDate);
+		endPanel.add(redStarEnd);
 		endPanel.add(new JLabel("    Enter the end date of deployment (MM-DD-YYYY):"));
 		endPanel.add(endDate);
 		datePanel.add(startPanel);
 		datePanel.add(endPanel);
+		datePanel.add(datesHelp);
 		
 		panel.setLayout(new GridLayout(7, 1));
 		panel.add(filePanel);
@@ -184,6 +273,37 @@ public class UploadWindow implements ActionListener, ItemListener, ChangeListene
 		panel.add(habitatPanel);
 		panel.add(datePanel);
 		panel.add(submitPanel);
+		
+		datesHelpPanel.setSize(datesHelpText.getSize());
+		datesHelpPanel.setLocation(600,600);
+		datesHelpPanel.add(datesHelpText);
+		frame.add(datesHelpPanel);
+		datesHelpPanel.setVisible(false);
+		
+		lonlatHelpPanel.setSize(lonlatHelpText.getSize());
+		lonlatHelpPanel.setLocation(600,300);
+		lonlatHelpPanel.add(lonlatHelpText);
+		frame.add(lonlatHelpPanel);
+		lonlatHelpPanel.setVisible(false);
+		
+		habitatHelpPanel.setSize(habitatHelpText.getSize());
+		habitatHelpPanel.setLocation(600,500);
+		habitatHelpPanel.add(habitatHelpText);
+		frame.add(habitatHelpPanel);
+		habitatHelpPanel.setVisible(false);
+		
+		folderHelpPanel.setSize(selectFolderHelpText.getSize());
+		folderHelpPanel.setLocation(600,100);
+		folderHelpPanel.add(selectFolderHelpText);
+		frame.add(folderHelpPanel);
+		folderHelpPanel.setVisible(false);
+		
+		groupHelpPanel.setSize(groupHelpText.getSize());
+		groupHelpPanel.setLocation(600,200);
+		groupHelpPanel.add(groupHelpText);
+		frame.add(groupHelpPanel);
+		groupHelpPanel.setVisible(false);
+		
 		frame.add(panel);
 		frame.pack();
 		frame.setVisible(true);
@@ -243,44 +363,53 @@ public class UploadWindow implements ActionListener, ItemListener, ChangeListene
 				longitude = lonLabel.getText();
 				startDateStr = startDate.getText();
 				endDateStr = endDate.getText();
-				if (startDateStr.length() == 10 && endDateStr.length() == 10) {
-					for (int i = 0; i < 10; i++) {
-						if (i == 2 || i == 5) {
-							if (startDateStr.charAt(i) != '-' || endDateStr.charAt(i) != '-') {
-								JOptionPane.showMessageDialog(new JFrame(),
-									    "Incorrect date format. Please enter a date in the format: MM-DD-YYYY");
-								break;
-							}
-						} else {
-							if (!Character.isDigit(startDateStr.charAt(i)) || !Character.isDigit(endDateStr.charAt(i))) {
-								JOptionPane.showMessageDialog(new JFrame(),
-									    "Incorrect date format. Please enter a date in the format: MM-DD-YYYY");
-								break;
+				completed();
+				if(completed) {
+					if (startDateStr.length() == 10 && endDateStr.length() == 10) {
+						for (int i = 0; i < 10; i++) {
+							if (i == 2 || i == 5) {
+								if (startDateStr.charAt(i) != '-' || endDateStr.charAt(i) != '-') {
+									JOptionPane.showMessageDialog(new JFrame(),
+											"Incorrect date format. Please enter a date in the format: MM-DD-YYYY");
+									break;
+								}
+							} else {
+								if (!Character.isDigit(startDateStr.charAt(i)) || !Character.isDigit(endDateStr.charAt(i))) {
+									JOptionPane.showMessageDialog(new JFrame(),
+											"Incorrect date format. Please enter a date in the format: MM-DD-YYYY");
+									break;
+								}
 							}
 						}
+						this.setUploading(true);
+						reset();
+					} else {
+						JOptionPane.showMessageDialog(new JFrame(),
+								"Incorrect date format. Please enter a date in the format: MM-DD-YYYY");
 					}
-					this.setUploading(true);
 				} else {
 					JOptionPane.showMessageDialog(new JFrame(),
-						    "Incorrect date format. Please enter a date in the format: MM-DD-YYYY");
+							"Please enter all the required fields");
 				}
 			} else if (uploading) {
 				this.setUploading(false);
 			}
 		}
 		if(evt.getSource() == change) {
-			if(latLabel.getText().contains(".") || lonLabel.getText().contains(".")) {
-				String lati = DDtoDMS(latLabel.getText());
-				String longi = DDtoDMS(lonLabel.getText());
-				latLabel.setText(lati);
-				lonLabel.setText(longi);
-				change.setText("Convert to Decimal degrees");
-			} else if (latLabel.getText().contains("\"") || lonLabel.getText().contains("\"")) {
-				String lati = DMStoDD(latLabel.getText());
-				String longi = DMStoDD(lonLabel.getText());
-				latLabel.setText(lati);
-				lonLabel.setText(longi);
-				change.setText("Convert to Degrees, Minutes, Seconds");
+			if(!latLabel.getText().isEmpty() && !lonLabel.getText().isEmpty()) {
+				if(latLabel.getText().contains(".") || lonLabel.getText().contains(".")) {
+					String lati = DDtoDMS(latLabel.getText());
+					String longi = DDtoDMS(lonLabel.getText());
+					latLabel.setText(lati);
+					lonLabel.setText(longi);
+					change.setText("Convert to Decimal degrees");
+				} else if (latLabel.getText().contains("\"") || lonLabel.getText().contains("\"")) {
+					String lati = DMStoDD(latLabel.getText());
+					String longi = DMStoDD(lonLabel.getText());
+					latLabel.setText(lati);
+					lonLabel.setText(longi);
+					change.setText("Convert to Degrees, Minutes, Seconds");
+				}
 			}
 		}
 	}
@@ -360,7 +489,7 @@ public class UploadWindow implements ActionListener, ItemListener, ChangeListene
 		return habitats;
 	}
 	
-	public String getAffiliation() {
+	public String getGroup() {
 		return groups.getSelectedItem().toString();
 	}
 	
@@ -389,6 +518,106 @@ public class UploadWindow implements ActionListener, ItemListener, ChangeListene
 		int sec = (int) secD;
 		String dms = deg+DEGREE+" "+min+"' "+sec+"\"";
 		return dms;
+	}
+
+	@Override
+	public void mouseClicked(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mousePressed(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseReleased(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseEntered(MouseEvent e) {
+        //Mouse is over component
+        Object source = e.getSource();
+        if (source == groupHelp) {
+            groupHelpPanel.setVisible(true);
+        }
+        if (source == datesHelp) {
+            datesHelpPanel.setVisible(true);
+        }
+        if (source == habitatHelp) {
+            habitatHelpPanel.setVisible(true);
+        }
+        if (source == selectFolderHelp) {
+            folderHelpPanel.setVisible(true);
+        }
+        if (source == lonlatHelp) {
+            lonlatHelpPanel.setVisible(true);
+        }
+		
+	}
+
+	@Override
+	public void mouseExited(MouseEvent e) {
+		Object source = e.getSource();
+		if (source == groupHelp) {
+			groupHelpPanel.setVisible(false);
+		}
+		if (source == datesHelp) {
+			datesHelpPanel.setVisible(false);
+		}
+		if (source == habitatHelp) {
+			habitatHelpPanel.setVisible(false);
+		}
+		if (source == selectFolderHelp) {
+			folderHelpPanel.setVisible(false);
+		}
+		if (source == lonlatHelp) {
+			lonlatHelpPanel.setVisible(false);
+		}
+		
+	}
+	
+	public void completed() {
+		boolean s = false;
+		boolean e = false;
+		boolean ott = false;
+		boolean g = false;
+		boolean f = false;
+		if(!startDate.getText().isEmpty()) {
+			s = true;
+		}
+		if(!endDate.getText().isEmpty()) {
+			e = true;
+		}
+		if(one.isSelected()|| two.isSelected() || three.isSelected()) {
+			ott = true;
+		}
+		if(groups.getSelectedIndex() != -1) {
+			g = true;
+		}
+		if(!filePath.getText().isEmpty()) {
+			f = true;
+		}
+		if(s && e && ott && g && f) {
+			completed = true;
+		}
+		
+	}
+	
+	private void reset() {
+		startDate.setText(null);
+		endDate.setText(null);
+		one.setSelected(false);
+		two.setSelected(false);
+		three.setSelected(false);
+		filePath.setText(null);
+		groups.setSelectedIndex(-1);
+		latLabel.setText(null);
+		lonLabel.setText(null);
 	}
 
 }
