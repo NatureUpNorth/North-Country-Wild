@@ -307,7 +307,7 @@ public class UploadWindow implements ActionListener, ItemListener, ChangeListene
 		datePanel.add(startPanel);
 		dateButtonPanel.add(datesHelp);
 		datePanel.add(endPanel);
-		dateButtonPanel.setPreferredSize(new Dimension(750, 30));
+		dateButtonPanel.setPreferredSize(new Dimension(750, 100));
 		
 		panel.add(filePanel);
 		panel.add(groupPanel);

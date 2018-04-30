@@ -303,11 +303,10 @@ public class UploadWindow implements ActionListener, ItemListener, ChangeListene
 		endPanel.add(redStarEnd);
 		endPanel.add(new JLabel("  For this deployment, on what date was the camera removed from the field? (MM-DD-YYYY):"));
 		endPanel.add(endDate);
-		datePanel.setLayout(new GridLayout(2, 1));
+		datePanel.setLayout(new GridLayout(3, 1));
 		datePanel.add(startPanel);
-		dateButtonPanel.add(datesHelp);
 		datePanel.add(endPanel);
-		dateButtonPanel.setPreferredSize(new Dimension(750, 30));
+		dateButtonPanel.add(datesHelp);
 		
 		panel.add(filePanel);
 		panel.add(groupPanel);
