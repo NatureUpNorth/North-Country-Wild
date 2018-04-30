@@ -94,16 +94,12 @@ public class UploadWindow implements ActionListener, ItemListener, ChangeListene
 		JPanel habitatPanel = new JPanel();
 		JPanel datePanel = new JPanel();
 		JPanel submitPanel = new JPanel();
-<<<<<<< HEAD
 		JPanel changeLatPanel = new JPanel();
 		JPanel changeLonPanel = new JPanel();
-=======
-		JPanel changePanel = new JPanel();
 		JPanel locationLabelPanel = new JPanel();
 		JPanel habitatLabelPanel = new JPanel();
 		JPanel habitatButtonPanel = new JPanel();
 		JPanel dateButtonPanel = new JPanel();
->>>>>>> 914adc478936aa6e7c13f23becae2059cc995b5e
 		
 		JLabel groupLabel = new JLabel("Please identify the group you are associated with, if any:");
 		groups = new JComboBox<String>(groupList);
@@ -113,22 +109,12 @@ public class UploadWindow implements ActionListener, ItemListener, ChangeListene
 		submit = new JButton("Submit");
 		fileButton.addActionListener(this);
 		submit.addActionListener(this);
-<<<<<<< HEAD
 		latChange = new JButton();
 		latChange.setText("Convert to Degrees, Minutes, Seconds");
 		latChange.addActionListener(this);
 		lonChange = new JButton();
 		lonChange.setText("Convert to Degrees, Minutes, Seconds");
 		lonChange.addActionListener(this);
-=======
-		change = new JButton();
-		if(changeToDMS) {
-			change.setText("Convert to decimal degrees");
-		} else {
-			change.setText("Convert to Degrees, Minutes, Seconds");
-		}
-		change.addActionListener(this);
->>>>>>> 914adc478936aa6e7c13f23becae2059cc995b5e
 
 		JLabel redStarFile = new JLabel("*");
 		JLabel redStarStart = new JLabel("*");
@@ -208,7 +194,7 @@ public class UploadWindow implements ActionListener, ItemListener, ChangeListene
 		twelve.addItemListener(this);
 		
 		// set window size
-		frame.setPreferredSize(new Dimension(800, 700));
+		frame.setPreferredSize(new Dimension(800, 750));
 		frame.setResizable(false);
 		
 		// make window appear in middle of screen
@@ -290,22 +276,19 @@ public class UploadWindow implements ActionListener, ItemListener, ChangeListene
 		lonPanel.add(new JLabel("Select the longitude:"));
 		lonPanel.add(lonLabel);
 		lonPanel.add(lon);
-<<<<<<< HEAD
 //		locationPanel.setLayout(new GridLayout(4, 1));
 //		locationPanel.add(latPanel);
 //		locationPanel.add(changeLatPanel);
 //		locationPanel.add(lonPanel);
 //		locationPanel.add(changeLonPanel);
 		
-		//habitatPanel.setLayout(new GridLayout(1,3));
+		habitatPanel.setLayout(new GridLayout(1,3));
 		habitatPanel.add(redStarHabitat);
 		habitatPanel.add(new JLabel("Select the habitat:"));
 		habitatPanel.add(one);
 		habitatPanel.add(two);
 		habitatPanel.add(three);
 		habitatPanel.add(habitatHelp);
-		//habitatPanel.add(urbanHelp);
-=======
 		locationPanel.setLayout(new GridLayout(2, 1));
 		locationLabelPanel.add(new JLabel("For this camera deployment, what was the latitude and longitude of the camera location?"));
 		locationPanel.add(latPanel);
@@ -327,7 +310,6 @@ public class UploadWindow implements ActionListener, ItemListener, ChangeListene
 		habitatPanel.add(eleven);
 		habitatPanel.add(twelve);
 		habitatButtonPanel.add(habitatHelp);
->>>>>>> 914adc478936aa6e7c13f23becae2059cc995b5e
 		
 		JPanel startPanel = new JPanel();
 		JPanel endPanel = new JPanel();
@@ -345,23 +327,15 @@ public class UploadWindow implements ActionListener, ItemListener, ChangeListene
 		datePanel.add(endPanel);
 		dateButtonPanel.setPreferredSize(new Dimension(750, 30));
 		
-<<<<<<< HEAD
-		panel.setLayout(new GridLayout(9, 1));
-		panel.add(filePanel);
-		panel.add(groupPanel);
-		//panel.add(locationPanel);
-		panel.add(latPanel);
-		panel.add(changeLatPanel);
-		panel.add(lonPanel);
-		panel.add(changeLonPanel);
-=======
 		panel.add(filePanel);
 		panel.add(groupPanel);
 		panel.add(locationLabelPanel);
 		panel.add(locationPanel);
-		panel.add(changePanel);
+		panel.add(latPanel);
+		panel.add(changeLatPanel);
+		panel.add(lonPanel);
+		panel.add(changeLonPanel);
 		panel.add(habitatLabelPanel);
->>>>>>> 914adc478936aa6e7c13f23becae2059cc995b5e
 		panel.add(habitatPanel);
 		panel.add(habitatButtonPanel);
 		panel.add(datePanel);
@@ -575,8 +549,8 @@ public class UploadWindow implements ActionListener, ItemListener, ChangeListene
 				if(latLabel.getText().contains(".") && latChange.getText().equals("Convert to Degrees, Minutes, Seconds")){
 					String lati = DDtoDMS(latLabel.getText());
 					latLabel.setText(lati);
-					latChange.setText("Convert to Decimal degrees");
-				}else if (latLabel.getText().contains("\"") && latChange.getText().equals("Convert to Decimal degrees")){
+					latChange.setText("     Convert to Decimal Degrees     ");
+				}else if (latLabel.getText().contains("\"") && latChange.getText().equals("     Convert to Decimal Degrees     ")){
 					String lati = DMStoDD(latLabel.getText());
 					latLabel.setText(lati);
 					latChange.setText("Convert to Degrees, Minutes, Seconds");

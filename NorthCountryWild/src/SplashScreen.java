@@ -183,6 +183,4 @@ public class SplashScreen implements ActionListener{
 
 	}
 
-
-
 }
