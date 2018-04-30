@@ -96,6 +96,7 @@ public class UploadWindow implements ActionListener, ItemListener, ChangeListene
 		JPanel submitPanel = new JPanel();
 		JPanel changeLatPanel = new JPanel();
 		JPanel changeLonPanel = new JPanel();
+		JPanel changePanel = new JPanel();
 		JPanel locationLabelPanel = new JPanel();
 		JPanel habitatLabelPanel = new JPanel();
 		JPanel habitatButtonPanel = new JPanel();
@@ -330,7 +331,7 @@ public class UploadWindow implements ActionListener, ItemListener, ChangeListene
 		datePanel.add(endPanel);
 		dateButtonPanel.setPreferredSize(new Dimension(750, 30));
 		
-		panel.setLayout(new GridLayout(12, 1));
+		panel.setLayout(new GridLayout(9, 1));
 		panel.add(filePanel);
 		panel.add(groupPanel);
 		//panel.add(locationPanel);
@@ -338,6 +339,11 @@ public class UploadWindow implements ActionListener, ItemListener, ChangeListene
 		panel.add(changeLatPanel);
 		panel.add(lonPanel);
 		panel.add(changeLonPanel);
+		panel.add(filePanel);
+		panel.add(groupPanel);
+		panel.add(locationLabelPanel);
+		panel.add(locationPanel);
+		panel.add(changePanel);
 		panel.add(habitatLabelPanel);
 		panel.add(habitatPanel);
 		panel.add(habitatButtonPanel);
@@ -363,7 +369,7 @@ public class UploadWindow implements ActionListener, ItemListener, ChangeListene
 		groupHelpText.setEditable(false);
 		groupHelpText.setText("Some people engage with North Country Wild through collaborations with school groups or by checking "
 				+ "a game camera out from Nature Up North or local library. If you are affiliated with a group, please enter it here.");
-		groupHelpText.setSize(200,173);
+		groupHelpText.setSize(200,200);
 	    groupHelpText.setBorder(BorderFactory.createCompoundBorder(border,
 	            BorderFactory.createEmptyBorder(10, 10, 10, 10)));
 		
@@ -425,7 +431,7 @@ public class UploadWindow implements ActionListener, ItemListener, ChangeListene
 		datesHelpPanel.setVisible(false);
 		
 		lonlatHelpPanel.setSize(lonlatHelpText.getSize());
-		lonlatHelpPanel.setLocation(570,190);
+		lonlatHelpPanel.setLocation(470,255);
 		lonlatHelpPanel.add(lonlatHelpText);
 		frame.add(lonlatHelpPanel);
 		lonlatHelpPanel.setVisible(false);
@@ -443,7 +449,7 @@ public class UploadWindow implements ActionListener, ItemListener, ChangeListene
 		folderHelpPanel.setVisible(false);
 		
 		groupHelpPanel.setSize(groupHelpText.getSize());
-		groupHelpPanel.setLocation(450, 67);
+		groupHelpPanel.setLocation(250, 35);
 		groupHelpPanel.add(groupHelpText);
 		frame.add(groupHelpPanel);
 		groupHelpPanel.setVisible(false);

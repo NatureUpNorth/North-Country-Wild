@@ -425,7 +425,7 @@ public class UploadWindow implements ActionListener, ItemListener, ChangeListene
 		datesHelpPanel.setVisible(false);
 		
 		lonlatHelpPanel.setSize(lonlatHelpText.getSize());
-		lonlatHelpPanel.setLocation(570,190);
+		lonlatHelpPanel.setLocation(500,220);
 		lonlatHelpPanel.add(lonlatHelpText);
 		frame.add(lonlatHelpPanel);
 		lonlatHelpPanel.setVisible(false);
