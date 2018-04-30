@@ -26,10 +26,11 @@ public class LoginWindow implements ActionListener {
 		JButton submit = new JButton("Submit");
 		
 		// set window size
-		frame.setSize(350, 125);
+		frame.setSize(350, 150);
 		frame.setResizable(false);
 		
 		// add components to panel
+		panel.add(new JLabel("<html>To begin, please sign in using your account information<br/>for natureupnorth.org:<br/></html>"));
 		panel.add(userLabel);
 		panel.add(userField);
 		panel.add(passLabel);
@@ -64,13 +65,15 @@ public class LoginWindow implements ActionListener {
 		username = userField.getText();
 		if (password.isEmpty() || username.isEmpty()) {
 			System.out.println("?");
-			JOptionPane.showMessageDialog(frame, "Invalid username/password error! Please contact the developer. \nThank you, and sorry for your inconvenience.");
+			JOptionPane.showMessageDialog(frame, "Incorrect username and/or password.\n" + 
+					"Please sign in using your account information for natureupnorth.org.\nIf you forget your username and/or password, please contact us at info@natureupnorth.org for assistance.\nThank you!\r\n");
 		}
 		else {
 			if (verify(username, password)) {
 				open = false;
 			} else {
-				JOptionPane.showMessageDialog(frame, "Invalid username/password error! Please contact the developer. \nThank you, and sorry for your inconvenience.");
+				JOptionPane.showMessageDialog(frame, "Incorrect username and/or password.\n" + 
+						"Please sign in using your account information for natureupnorth.org.\nIf you forget your username and/or password, please contact us at info@natureupnorth.org for assistance.\nThank you!\r\n");
 			}
 		}
 	}
@@ -81,11 +84,6 @@ public class LoginWindow implements ActionListener {
 	
 	public String getName() {
 		return username;
-	}
-
-	public static void main(String[] args) {
-		// for testing
-		new LoginWindow();
 	}
 
 }

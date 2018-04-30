@@ -11,16 +11,19 @@ public class Main {
 		String name = login.getName();
 		login.close();
 		
-		//String name = "Guinevere Gilman";
-		//String name = "Remi LeBlanc";
 		UploadWindow upload = new UploadWindow();
 		while (true) {
 			while (!upload.isUploading());  // wait for them to hit submit
 			String date = upload.getStartDate();
 			String affiliation = upload.getGroup();
 			String destination = affiliation + "/" + name + "/" + date;
+<<<<<<< HEAD
 			System.out.println(upload.getFilepath()+" :Path");
 			UploadThread thread = new UploadThread(upload.getFilepath(), destination, upload, upload.getCount());
+=======
+			String filepath = upload.getFilepath();
+			UploadThread thread = new UploadThread(filepath, destination, upload, upload.getCount());
+>>>>>>> 914adc478936aa6e7c13f23becae2059cc995b5e
 			thread.start();
 			while(thread.isUploading()) {
 				if (!upload.isUploading()) {
