@@ -9,6 +9,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.nio.file.attribute.FileTime;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 import com.drew.imaging.ImageMetadataReader;
@@ -33,8 +34,10 @@ public class UploadThread extends Thread {
 	private LoadingWindow loading;
 	private UploadWindow upload;
 	private volatile boolean running = true;
+	private final String DEGREE  = "\u00b0";
 	
 	UploadThread(String path, String destination, UploadWindow uw, int files) {	
+		System.out.print("Path 4: "+path);
 		filePath = path;
 		destinationPath = destination;
 		uploading = true;
@@ -85,6 +88,12 @@ public class UploadThread extends Thread {
     			if(hab.length()>3) {
     				hab = hab.substring(0, hab.length()-3);
     			}
+    			if(lat.contains("\"")) {
+    				lat = DMStoDD(lat);
+    			}
+    			if(lon.contains("\"")) {
+    				lon = DMStoDD(lon);
+    			}
     			fileWriter.append(affiliation+","+lat+","+lon+","+hab+","+startDate+","+endDate);
     			fileWriter.append("\n");
     		}
@@ -107,6 +116,7 @@ public class UploadThread extends Thread {
 	
 	public void run() {
 		count = 0;
+		System.out.println("Path 3:"+filePath);
 		upload(filePath, destinationPath);
 	}
 	
@@ -120,8 +130,10 @@ public class UploadThread extends Thread {
         DbxClientV2 client = new DbxClientV2(config, ACCESS_TOKEN);  
 		
 		File dir = null;
+		System.out.println("Path2: "+filePath);
 		try {
         	dir = new File(filePath);
+        	System.out.println("path: "+filePath);
     		for(File file: dir.listFiles()){
     			if (file.isDirectory()) {
     				upload(file.getAbsolutePath(), destinationPath);
@@ -182,6 +194,22 @@ public class UploadThread extends Thread {
 	
 	public boolean isUploading() {
 		return uploading;
+	}
+	
+	public String DMStoDD(String dms) {
+		int x = dms.indexOf(DEGREE);
+		String deg = dms.substring(0, x);
+		int y = dms.indexOf("'");
+		String min = dms.substring(x+1, y);
+		int z = dms.indexOf("\"");
+		String sec = dms.substring(y+1, z);
+		double d = Double.parseDouble(deg);
+		double m = Double.parseDouble(min);
+		double s = Double.parseDouble(sec);
+		Double dd = d + (m/60.0) + (s/3600.0);
+		DecimalFormat df4 = new DecimalFormat("#.##");
+		dd = Double.valueOf(df4.format(dd));
+		return dd.toString();
 	}
 	
 }

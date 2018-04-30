@@ -1,0 +1,768 @@
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.GridLayout;
+import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.io.File;
+import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.Hashtable;
+
+import javax.swing.*;
+import javax.swing.border.Border;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+
+public class UploadWindow implements ActionListener, ItemListener, ChangeListener, MouseListener, FocusListener {
+	
+	// instance variables
+	private JFrame frame;
+	private JTextField filePath;
+	private String[] groupList = {"List of schools", "Unaffiliated"};
+	private JButton fileButton;
+	private JLabel fileLabel;
+	private JButton submit;
+	private JButton latChange;
+	private JButton lonChange;
+	private JCheckBox one;
+	private JCheckBox two;
+	private JCheckBox three;
+	private JSlider lat;
+	private JSlider lon;
+	private JTextField latLabel;
+	private JTextField lonLabel;
+	private JTextField startDate;
+	private JTextField endDate;
+	private String startDateStr;
+	private String endDateStr;
+	private String latitude;
+	private String longitude;
+	JComboBox<String> groups; 
+	private ArrayList<String> habitats = new ArrayList<String>();
+	private volatile boolean uploading = false;
+	private final String DEGREE  = "\u00b0";
+	private boolean completed = false;
+	private int count;
+	
+	private JTextField selectFolderHelp;
+	private JTextField groupHelp;
+	private JTextField lonHelp;
+	private JTextField latHelp;
+	private JTextField habitatHelp;
+	private JTextField datesHelp;
+	private JTextField urbanHelp;
+	private JTextArea selectFolderHelpText;
+	private JTextArea groupHelpText;
+	private JTextArea lonlatHelpText;
+	private JTextArea habitatHelpText;
+	private JTextArea datesHelpText;
+	private JTextArea urbanHelpText;
+	JPanel datesHelpPanel= new JPanel();
+	JPanel folderHelpPanel = new JPanel();
+	JPanel groupHelpPanel = new JPanel();
+	JPanel lonlatHelpPanel = new JPanel();
+	JPanel habitatHelpPanel = new JPanel();
+	JPanel urbanHelpPanel = new JPanel();
+	
+	// these ones are for directory browsing (drives only)
+	private JFileChooser fc; 
+
+	public UploadWindow() {
+		// set up the components
+		frame = new JFrame("North Country Wild");
+		JPanel panel = new JPanel();
+		JPanel filePanel = new JPanel();
+		JPanel groupPanel = new JPanel();
+		JPanel locationPanel = new JPanel();
+		JPanel habitatPanel = new JPanel();
+		JPanel datePanel = new JPanel();
+		JPanel submitPanel = new JPanel();
+		JPanel changeLatPanel = new JPanel();
+		JPanel changeLonPanel = new JPanel();
+		
+		JLabel groupLabel = new JLabel("Select your affiliation:");
+		groups = new JComboBox<String>(groupList);
+		fileLabel = new JLabel("Select the pictures to be uploaded:");
+		filePath = new JTextField(20);
+		fileButton = new JButton("Browse");
+		submit = new JButton("Submit");
+		fileButton.addActionListener(this);
+		submit.addActionListener(this);
+		latChange = new JButton();
+		latChange.setText("Convert to Degrees, Minutes, Seconds");
+		latChange.addActionListener(this);
+		lonChange = new JButton();
+		lonChange.setText("Convert to Degrees, Minutes, Seconds");
+		lonChange.addActionListener(this);
+
+		JLabel redStarFile = new JLabel("*");
+		JLabel redStarStart = new JLabel("*");
+		JLabel redStarEnd = new JLabel("*");
+		JLabel redStarGroup = new JLabel("*");
+		JLabel redStarHabitat = new JLabel("*");
+		redStarFile.setForeground(Color.RED);
+		redStarFile.setFont(new Font("Dialog", Font.BOLD, 24));
+		redStarStart.setForeground(Color.RED);
+		redStarStart.setFont(new Font("Dialog", Font.BOLD, 24));
+		redStarEnd.setForeground(Color.RED);
+		redStarEnd.setFont(new Font("Dialog", Font.BOLD, 24));
+		redStarGroup.setForeground(Color.RED);
+		redStarGroup.setFont(new Font("Dialog", Font.BOLD, 24));
+		redStarHabitat.setForeground(Color.RED);
+		redStarHabitat.setFont(new Font("Dialog", Font.BOLD, 24));
+		
+		
+		selectFolderHelp = new JTextField(" ?");
+		selectFolderHelp.setEditable(false);
+		selectFolderHelp.setPreferredSize(new Dimension(23, 20));
+		selectFolderHelp.addMouseListener(this);
+		
+		groupHelp = new JTextField(" ?");
+		groupHelp.setEditable(false);
+		groupHelp.setPreferredSize(new Dimension(23, 20));
+		groupHelp.addMouseListener(this);
+		
+		lonHelp = new JTextField(" ?");
+		lonHelp.setEditable(false);
+		lonHelp.setPreferredSize(new Dimension(23, 20));
+		lonHelp.addMouseListener(this);
+		
+		latHelp = new JTextField(" ?");
+		latHelp.setEditable(false);
+		latHelp.setPreferredSize(new Dimension(23, 20));
+		latHelp.addMouseListener(this);
+		
+		habitatHelp = new JTextField(" ?");
+		habitatHelp.setEditable(false);
+		habitatHelp.setPreferredSize(new Dimension(23, 20));
+		habitatHelp.addMouseListener(this);
+		
+		datesHelp = new JTextField(" ?");
+		datesHelp.setEditable(false);
+		datesHelp.setPreferredSize(new Dimension(23, 20));
+		datesHelp.addMouseListener(this);
+		
+		urbanHelp = new JTextField(" ?");
+		urbanHelp.setEditable(false);
+		urbanHelp.setPreferredSize(new Dimension(23, 20));
+		urbanHelp.addMouseListener(this);
+		
+		one = new JCheckBox("Habitat one");
+		two = new JCheckBox("Habitat two");
+		three = new JCheckBox("Habitat three");
+		one.addItemListener(this);
+		two.addItemListener(this);
+		three.addItemListener(this);
+		
+		// set window size
+		frame.setPreferredSize(new Dimension(700, 700));
+		frame.setResizable(false);
+		
+		// make window appear in middle of screen
+		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+		frame.setLocation(dim.width/2-350, dim.height/2-350);
+		
+		// add components to panels
+		filePanel.add(redStarFile);
+		filePanel.add(fileLabel);
+		filePanel.add(filePath);
+		filePanel.add(fileButton);
+		filePanel.add(selectFolderHelp);
+		submitPanel.add(submit);
+		changeLatPanel.add(latChange);
+		changeLatPanel.add(latHelp);
+		changeLonPanel.add(lonChange);
+		changeLonPanel.add(lonHelp);
+		
+		groupPanel.add(redStarGroup);
+		groupPanel.add(groupLabel);
+		groupPanel.add(groups);
+		groupPanel.add(groupHelp);
+		
+		JPanel latPanel = new JPanel();
+		JPanel lonPanel = new JPanel();
+		lat = new JSlider(JSlider.HORIZONTAL, -9000, 9000, 0);
+		lat.setPreferredSize(new Dimension(300, 45));
+		lat.addChangeListener(this);
+		latLabel = new JTextField(10);
+		latLabel.setText("0.00");
+		//latLabel.addActionListener(this);
+		latLabel.addFocusListener(this);
+		lat.setMajorTickSpacing(2000);
+		lat.setMinorTickSpacing(500);
+		lat.setPaintTicks(true);
+		lat.setPaintLabels(true);
+		lon = new JSlider(JSlider.HORIZONTAL, -18000, 18000, 0);
+		lon.setPreferredSize(new Dimension(300, 45));
+		lonLabel = new JTextField(10);
+		lonLabel.setText("0.00");
+		lonLabel.addFocusListener(this);
+		lon.addChangeListener(this);
+		lon.setMajorTickSpacing(4000);
+		lon.setMinorTickSpacing(1000);
+		lon.setPaintTicks(true);
+		lon.setPaintLabels(true);
+		
+		//Create the label table
+		Hashtable latTable = new Hashtable();
+		latTable.put( new Integer( 9000 ), new JLabel("90") );
+		latTable.put( new Integer( 7000 ), new JLabel("70") );
+		latTable.put( new Integer( 5000 ), new JLabel("50") );
+		latTable.put( new Integer( 3000 ), new JLabel("30") );
+		latTable.put( new Integer( 1000 ), new JLabel("10") );
+		latTable.put( new Integer( -7000 ), new JLabel("-70") );
+		latTable.put( new Integer( -5000 ), new JLabel("-50") );
+		latTable.put( new Integer( -3000 ), new JLabel("-30") );
+		latTable.put( new Integer( -1000 ), new JLabel("-10") );
+		latTable.put( new Integer( -9000 ), new JLabel("-90") );
+		lat.setLabelTable( latTable );
+		lat.setPaintLabels(true);
+		Hashtable lonTable = new Hashtable();
+		lonTable.put( new Integer( 18000 ), new JLabel("180")); 
+		lonTable.put( new Integer( 14000 ), new JLabel("140")); 
+		lonTable.put( new Integer( 10000 ), new JLabel("100")); 
+		lonTable.put( new Integer( 6000 ), new JLabel("60")); 
+		lonTable.put( new Integer( 2000 ), new JLabel("20")); 
+		lonTable.put( new Integer( -14000 ), new JLabel("-140")); 
+		lonTable.put( new Integer( -10000 ), new JLabel("-100")); 
+		lonTable.put( new Integer( -6000 ), new JLabel("-60")); 
+		lonTable.put( new Integer( -2000 ), new JLabel("-20")); 
+		lonTable.put( new Integer( -18000 ), new JLabel("-180")); 
+		lon.setLabelTable( lonTable );
+		lon.setPaintLabels(true);
+		
+		latPanel.add(new JLabel(" Select the latitude:"));
+		latPanel.add(latLabel);
+		latPanel.add(lat);
+		lonPanel.add(new JLabel("Select the longitude:"));
+		lonPanel.add(lonLabel);
+		lonPanel.add(lon);
+//		locationPanel.setLayout(new GridLayout(4, 1));
+//		locationPanel.add(latPanel);
+//		locationPanel.add(changeLatPanel);
+//		locationPanel.add(lonPanel);
+//		locationPanel.add(changeLonPanel);
+		
+		//habitatPanel.setLayout(new GridLayout(1,3));
+		habitatPanel.add(redStarHabitat);
+		habitatPanel.add(new JLabel("Select the habitat:"));
+		habitatPanel.add(one);
+		habitatPanel.add(two);
+		habitatPanel.add(three);
+		habitatPanel.add(habitatHelp);
+		//habitatPanel.add(urbanHelp);
+		
+		JPanel startPanel = new JPanel();
+		JPanel endPanel = new JPanel();
+		startDate = new JTextField(20);
+		endDate = new JTextField(20);
+		startPanel.add(redStarStart);
+		startPanel.add(new JLabel("Enter the start date of deployment (MM-DD-YYYY):"));
+		startPanel.add(startDate);
+		endPanel.add(redStarEnd);
+		endPanel.add(new JLabel("    Enter the end date of deployment (MM-DD-YYYY):"));
+		endPanel.add(endDate);
+		datePanel.add(startPanel);
+		datePanel.add(endPanel);
+		datePanel.add(datesHelp);
+		
+		panel.setLayout(new GridLayout(9, 1));
+		panel.add(filePanel);
+		panel.add(groupPanel);
+		//panel.add(locationPanel);
+		panel.add(latPanel);
+		panel.add(changeLatPanel);
+		panel.add(lonPanel);
+		panel.add(changeLonPanel);
+		panel.add(habitatPanel);
+		panel.add(datePanel);
+		panel.add(submitPanel);
+		
+		Border border = BorderFactory.createLineBorder(Color.BLACK);
+		
+		selectFolderHelpText = new JTextArea();
+		selectFolderHelpText.setLineWrap(true);
+		selectFolderHelpText.setWrapStyleWord(true);
+		selectFolderHelpText.setEditable(false);
+		selectFolderHelpText.setText("Browse for the folder that contains the images that you wish to upload. This folder can have sub-folders "
+				+ "within it.");
+		selectFolderHelpText.setSize(200,111);
+		selectFolderHelpText.setBorder(BorderFactory.createCompoundBorder(border,
+	            BorderFactory.createEmptyBorder(10, 10, 10, 10)));
+		
+		groupHelpText = new JTextArea();
+		groupHelpText.setLineWrap(true);
+		groupHelpText.setWrapStyleWord(true);
+		groupHelpText.setEditable(false);
+		groupHelpText.setText("Some people engage with North Country Wild through collaborations with school groups or by checking "
+				+ "a game camera out from Nature Up North or local library. If you are affiliated with a group, please enter it here.");
+		groupHelpText.setSize(200,200);
+	    groupHelpText.setBorder(BorderFactory.createCompoundBorder(border,
+	            BorderFactory.createEmptyBorder(10, 10, 10, 10)));
+		
+		lonlatHelpText = new JTextArea();
+		lonlatHelpText.setLineWrap(true);
+		lonlatHelpText.setWrapStyleWord(true);
+		lonlatHelpText.setEditable(false);
+		lonlatHelpText.setText("If you do not know the longitude and latitude of the camera location, you can search for them here: "
+				+ "https://mynasadata.larc.nasa.gov/latitudelongitude-finder/");
+		lonlatHelpText.setSize(200,145);
+	    lonlatHelpText.setBorder(BorderFactory.createCompoundBorder(border,
+	            BorderFactory.createEmptyBorder(10, 10, 10, 10)));
+		
+		habitatHelpText = new JTextArea();
+		habitatHelpText.setLineWrap(true);
+		habitatHelpText.setWrapStyleWord(true);
+		habitatHelpText.setEditable(false);
+		habitatHelpText.setText("Hardwood Forest: Dominated by mainly hardwood species including for example maple, beech, cherry, and birch.\n\n"
+				+ "Evergreen Forest: Dominated by mainly evergreen species including for example white pine, red spruce, balsam fir, hemlock, and "
+				+ "possibly plantation pines such as Scots pine.\n\nMixed Forest: Hardwood and Evergreen trees are present in a balanced mix.\n\n"
+				+ "Plantation Forest: Trees (usually Pines) are evenly spaced in an organized fashion throuhgout the forest and there are mainly "
+				+ "one single species making up the forest leaf-layer (canpoy).\n\nNatural Field or Meadow: Area dominated by grasses and plants "
+				+ "such as goldenrod and milkweed; possibly interspersed with a few young trees such as pine or cedar. Not mowed.\n\nPublic Park/"
+				+ "School Grounds/Lawn: Primarily open area with some trees interspersed; grass is the predominant vegetation, perhaps supplemented "
+				+ "with e.g. flower beds. Grass is regularly maintained by mowing.\n\nWetland edge: If the camera was placed within 15 feet of a pond"
+				+ "or wetland, please check this box.\n\nEdge between two habitats: If the camera is located within about 25 feet of more than one "
+				+ "of the habitats listed above, please select this choice.");
+		habitatHelpText.setSize(500,450);
+	    habitatHelpText.setBorder(BorderFactory.createCompoundBorder(border,
+	            BorderFactory.createEmptyBorder(10, 10, 10, 10)));
+		
+		datesHelpText = new JTextArea();
+		datesHelpText.setLineWrap(true);
+		datesHelpText.setWrapStyleWord(true);
+		datesHelpText.setEditable(false);
+		datesHelpText.setText("Enter dates");
+		datesHelpText.setSize(100,25);
+		
+		urbanHelpText = new JTextArea();
+		urbanHelpText.setLineWrap(true);
+		urbanHelpText.setWrapStyleWord(true);
+		urbanHelpText.setEditable(false);
+		urbanHelpText.setText("Rural: Camera was placed on public or private land in a rural location away from much human influence.\n\n"
+				+ "Suburan/moderately urban: Camera was placed near the edge of a town or village where there are more homes and other "
+				+ "development than in rural places.\n\nPrimarily urban: Camera was placed inside of a town or village in a location where automobile"
+				+ "traffic is prevalent as is the amount of developed space (storefront, parking areas, etc.).");
+		urbanHelpText.setSize(300,260);
+		urbanHelpText.setBorder(BorderFactory.createCompoundBorder(border,
+	            BorderFactory.createEmptyBorder(10, 10, 10, 10)));
+		
+		//-------------------------------------------------------
+		
+		datesHelpPanel.setSize(datesHelpText.getSize());
+		datesHelpPanel.setLocation(600,600);
+		datesHelpPanel.add(datesHelpText);
+		frame.add(datesHelpPanel);
+		datesHelpPanel.setVisible(false);
+		
+		lonlatHelpPanel.setSize(lonlatHelpText.getSize());
+		lonlatHelpPanel.setLocation(490,220);
+		lonlatHelpPanel.add(lonlatHelpText);
+		frame.add(lonlatHelpPanel);
+		lonlatHelpPanel.setVisible(false);
+		
+		habitatHelpPanel.setSize(habitatHelpText.getSize());
+		habitatHelpPanel.setLocation(60,7);
+		habitatHelpPanel.add(habitatHelpText);
+		frame.add(habitatHelpPanel);
+		habitatHelpPanel.setVisible(false);
+		
+		folderHelpPanel.setSize(selectFolderHelpText.getSize());
+		folderHelpPanel.setLocation(470,35);
+		folderHelpPanel.add(selectFolderHelpText);
+		frame.add(folderHelpPanel);
+		folderHelpPanel.setVisible(false);
+		
+		groupHelpPanel.setSize(groupHelpText.getSize());
+		groupHelpPanel.setLocation(250, 35);
+		groupHelpPanel.add(groupHelpText);
+		frame.add(groupHelpPanel);
+		groupHelpPanel.setVisible(false);
+		
+		urbanHelpPanel.setSize(urbanHelpText.getSize());
+		urbanHelpPanel.setLocation(300, 200);
+		urbanHelpPanel.add(urbanHelpText);
+		frame.add(urbanHelpPanel);
+		urbanHelpPanel.setVisible(false);
+		
+		frame.add(panel);
+		frame.pack();
+		frame.setVisible(true);
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	}
+	
+	public boolean isUploading() {
+		return uploading;
+	}
+	
+	public void setUploading(boolean status) {
+		uploading = status;
+		if (status) {
+			submit.setText("Cancel");
+		} else {
+			submit.setText("Submit");
+		}
+	}
+	
+	public void actionPerformed(ActionEvent evt) {
+		if (evt.getSource() == fileButton) {
+			fc = new JFileChooser(System.getProperty("user.home"));
+			fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+			/*
+			fc.setFileFilter(new javax.swing.filechooser.FileFilter() {
+
+				@Override
+				public boolean accept(File f) {
+					currentPath = fc.getCurrentDirectory().toString();
+					return (f.isDirectory() && f.getAbsolutePath().endsWith(":\\"));
+				}
+
+				@Override
+				public String getDescription() {
+					return "Only drives";
+				}
+				
+			});
+			*/
+			if (fc.showOpenDialog(fc) == JFileChooser.APPROVE_OPTION) {
+				filePath.setText(fc.getSelectedFile().toString());
+				count = 0;
+				checkDirectory(getFilepath());
+				JFrame optionFrame = new JFrame();
+				String[] options = {"Yes", "No"};
+				int n = JOptionPane.showOptionDialog(
+					    optionFrame, "This folder has approximately " + count + " files to be uploaded in it. Is this correct?",
+					    "Warning", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
+				if (n == 1) {
+					fileButton.doClick();
+				}
+			}
+		}
+		if (evt.getSource() == submit) {
+			if (!uploading) {
+				latitude = latLabel.getText();
+				longitude = lonLabel.getText();
+				startDateStr = startDate.getText();
+				endDateStr = endDate.getText();
+				completed();
+				if(completed) {
+					if (startDateStr.length() == 10 && endDateStr.length() == 10) {
+						for (int i = 0; i < 10; i++) {
+							if (i == 2 || i == 5) {
+								if (startDateStr.charAt(i) != '-' || endDateStr.charAt(i) != '-') {
+									JOptionPane.showMessageDialog(new JFrame(),
+											"Incorrect date format. Please enter a date in the format: MM-DD-YYYY");
+									break;
+								}
+							} else {
+								if (!Character.isDigit(startDateStr.charAt(i)) || !Character.isDigit(endDateStr.charAt(i))) {
+									JOptionPane.showMessageDialog(new JFrame(),
+											"Incorrect date format. Please enter a date in the format: MM-DD-YYYY");
+									break;
+								}
+							}
+						}
+						this.setUploading(true);
+						reset();
+					} else {
+						JOptionPane.showMessageDialog(new JFrame(),
+								"Incorrect date format. Please enter a date in the format: MM-DD-YYYY");
+					}
+				} else {
+					JOptionPane.showMessageDialog(new JFrame(),
+							"Please enter all the required fields");
+				}
+			} else if (uploading) {
+				this.setUploading(false);
+			}
+		}
+		if(evt.getSource() == latChange) {
+			if(!latLabel.getText().isEmpty()) {
+				if(latLabel.getText().contains(".") && latChange.getText().equals("Convert to Degrees, Minutes, Seconds")){
+					String lati = DDtoDMS(latLabel.getText());
+					latLabel.setText(lati);
+					latChange.setText("Convert to Decimal degrees");
+				}else if (latLabel.getText().contains("\"") && latChange.getText().equals("Convert to Decimal degrees")){
+					String lati = DMStoDD(latLabel.getText());
+					latLabel.setText(lati);
+					latChange.setText("Convert to Degrees, Minutes, Seconds");
+				}
+			}
+		}
+		
+		if(evt.getSource() == lonChange) {
+			if(!lonLabel.getText().isEmpty()) {
+				if(lonLabel.getText().contains(".") && lonChange.getText().equals("Convert to Degrees, Minutes, Seconds")) {
+					String longi = DDtoDMS(lonLabel.getText());
+					lonLabel.setText(longi);
+					lonChange.setText("Convert to Decimal degrees");
+					System.out.println(lonLabel.getText());
+				} else if (lonLabel.getText().contains("\"") && lonChange.getText().equals("Convert to Decimal degrees")) {
+					String longi = DMStoDD(lonLabel.getText());
+					lonLabel.setText(longi);
+					lonChange.setText("Convert to Degrees, Minutes, Seconds");
+					System.out.println(lonLabel.getText());
+				}
+			}
+		}
+		
+//		if(evt.getSource() == latLabel) {
+//			String value = latLabel.getText();
+//			double latPos = Double.parseDouble(value);
+//			double latPosUpdated = latPos*100;
+//			lat.setValue((int)latPosUpdated);
+//		}
+	}
+
+	public String getFilepath() {
+		return filePath.getText();
+	}
+
+	public int getCount() {
+		return count;
+	}
+
+	public void checkDirectory(String path) {
+		File dir = new File(path);
+
+		for (File file: dir.listFiles()) {
+			if (file.isDirectory()) {
+				checkDirectory(file.getAbsolutePath());
+			} else {
+				if (file.getName().endsWith(".JPG")) {
+					count++;
+				}
+			}
+		}
+	}
+
+	@Override
+	public void itemStateChanged(ItemEvent e) {
+		if (e.getItemSelectable() == one) {
+			if (e.getStateChange() == ItemEvent.SELECTED) {
+				habitats.add("one");
+			} else if (e.getStateChange() == ItemEvent.DESELECTED) {
+				habitats.remove("one");
+			}
+		} else if (e.getItemSelectable() == two) {
+			if (e.getStateChange() == ItemEvent.SELECTED) {
+				habitats.add("two");
+			} else if (e.getStateChange() == ItemEvent.DESELECTED) {
+				habitats.remove("two");
+			}
+		} else if (e.getItemSelectable() == three) {
+			if (e.getStateChange() == ItemEvent.SELECTED) {
+				habitats.add("three");
+			} else if (e.getStateChange() == ItemEvent.DESELECTED) {
+				habitats.remove("three");
+			}
+		}
+	}
+
+	@Override
+	public void stateChanged(ChangeEvent e) {
+		JSlider source = (JSlider) e.getSource();
+		if (source == lat) {
+			latLabel.setText("" + source.getValue()/100.0);
+			latChange.setText("Convert to Degrees, Minutes, Seconds");
+		} else if (source == lon) {
+			lonLabel.setText("" + source.getValue()/100.0);
+			lonChange.setText("Convert to Degrees, Minutes, Seconds");
+		}
+	}
+	
+	public String getLat() {
+		return latitude;
+	}
+	
+	public String getLon() {
+		return longitude;
+	}
+	
+	public String getStartDate() {
+		return startDateStr;
+	}
+	
+	public String getEndDate() {
+		return endDateStr;
+	}
+	
+	public ArrayList<String> getHabitats() {
+		return habitats;
+	}
+	
+	public String getGroup() {
+		return groups.getSelectedItem().toString();
+	}
+	
+	public String DMStoDD(String dms) {
+		int x = dms.indexOf(DEGREE);
+		String deg = dms.substring(0, x);
+		int y = dms.indexOf("'");
+		String min = dms.substring(x+1, y);
+		int z = dms.indexOf("\"");
+		String sec = dms.substring(y+1, z);
+		double d = Double.parseDouble(deg);
+		double m = Double.parseDouble(min);
+		double s = Double.parseDouble(sec);
+		Double dd = d + (m/60.0) + (s/3600.0);
+		DecimalFormat df4 = new DecimalFormat("#.##");
+		dd = Double.valueOf(df4.format(dd));
+		return dd.toString();
+	}
+		
+	public String DDtoDMS(String dd) {
+		double ddDouble = Double.parseDouble(dd);
+		int deg = (int) ddDouble;
+		double minD = (ddDouble-deg)*60;
+		int min = (int) minD;
+		double secD = (ddDouble - deg - (min/60.0)) * 3600;
+		int sec = (int) secD;
+		String dms = deg+DEGREE+" "+min+"' "+sec+"\"";
+		return dms;
+	}
+
+	@Override
+	public void mouseClicked(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mousePressed(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseReleased(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseEntered(MouseEvent e) {
+        //Mouse is over component
+        Object source = e.getSource();
+        if (source == groupHelp) {
+            groupHelpPanel.setVisible(true);
+        }
+        if (source == datesHelp) {
+            datesHelpPanel.setVisible(true);
+        }
+        if (source == habitatHelp) {
+            habitatHelpPanel.setVisible(true);
+        }
+        if (source == selectFolderHelp) {
+            folderHelpPanel.setVisible(true);
+        }
+        if (source == lonHelp) {
+            lonlatHelpPanel.setVisible(true);
+        }
+        if (source == latHelp) {
+            lonlatHelpPanel.setVisible(true);
+        }
+        if (source == urbanHelp) {
+            urbanHelpPanel.setVisible(true);
+        }
+		
+	}
+
+	@Override
+	public void mouseExited(MouseEvent e) {
+		Object source = e.getSource();
+		if (source == groupHelp) {
+			groupHelpPanel.setVisible(false);
+		}
+		if (source == datesHelp) {
+			datesHelpPanel.setVisible(false);
+		}
+		if (source == habitatHelp) {
+			habitatHelpPanel.setVisible(false);
+		}
+		if (source == selectFolderHelp) {
+			folderHelpPanel.setVisible(false);
+		}
+		if (source == lonHelp) {
+			lonlatHelpPanel.setVisible(false);
+		}
+        if (source == latHelp) {
+            lonlatHelpPanel.setVisible(false);
+        }
+		if (source == urbanHelp) {
+			urbanHelpPanel.setVisible(false);
+		}
+
+	}
+
+	public void completed() {
+		boolean s = false;
+		boolean e = false;
+		boolean ott = false;
+		boolean g = false;
+		boolean f = false;
+		if(!startDate.getText().isEmpty()) {
+			s = true;
+		}
+		if(!endDate.getText().isEmpty()) {
+			e = true;
+		}
+		if(one.isSelected()|| two.isSelected() || three.isSelected()) {
+			ott = true;
+		}
+		if(groups.getSelectedIndex() != -1) {
+			g = true;
+		}
+		if(!filePath.getText().isEmpty()) {
+			f = true;
+		}
+		if(s && e && ott && g && f) {
+			completed = true;
+		}
+		
+	}
+	
+	private void reset() {
+		startDate.setText(null);
+		endDate.setText(null);
+		one.setSelected(false);
+		two.setSelected(false);
+		three.setSelected(false);
+		filePath.setText(null);
+		groups.setSelectedIndex(-1);
+		latLabel.setText("0.00");
+		lonLabel.setText("0.00");
+	}
+
+	@Override
+	public void focusGained(FocusEvent evt) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void focusLost(FocusEvent evt) {
+		
+		if(evt.getSource() == lonLabel) {
+			String value = lonLabel.getText();
+			double lonPos = Double.parseDouble(value);
+			double lonPosUpdated = lonPos*100;
+			lon.setValue((int)lonPosUpdated);
+		} else if(evt.getSource() == latLabel) {
+			String value = latLabel.getText();
+			double latPos = Double.parseDouble(value);
+			double latPosUpdated = latPos*100;
+			lat.setValue((int)latPosUpdated);
+		} 
+
+	}
+
+}

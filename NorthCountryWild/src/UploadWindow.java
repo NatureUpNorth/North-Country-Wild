@@ -1,9 +1,12 @@
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.MouseEvent;
@@ -14,10 +17,11 @@ import java.util.ArrayList;
 import java.util.Hashtable;
 
 import javax.swing.*;
+import javax.swing.border.Border;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-public class UploadWindow implements ActionListener, ItemListener, ChangeListener, MouseListener {
+public class UploadWindow implements ActionListener, ItemListener, ChangeListener, MouseListener, FocusListener {
 	
 	// instance variables
 	private JFrame frame;
@@ -26,7 +30,8 @@ public class UploadWindow implements ActionListener, ItemListener, ChangeListene
 	private JButton fileButton;
 	private JLabel fileLabel;
 	private JButton submit;
-	private JButton change;
+	private JButton latChange;
+	private JButton lonChange;
 	private JCheckBox one;
 	private JCheckBox two;
 	private JCheckBox three;
@@ -44,25 +49,28 @@ public class UploadWindow implements ActionListener, ItemListener, ChangeListene
 	private ArrayList<String> habitats = new ArrayList<String>();
 	private volatile boolean uploading = false;
 	private final String DEGREE  = "\u00b0";
-	private boolean changeToDMS = false;
 	private boolean completed = false;
 	private int count;
 	
 	private JTextField selectFolderHelp;
 	private JTextField groupHelp;
-	private JTextField lonlatHelp;
+	private JTextField lonHelp;
+	private JTextField latHelp;
 	private JTextField habitatHelp;
 	private JTextField datesHelp;
-	private JTextField selectFolderHelpText;
-	private JTextField groupHelpText;
-	private JTextField lonlatHelpText;
-	private JTextField habitatHelpText;
-	private JTextField datesHelpText;
+	private JTextField urbanHelp;
+	private JTextArea selectFolderHelpText;
+	private JTextArea groupHelpText;
+	private JTextArea lonlatHelpText;
+	private JTextArea habitatHelpText;
+	private JTextArea datesHelpText;
+	private JTextArea urbanHelpText;
 	JPanel datesHelpPanel= new JPanel();
 	JPanel folderHelpPanel = new JPanel();
 	JPanel groupHelpPanel = new JPanel();
 	JPanel lonlatHelpPanel = new JPanel();
 	JPanel habitatHelpPanel = new JPanel();
+	JPanel urbanHelpPanel = new JPanel();
 	
 	// these ones are for directory browsing (drives only)
 	private JFileChooser fc; 
@@ -77,7 +85,8 @@ public class UploadWindow implements ActionListener, ItemListener, ChangeListene
 		JPanel habitatPanel = new JPanel();
 		JPanel datePanel = new JPanel();
 		JPanel submitPanel = new JPanel();
-		JPanel changePanel = new JPanel();
+		JPanel changeLatPanel = new JPanel();
+		JPanel changeLonPanel = new JPanel();
 		
 		JLabel groupLabel = new JLabel("Select your affiliation:");
 		groups = new JComboBox<String>(groupList);
@@ -87,13 +96,12 @@ public class UploadWindow implements ActionListener, ItemListener, ChangeListene
 		submit = new JButton("Submit");
 		fileButton.addActionListener(this);
 		submit.addActionListener(this);
-		change = new JButton();
-		if(changeToDMS) {
-			change.setText("Convert to Decimal degrees");
-		} else {
-			change.setText("Convert to Degrees, Minutes, Seconds");
-		}
-		change.addActionListener(this);
+		latChange = new JButton();
+		latChange.setText("Convert to Degrees, Minutes, Seconds");
+		latChange.addActionListener(this);
+		lonChange = new JButton();
+		lonChange.setText("Convert to Degrees, Minutes, Seconds");
+		lonChange.addActionListener(this);
 
 		JLabel redStarFile = new JLabel("*");
 		JLabel redStarStart = new JLabel("*");
@@ -101,58 +109,51 @@ public class UploadWindow implements ActionListener, ItemListener, ChangeListene
 		JLabel redStarGroup = new JLabel("*");
 		JLabel redStarHabitat = new JLabel("*");
 		redStarFile.setForeground(Color.RED);
+		redStarFile.setFont(new Font("Dialog", Font.BOLD, 24));
 		redStarStart.setForeground(Color.RED);
+		redStarStart.setFont(new Font("Dialog", Font.BOLD, 24));
 		redStarEnd.setForeground(Color.RED);
+		redStarEnd.setFont(new Font("Dialog", Font.BOLD, 24));
 		redStarGroup.setForeground(Color.RED);
+		redStarGroup.setFont(new Font("Dialog", Font.BOLD, 24));
 		redStarHabitat.setForeground(Color.RED);
+		redStarHabitat.setFont(new Font("Dialog", Font.BOLD, 24));
 		
 		
 		selectFolderHelp = new JTextField(" ?");
 		selectFolderHelp.setEditable(false);
 		selectFolderHelp.setPreferredSize(new Dimension(23, 20));
 		selectFolderHelp.addMouseListener(this);
+		
 		groupHelp = new JTextField(" ?");
 		groupHelp.setEditable(false);
 		groupHelp.setPreferredSize(new Dimension(23, 20));
 		groupHelp.addMouseListener(this);
-		lonlatHelp = new JTextField(" ?");
-		lonlatHelp.setEditable(false);
-		lonlatHelp.setPreferredSize(new Dimension(23, 20));
-		lonlatHelp.addMouseListener(this);
+		
+		lonHelp = new JTextField(" ?");
+		lonHelp.setEditable(false);
+		lonHelp.setPreferredSize(new Dimension(23, 20));
+		lonHelp.addMouseListener(this);
+		
+		latHelp = new JTextField(" ?");
+		latHelp.setEditable(false);
+		latHelp.setPreferredSize(new Dimension(23, 20));
+		latHelp.addMouseListener(this);
+		
 		habitatHelp = new JTextField(" ?");
 		habitatHelp.setEditable(false);
 		habitatHelp.setPreferredSize(new Dimension(23, 20));
 		habitatHelp.addMouseListener(this);
+		
 		datesHelp = new JTextField(" ?");
 		datesHelp.setEditable(false);
 		datesHelp.setPreferredSize(new Dimension(23, 20));
 		datesHelp.addMouseListener(this);
 		
-		selectFolderHelpText = new JTextField();
-		selectFolderHelpText.setEditable(false);
-		selectFolderHelpText.setText("Select folder");
-		selectFolderHelpText.setSize(100,25);
-		
-		groupHelpText = new JTextField();
-		groupHelpText.setEditable(false);
-		groupHelpText.setText("Choose an affiliation");
-		groupHelpText.setSize(100,25);
-		
-		lonlatHelpText = new JTextField();
-		lonlatHelpText.setEditable(false);
-		lonlatHelpText.setText("Enter lon and lat");
-		lonlatHelpText.setSize(100,25);
-		
-		habitatHelpText = new JTextField();
-		habitatHelpText.setEditable(false);
-		habitatHelpText.setText("Pick habitat(s)");
-		habitatHelpText.setSize(100,25);
-		
-		datesHelpText = new JTextField();
-		datesHelpText.setEditable(false);
-		datesHelpText.setText("Enter dates");
-		datesHelpText.setSize(100,25);
-
+		urbanHelp = new JTextField(" ?");
+		urbanHelp.setEditable(false);
+		urbanHelp.setPreferredSize(new Dimension(23, 20));
+		urbanHelp.addMouseListener(this);
 		
 		one = new JCheckBox("Habitat one");
 		two = new JCheckBox("Habitat two");
@@ -176,8 +177,10 @@ public class UploadWindow implements ActionListener, ItemListener, ChangeListene
 		filePanel.add(fileButton);
 		filePanel.add(selectFolderHelp);
 		submitPanel.add(submit);
-		changePanel.add(change);
-		changePanel.add(lonlatHelp);
+		changeLatPanel.add(latChange);
+		changeLatPanel.add(latHelp);
+		changeLonPanel.add(lonChange);
+		changeLonPanel.add(lonHelp);
 		
 		groupPanel.add(redStarGroup);
 		groupPanel.add(groupLabel);
@@ -190,7 +193,9 @@ public class UploadWindow implements ActionListener, ItemListener, ChangeListene
 		lat.setPreferredSize(new Dimension(300, 45));
 		lat.addChangeListener(this);
 		latLabel = new JTextField(10);
-		latLabel.addActionListener(this);
+		latLabel.setText("0.00");
+		//latLabel.addActionListener(this);
+		latLabel.addFocusListener(this);
 		lat.setMajorTickSpacing(2000);
 		lat.setMinorTickSpacing(500);
 		lat.setPaintTicks(true);
@@ -198,7 +203,8 @@ public class UploadWindow implements ActionListener, ItemListener, ChangeListene
 		lon = new JSlider(JSlider.HORIZONTAL, -18000, 18000, 0);
 		lon.setPreferredSize(new Dimension(300, 45));
 		lonLabel = new JTextField(10);
-		lonLabel.addActionListener(this);
+		lonLabel.setText("0.00");
+		lonLabel.addFocusListener(this);
 		lon.addChangeListener(this);
 		lon.setMajorTickSpacing(4000);
 		lon.setMinorTickSpacing(1000);
@@ -239,17 +245,20 @@ public class UploadWindow implements ActionListener, ItemListener, ChangeListene
 		lonPanel.add(new JLabel("Select the longitude:"));
 		lonPanel.add(lonLabel);
 		lonPanel.add(lon);
-		locationPanel.setLayout(new GridLayout(2, 1));
-		locationPanel.add(latPanel);
-		locationPanel.add(lonPanel);
+//		locationPanel.setLayout(new GridLayout(4, 1));
+//		locationPanel.add(latPanel);
+//		locationPanel.add(changeLatPanel);
+//		locationPanel.add(lonPanel);
+//		locationPanel.add(changeLonPanel);
 		
-		habitatPanel.setLayout(new GridLayout());
+		//habitatPanel.setLayout(new GridLayout(1,3));
 		habitatPanel.add(redStarHabitat);
 		habitatPanel.add(new JLabel("Select the habitat:"));
 		habitatPanel.add(one);
 		habitatPanel.add(two);
 		habitatPanel.add(three);
 		habitatPanel.add(habitatHelp);
+		//habitatPanel.add(urbanHelp);
 		
 		JPanel startPanel = new JPanel();
 		JPanel endPanel = new JPanel();
@@ -265,44 +274,126 @@ public class UploadWindow implements ActionListener, ItemListener, ChangeListene
 		datePanel.add(endPanel);
 		datePanel.add(datesHelp);
 		
-		panel.setLayout(new GridLayout(7, 1));
+		panel.setLayout(new GridLayout(9, 1));
 		panel.add(filePanel);
 		panel.add(groupPanel);
-		panel.add(locationPanel);
-		panel.add(changePanel);
+		//panel.add(locationPanel);
+		panel.add(latPanel);
+		panel.add(changeLatPanel);
+		panel.add(lonPanel);
+		panel.add(changeLonPanel);
 		panel.add(habitatPanel);
 		panel.add(datePanel);
 		panel.add(submitPanel);
 		
+		Border border = BorderFactory.createLineBorder(Color.BLACK);
+		
+		selectFolderHelpText = new JTextArea();
+		selectFolderHelpText.setLineWrap(true);
+		selectFolderHelpText.setWrapStyleWord(true);
+		selectFolderHelpText.setEditable(false);
+		selectFolderHelpText.setText("Browse for the folder that contains the images that you wish to upload. This folder can have sub-folders "
+				+ "within it.");
+		selectFolderHelpText.setSize(200,111);
+		selectFolderHelpText.setBorder(BorderFactory.createCompoundBorder(border,
+	            BorderFactory.createEmptyBorder(10, 10, 10, 10)));
+		
+		groupHelpText = new JTextArea();
+		groupHelpText.setLineWrap(true);
+		groupHelpText.setWrapStyleWord(true);
+		groupHelpText.setEditable(false);
+		groupHelpText.setText("Some people engage with North Country Wild through collaborations with school groups or by checking "
+				+ "a game camera out from Nature Up North or local library. If you are affiliated with a group, please enter it here.");
+		groupHelpText.setSize(200,200);
+	    groupHelpText.setBorder(BorderFactory.createCompoundBorder(border,
+	            BorderFactory.createEmptyBorder(10, 10, 10, 10)));
+		
+		lonlatHelpText = new JTextArea();
+		lonlatHelpText.setLineWrap(true);
+		lonlatHelpText.setWrapStyleWord(true);
+		lonlatHelpText.setEditable(false);
+		lonlatHelpText.setText("If you do not know the longitude and latitude of the camera location, you can search for them here: "
+				+ "https://mynasadata.larc.nasa.gov/latitudelongitude-finder/");
+		lonlatHelpText.setSize(220,125);
+	    lonlatHelpText.setBorder(BorderFactory.createCompoundBorder(border,
+	            BorderFactory.createEmptyBorder(10, 10, 10, 10)));
+		
+		habitatHelpText = new JTextArea();
+		habitatHelpText.setLineWrap(true);
+		habitatHelpText.setWrapStyleWord(true);
+		habitatHelpText.setEditable(false);
+		habitatHelpText.setText("Hardwood Forest: Dominated by mainly hardwood species including for example maple, beech, cherry, and birch.\n\n"
+				+ "Evergreen Forest: Dominated by mainly evergreen species including for example white pine, red spruce, balsam fir, hemlock, and "
+				+ "possibly plantation pines such as Scots pine.\n\nMixed Forest: Hardwood and Evergreen trees are present in a balanced mix.\n\n"
+				+ "Plantation Forest: Trees (usually Pines) are evenly spaced in an organized fashion throuhgout the forest and there are mainly "
+				+ "one single species making up the forest leaf-layer (canpoy).\n\nNatural Field or Meadow: Area dominated by grasses and plants "
+				+ "such as goldenrod and milkweed; possibly interspersed with a few young trees such as pine or cedar. Not mowed.\n\nPublic Park/"
+				+ "School Grounds/Lawn: Primarily open area with some trees interspersed; grass is the predominant vegetation, perhaps supplemented "
+				+ "with e.g. flower beds. Grass is regularly maintained by mowing.\n\nWetland edge: If the camera was placed within 15 feet of a pond"
+				+ "or wetland, please check this box.\n\nEdge between two habitats: If the camera is located within about 25 feet of more than one "
+				+ "of the habitats listed above, please select this choice.");
+		habitatHelpText.setSize(500,450);
+	    habitatHelpText.setBorder(BorderFactory.createCompoundBorder(border,
+	            BorderFactory.createEmptyBorder(10, 10, 10, 10)));
+		
+		datesHelpText = new JTextArea();
+		datesHelpText.setLineWrap(true);
+		datesHelpText.setWrapStyleWord(true);
+		datesHelpText.setEditable(false);
+		datesHelpText.setText("Enter the the start and end dates of deployment for the camera.");
+		datesHelpText.setSize(150,92);
+		datesHelpText.setBorder(BorderFactory.createCompoundBorder(border,
+	            BorderFactory.createEmptyBorder(10, 10, 10, 10)));
+		
+		urbanHelpText = new JTextArea();
+		urbanHelpText.setLineWrap(true);
+		urbanHelpText.setWrapStyleWord(true);
+		urbanHelpText.setEditable(false);
+		urbanHelpText.setText("Rural: Camera was placed on public or private land in a rural location away from much human influence.\n\n"
+				+ "Suburan/moderately urban: Camera was placed near the edge of a town or village where there are more homes and other "
+				+ "development than in rural places.\n\nPrimarily urban: Camera was placed inside of a town or village in a location where automobile"
+				+ "traffic is prevalent as is the amount of developed space (storefront, parking areas, etc.).");
+		urbanHelpText.setSize(300,260);
+		urbanHelpText.setBorder(BorderFactory.createCompoundBorder(border,
+	            BorderFactory.createEmptyBorder(10, 10, 10, 10)));
+		
+		//-------------------------------------------------------
+		
 		datesHelpPanel.setSize(datesHelpText.getSize());
-		datesHelpPanel.setLocation(600,600);
+		datesHelpPanel.setLocation(500,500);
 		datesHelpPanel.add(datesHelpText);
 		frame.add(datesHelpPanel);
 		datesHelpPanel.setVisible(false);
 		
 		lonlatHelpPanel.setSize(lonlatHelpText.getSize());
-		lonlatHelpPanel.setLocation(600,300);
+		lonlatHelpPanel.setLocation(470,255);
 		lonlatHelpPanel.add(lonlatHelpText);
 		frame.add(lonlatHelpPanel);
 		lonlatHelpPanel.setVisible(false);
 		
 		habitatHelpPanel.setSize(habitatHelpText.getSize());
-		habitatHelpPanel.setLocation(600,500);
+		habitatHelpPanel.setLocation(60,7);
 		habitatHelpPanel.add(habitatHelpText);
 		frame.add(habitatHelpPanel);
 		habitatHelpPanel.setVisible(false);
 		
 		folderHelpPanel.setSize(selectFolderHelpText.getSize());
-		folderHelpPanel.setLocation(600,100);
+		folderHelpPanel.setLocation(470,35);
 		folderHelpPanel.add(selectFolderHelpText);
 		frame.add(folderHelpPanel);
 		folderHelpPanel.setVisible(false);
 		
 		groupHelpPanel.setSize(groupHelpText.getSize());
-		groupHelpPanel.setLocation(600,200);
+		groupHelpPanel.setLocation(250, 35);
 		groupHelpPanel.add(groupHelpText);
 		frame.add(groupHelpPanel);
 		groupHelpPanel.setVisible(false);
+		
+		urbanHelpPanel.setSize(urbanHelpText.getSize());
+		urbanHelpPanel.setLocation(300, 200);
+		urbanHelpPanel.add(urbanHelpText);
+		frame.add(urbanHelpPanel);
+		urbanHelpPanel.setVisible(false);
 		
 		frame.add(panel);
 		frame.pack();
@@ -395,36 +486,55 @@ public class UploadWindow implements ActionListener, ItemListener, ChangeListene
 				this.setUploading(false);
 			}
 		}
-		if(evt.getSource() == change) {
-			if(!latLabel.getText().isEmpty() && !lonLabel.getText().isEmpty()) {
-				if(latLabel.getText().contains(".") || lonLabel.getText().contains(".")) {
+		if(evt.getSource() == latChange) {
+			if(!latLabel.getText().isEmpty()) {
+				if(latLabel.getText().contains(".") && latChange.getText().equals("Convert to Degrees, Minutes, Seconds")){
 					String lati = DDtoDMS(latLabel.getText());
-					String longi = DDtoDMS(lonLabel.getText());
 					latLabel.setText(lati);
-					lonLabel.setText(longi);
-					change.setText("Convert to Decimal degrees");
-				} else if (latLabel.getText().contains("\"") || lonLabel.getText().contains("\"")) {
+					latChange.setText("Convert to Decimal degrees");
+				}else if (latLabel.getText().contains("\"") && latChange.getText().equals("Convert to Decimal degrees")){
 					String lati = DMStoDD(latLabel.getText());
-					String longi = DMStoDD(lonLabel.getText());
 					latLabel.setText(lati);
-					lonLabel.setText(longi);
-					change.setText("Convert to Degrees, Minutes, Seconds");
+					latChange.setText("Convert to Degrees, Minutes, Seconds");
 				}
 			}
 		}
+		
+		if(evt.getSource() == lonChange) {
+			if(!lonLabel.getText().isEmpty()) {
+				if(lonLabel.getText().contains(".") && lonChange.getText().equals("Convert to Degrees, Minutes, Seconds")) {
+					String longi = DDtoDMS(lonLabel.getText());
+					lonLabel.setText(longi);
+					lonChange.setText("Convert to Decimal degrees");
+					System.out.println(lonLabel.getText());
+				} else if (lonLabel.getText().contains("\"") && lonChange.getText().equals("Convert to Decimal degrees")) {
+					String longi = DMStoDD(lonLabel.getText());
+					lonLabel.setText(longi);
+					lonChange.setText("Convert to Degrees, Minutes, Seconds");
+					System.out.println(lonLabel.getText());
+				}
+			}
+		}
+		
+//		if(evt.getSource() == latLabel) {
+//			String value = latLabel.getText();
+//			double latPos = Double.parseDouble(value);
+//			double latPosUpdated = latPos*100;
+//			lat.setValue((int)latPosUpdated);
+//		}
 	}
-	
+
 	public String getFilepath() {
 		return filePath.getText();
 	}
-	
+
 	public int getCount() {
 		return count;
 	}
-	
+
 	public void checkDirectory(String path) {
 		File dir = new File(path);
-		
+
 		for (File file: dir.listFiles()) {
 			if (file.isDirectory()) {
 				checkDirectory(file.getAbsolutePath());
@@ -464,8 +574,10 @@ public class UploadWindow implements ActionListener, ItemListener, ChangeListene
 		JSlider source = (JSlider) e.getSource();
 		if (source == lat) {
 			latLabel.setText("" + source.getValue()/100.0);
+			latChange.setText("Convert to Degrees, Minutes, Seconds");
 		} else if (source == lon) {
 			lonLabel.setText("" + source.getValue()/100.0);
+			lonChange.setText("Convert to Degrees, Minutes, Seconds");
 		}
 	}
 	
@@ -554,8 +666,14 @@ public class UploadWindow implements ActionListener, ItemListener, ChangeListene
         if (source == selectFolderHelp) {
             folderHelpPanel.setVisible(true);
         }
-        if (source == lonlatHelp) {
+        if (source == lonHelp) {
             lonlatHelpPanel.setVisible(true);
+        }
+        if (source == latHelp) {
+            lonlatHelpPanel.setVisible(true);
+        }
+        if (source == urbanHelp) {
+            urbanHelpPanel.setVisible(true);
         }
 		
 	}
@@ -575,12 +693,18 @@ public class UploadWindow implements ActionListener, ItemListener, ChangeListene
 		if (source == selectFolderHelp) {
 			folderHelpPanel.setVisible(false);
 		}
-		if (source == lonlatHelp) {
+		if (source == lonHelp) {
 			lonlatHelpPanel.setVisible(false);
 		}
-		
+        if (source == latHelp) {
+            lonlatHelpPanel.setVisible(false);
+        }
+		if (source == urbanHelp) {
+			urbanHelpPanel.setVisible(false);
+		}
+
 	}
-	
+
 	public void completed() {
 		boolean s = false;
 		boolean e = false;
@@ -616,8 +740,31 @@ public class UploadWindow implements ActionListener, ItemListener, ChangeListene
 		three.setSelected(false);
 		filePath.setText(null);
 		groups.setSelectedIndex(-1);
-		latLabel.setText(null);
-		lonLabel.setText(null);
+		latLabel.setText("0.00");
+		lonLabel.setText("0.00");
+	}
+
+	@Override
+	public void focusGained(FocusEvent evt) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void focusLost(FocusEvent evt) {
+		
+		if(evt.getSource() == lonLabel) {
+			String value = lonLabel.getText();
+			double lonPos = Double.parseDouble(value);
+			double lonPosUpdated = lonPos*100;
+			lon.setValue((int)lonPosUpdated);
+		} else if(evt.getSource() == latLabel) {
+			String value = latLabel.getText();
+			double latPos = Double.parseDouble(value);
+			double latPosUpdated = latPos*100;
+			lat.setValue((int)latPosUpdated);
+		} 
+
 	}
 
 }
