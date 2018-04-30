@@ -525,6 +525,7 @@ public class UploadWindow implements ActionListener, ItemListener, ChangeListene
 	}
 	
 	public String getGroup() {
+		System.out.println(groups.getSelectedItem().toString());
 		return groups.getSelectedItem().toString();
 	}
 	

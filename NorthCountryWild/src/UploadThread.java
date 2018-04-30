@@ -23,8 +23,8 @@ import com.dropbox.core.v2.files.UploadErrorException;
 
 public class UploadThread extends Thread {
 	
-	private String filePath = "";
-	private String destinationPath = "";
+	private String filePath;
+	private String destinationPath;
 	private int total_files;
 	private int count;
 	private static final String ACCESS_TOKEN = "Ot337FVMgnAAAAAAAAAAsbxu_FAGR3s-rifTdgzY9-mIjanUH1hPKX6f9Jnb4pAP";//"kdJxVuoW-DAAAAAAAAAA15HtUot88rO-JjNXvFlyZ-jEyadtfk3bCyCGoihbHqn3";
