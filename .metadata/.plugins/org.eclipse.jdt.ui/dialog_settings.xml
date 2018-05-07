@@ -11,15 +11,18 @@
 		<item value="false" key="updateTextualMatches"/>
 	</section>
 	<section name="FatJarPackageWizard">
-		<item value="P:\nocowild" key="FatJarPackageWizardPage.ANTSCRIPT_LOCATION"/>
+		<item value="/Users/remileblanc/Desktop/Nature Up North/North-Country-Wild-Workspace/P:\nocowild.xml" key="FatJarPackageWizardPage.ANTSCRIPT_LOCATION"/>
 		<item value="Main - NorthCountryWild" key="FatJarPackageWizardPage.LAUNCH_CONFIGURATION_SELECTION_NAME"/>
-		<item value="P:\nocowild\nocowildtest.jar" key="FatJarPackageWizardPage.DESTINATION_PATH_SELECTION"/>
+		<item value="/Users/remileblanc/Desktop/NorthCountryWild.jar" key="FatJarPackageWizardPage.DESTINATION_PATH_SELECTION"/>
 		<item value="false" key="FatJarPackageWizardPage.ANTSCRIPT_SAVE"/>
-		<item value="1" key="FatJarPackageWizardPage.LIBRARY_HANDLING"/>
+		<item value="2" key="FatJarPackageWizardPage.LIBRARY_HANDLING"/>
 		<list key="FatJarPackageWizardPage.DESTINATION_NAMES_ID">
+			<item value="/Users/remileblanc/Desktop/NorthCountryWild.jar"/>
+			<item value="/Users/remileblanc/Desktop/NorthCountryWild2.jar"/>
 			<item value="P:\nocowild\nocowildtest.jar"/>
 		</list>
 		<list key="FatJarPackageWizardPage.ANTSCRIPT_LOCATION_HISTORY">
+			<item value="/Users/remileblanc/Desktop/Nature Up North/North-Country-Wild-Workspace/P:\nocowild.xml"/>
 			<item value="P:\nocowild.xml"/>
 			<item value=".xml"/>
 		</list>
@@ -48,6 +51,18 @@
 		<item value="2" key="pageIndex"/>
 	</section>
 	<section name="completion_proposal_size">
+	</section>
+	<section name="org.eclipse.jdt.internal.ui.dialogs.OpenTypeSelectionDialog2">
+		<item value="true" key="ShowStatusLine"/>
+		<item value="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&#x0A;&lt;History/&gt;" key="History"/>
+		<item value="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&#x0A;&lt;workingSet workingSetName=&quot;&quot;/&gt;" key="WorkingSet"/>
+		<section name="DialogBoundsSettings">
+			<item value="600" key="DIALOG_WIDTH"/>
+			<item value="1|.AppleSystemUIFont|11.0|0|COCOA|1|.AppleSystemUIFont" key="DIALOG_FONT_NAME"/>
+			<item value="500" key="DIALOG_HEIGHT"/>
+			<item value="359" key="DIALOG_X_ORIGIN"/>
+			<item value="64" key="DIALOG_Y_ORIGIN"/>
+		</section>
 	</section>
 	<section name="JavaElementSearchActions">
 	</section>
