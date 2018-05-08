@@ -31,7 +31,7 @@ public class SplashScreen implements ActionListener{
 		//set up the components
 		frame = new JFrame("North Country Wild");
 		//set window size
-		frame.setSize(920,500);
+		frame.setSize(920,530);
 		frame.setResizable(false);
 		
 		JPanel panel = new JPanel();
@@ -40,6 +40,7 @@ public class SplashScreen implements ActionListener{
 		JPanel infoPanel = new JPanel();
 		JPanel beginPanel = new JPanel();
 		JPanel creditsPanel = new JPanel();
+		JPanel versionPanel = new JPanel();
 		
 		ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
 		InputStream logoInput = classLoader.getResourceAsStream("nun_SLU.jpg");
@@ -64,6 +65,7 @@ public class SplashScreen implements ActionListener{
 		JTextArea info = new JTextArea();
 		beginButton = new JButton("Begin");
 		JTextArea credits = new JTextArea();
+		JTextArea version = new JTextArea();
 		
 		imageLabel.setIcon(logoIcon);
 		titleLabel.setIcon(titleIcon);
@@ -114,25 +116,37 @@ public class SplashScreen implements ActionListener{
 		info.setText("Before you begin you should:\n\n"
 				+ "1) Organize your photos on your hard drive so tha there is a single folder for each camera deployment. "
 				+ "Each folder should contain only the image files that were produced during the deployment, and should include "
-				+ "ALL image files, even if there are no animals in the picture. You will use the Photo Portal wizard once for "
+				+ "ALL image files, even if there are no animals in the picture. You will use the Photo Uploader once for "
 				+ "each camera deployment.\n\n2) Make sure you have the latitude and longitude information for where the camera "
 				+ "was located during the deployment and that you know the start date and end date that the camera was in the field."
 				+ "\n\n3) Make sure you know your Nature Up North username and password. Please contact us at info@natureupnorth.org "
 				+ "for assistance if needed.");
 		
 		credits.setFont(nun);
-		credits.setFont(info.getFont().deriveFont(10f));
-		credits.setSize(300, 50);
+		credits.setFont(info.getFont().deriveFont(12f));
+		credits.setSize(500, 50);
 		credits.setForeground(brown);
 		credits.setLineWrap(true);
 		credits.setWrapStyleWord(true);
 		credits.setOpaque(false);
 		credits.setEditable(false);
-		credits.setText("Program created for Nature Up North by St. Lawrence \n           University Computer Science interns in 2018.");
+		credits.setText("     Program created for Nature Up North by St. Lawrence University\ncomputer science interns Guinevere Gilman and Remi LeBlanc in 2018.");
 		creditsPanel.setSize(credits.getSize());
-		creditsPanel.setLocation(frame.getWidth()-255, frame.getHeight()-50);
+		creditsPanel.setLocation(frame.getWidth()-435, frame.getHeight()-60);
 		creditsPanel.add(credits);
 
+		version.setFont(nun);
+		version.setFont(info.getFont().deriveFont(11f));
+		version.setSize(100, 25);
+		version.setForeground(brown);
+//		version.setLineWrap(true);
+//		version.setWrapStyleWord(true);
+		version.setOpaque(false);
+		version.setEditable(false);
+		version.setText("Version 1.2.1"); //(1st major version).(second meeting presenting).(first github push) ???? or version 1.0.0
+		versionPanel.setSize(version.getSize());
+		versionPanel.setLocation(frame.getWidth()-927, frame.getHeight()-45);
+		versionPanel.add(version);
 		
 		//add components to panel
 		topPanel.add(gameLabel);
@@ -153,7 +167,8 @@ public class SplashScreen implements ActionListener{
 		// make window appear in middle of screen
 		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
 		frame.setLocation(dim.width/2-460, dim.height/2-250);
-		
+
+		frame.add(versionPanel);
 		frame.add(creditsPanel);
 		frame.add(panel);
 		frame.setVisible(true);
@@ -182,7 +197,5 @@ public class SplashScreen implements ActionListener{
 		new SplashScreen();
 
 	}
-
-
 
 }

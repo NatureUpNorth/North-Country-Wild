@@ -35,15 +35,20 @@ public class UploadThread extends Thread {
 	private UploadWindow upload;
 	private volatile boolean running = true;
 	private final String DEGREE  = "\u00b0";
+	private String habitat;
+	private String urbanized;
+	private String affiliation;
 	
-	UploadThread(String path, String destination, UploadWindow uw, int files) {	
-		System.out.print("Path 4: "+path);
+	UploadThread(String path, String destination, UploadWindow uw, int files, String habit, String urba, String a) {
 		filePath = path;
 		destinationPath = destination;
 		uploading = true;
 		loading = new LoadingWindow();
 		upload = uw;
 		total_files = files;
+		habitat = habit;
+		urbanized = urba;
+		affiliation = a;
 	}
 	
 	private void write(ArrayList<Metadata> meta, String method, String fileName) {
@@ -59,7 +64,7 @@ public class UploadThread extends Thread {
     				fileWriter.append(tag.getTagName()+",");
     			}
     		}
-    		fileWriter.append("Affiliation,Longitude,Latitude,Habitat,Start Date,End Date");
+    		fileWriter.append("Affiliation,Longitude,Latitude,Habitat,Urban,Start Date,End Date,File Path");
     		fileWriter.append("\n");
     		
     		for(Metadata metadata : meta){
@@ -75,26 +80,17 @@ public class UploadThread extends Thread {
     					System.err.println("ERROR: " + error);
         			}
     			}
-    			ArrayList<String> habitats= upload.getHabitats();
-    			String hab = "";
-    			String affiliation = upload.getGroup();
     			String lat = upload.getLat();
     			String lon = upload.getLon();
     			String startDate = upload.getStartDate();
     			String endDate = upload.getEndDate();
-    			for(String s: habitats) {
-    				hab = hab.concat(s+ " / ");
-    			}
-    			if(hab.length()>3) {
-    				hab = hab.substring(0, hab.length()-3);
-    			}
     			if(lat.contains("\"")) {
     				lat = DMStoDD(lat);
     			}
     			if(lon.contains("\"")) {
     				lon = DMStoDD(lon);
     			}
-    			fileWriter.append(affiliation+","+lat+","+lon+","+hab+","+startDate+","+endDate);
+    			fileWriter.append(affiliation+","+lat+","+lon+","+habitat+","+urbanized+","+startDate+","+endDate+","+destinationPath);
     			fileWriter.append("\n");
     		}
 
@@ -107,7 +103,6 @@ public class UploadThread extends Thread {
     			fileWriter.flush();
     			fileWriter.close();
     		} catch(IOException e){
-    			System.out.println("Error while flushing/closing fileWriter");
     			e.printStackTrace();
     		}
     	}
@@ -116,7 +111,6 @@ public class UploadThread extends Thread {
 	
 	public void run() {
 		count = 0;
-		System.out.println("Path 3:"+filePath);
 		upload(filePath, destinationPath);
 	}
 	
@@ -130,10 +124,8 @@ public class UploadThread extends Thread {
         DbxClientV2 client = new DbxClientV2(config, ACCESS_TOKEN);  
 		
 		File dir = null;
-		System.out.println("Path2: "+filePath);
 		try {
         	dir = new File(filePath);
-        	System.out.println("path: "+filePath);
     		for(File file: dir.listFiles()){
     			if (file.isDirectory()) {
     				upload(file.getAbsolutePath(), destinationPath);
