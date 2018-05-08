@@ -12,9 +12,15 @@ import java.awt.event.ItemListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.File;
+import java.text.DateFormat;
 import java.text.DecimalFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.Hashtable;
+import java.util.Locale;
 
 import javax.swing.*;
 import javax.swing.border.Border;
@@ -61,6 +67,7 @@ public class UploadWindow implements ActionListener, ItemListener, ChangeListene
 	private final String DEGREE  = "\u00b0";
 	private boolean completed = false;
 	private int count;
+	private int cancelled = 0;
 	
 	private JTextField selectFolderHelp;
 	private JTextField groupHelp;
@@ -497,6 +504,10 @@ public class UploadWindow implements ActionListener, ItemListener, ChangeListene
 		}
 	}
 	
+	public int cancelled() {
+		return cancelled;
+	}
+	
 	public void actionPerformed(ActionEvent evt) {
 		if (evt.getSource() == fileButton) {
 			fc = new JFileChooser(System.getProperty("user.home"));
@@ -532,6 +543,9 @@ public class UploadWindow implements ActionListener, ItemListener, ChangeListene
 			}
 		}
 		if (evt.getSource() == submit) {
+			if(submit.getText().equals("Cancel")) {
+				cancelled++;
+			}
 			if (!uploading) {
 				latitude = latLabel.getText();
 				longitude = lonLabel.getText();
@@ -539,7 +553,7 @@ public class UploadWindow implements ActionListener, ItemListener, ChangeListene
 				endDateStr = endDate.getText();
 				completed();
 				if(completed) {
-					if (startDateStr.length() == 10 && endDateStr.length() == 10) {
+					if (startDateStr.length() == 10 && endDateStr.length() == 10 && !startDateStr.equals("MM-DD-YYYY") && !endDateStr.equals("MM-DD-YYYY")) {
 						for (int i = 0; i < 10; i++) {
 							if (i == 2 || i == 5) {
 								if (startDateStr.charAt(i) != '-' || endDateStr.charAt(i) != '-') {
@@ -555,8 +569,48 @@ public class UploadWindow implements ActionListener, ItemListener, ChangeListene
 								}
 							}
 						}
-						this.setUploading(true);
-						reset();
+						
+						
+						DateFormat format = new SimpleDateFormat("MM-dd-yyyy", Locale.ENGLISH);
+						Date startDate = null;
+						Date endDate = null;
+						Date today = Calendar.getInstance().getTime();
+						boolean load1 = false;
+						boolean load2 = false;
+						boolean load3 = false;
+						try {
+							startDate = format.parse(startDateStr);
+							endDate = format.parse(endDateStr);
+						} catch (ParseException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+							System.out.println("Error in date.");
+						}
+						if(startDate.after(endDate)) {
+							JOptionPane.showMessageDialog(new JFrame(),
+									"Incorrect date entry. The start date is after the end date.");
+							load1 = false;
+						} else {
+							load1 = true;
+						}
+						if(startDate.after(today) && load1) {
+							JOptionPane.showMessageDialog(new JFrame(),
+									"Incorrect date entry. The start date is after the current date.");
+							load2 = false;
+						} else {
+							load2 = true;
+						}
+						if(endDate.after(today) && load1 && load2) {
+							JOptionPane.showMessageDialog(new JFrame(),
+									"Incorrect date entry. The end date is after the current date.");
+							load3 = false;
+						} else {
+							load3 = true;
+						}
+						if(load1 && load2 && load3) {
+							this.setUploading(true);
+							reset();
+						}
 					} else {
 						JOptionPane.showMessageDialog(new JFrame(),
 								"Incorrect date format. Please enter a date in the format: MM-DD-YYYY");
@@ -846,6 +900,8 @@ public class UploadWindow implements ActionListener, ItemListener, ChangeListene
 		startDate.setText("MM-DD-YYYY");
 		endDate.setForeground(Color.GRAY);
 		endDate.setText("MM-DD-YYYY");
+		habitats.clear();
+		urbanized.clear();
 	}
 
 	@Override
