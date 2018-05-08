@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 
 .metadata/.log
 .metadata/.plugins/org.eclipse.core.resources/.history/16/f02489502b4c00181fb8d47bacd3f8f1
@@ -151,3 +152,7 @@ NorthCountryWild/src/images/game_camera_pic.JPG
 .metadata/.plugins/org.eclipse.core.resources/.history/14/309b14cafc4b001816638cbce3078bc5
 .metadata/.log
 .metadata/.plugins/org.eclipse.core.resources/.history/14/c077df00f64800181dbbba582f3e324f
+=======
+/.metadata/
+/.recommenders/
+>>>>>>> 13fc848424bb8815f5b305710b4c5b15ff182e2f

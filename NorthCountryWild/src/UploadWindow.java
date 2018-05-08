@@ -12,9 +12,15 @@ import java.awt.event.ItemListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.File;
+import java.text.DateFormat;
 import java.text.DecimalFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.Hashtable;
+import java.util.Locale;
 
 import javax.swing.*;
 import javax.swing.border.Border;
@@ -22,7 +28,7 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 public class UploadWindow implements ActionListener, ItemListener, ChangeListener, MouseListener, FocusListener {
-	
+
 	// instance variables
 	private JFrame frame;
 	private JTextField filePath;
@@ -41,9 +47,9 @@ public class UploadWindow implements ActionListener, ItemListener, ChangeListene
 	private JCheckBox seven;
 	private JCheckBox eight;
 	private JCheckBox nine;
-	private JCheckBox ten;
-	private JCheckBox eleven;
-	private JCheckBox twelve;
+	private JCheckBox rural;
+	private JCheckBox sub;
+	private JCheckBox urban;
 	private JSlider lat;
 	private JSlider lon;
 	private JTextField latLabel;
@@ -55,11 +61,13 @@ public class UploadWindow implements ActionListener, ItemListener, ChangeListene
 	private String latitude;
 	private String longitude;
 	JComboBox<String> groups; 
-	private ArrayList<String> habitats = new ArrayList<String>();
+	ArrayList<String> habitats;
+	ArrayList<String> urbanized;
 	private volatile boolean uploading = false;
 	private final String DEGREE  = "\u00b0";
 	private boolean completed = false;
 	private int count;
+	private int cancelled = 0;
 	
 	private JTextField selectFolderHelp;
 	private JTextField groupHelp;
@@ -92,14 +100,14 @@ public class UploadWindow implements ActionListener, ItemListener, ChangeListene
 		JPanel groupPanel = new JPanel();
 		JPanel locationPanel = new JPanel();
 		JPanel habitatPanel = new JPanel();
+		JPanel urbanPanel = new JPanel();
 		JPanel datePanel = new JPanel();
 		JPanel submitPanel = new JPanel();
 		JPanel changeLatPanel = new JPanel();
 		JPanel changeLonPanel = new JPanel();
 		JPanel locationLabelPanel = new JPanel();
 		JPanel habitatLabelPanel = new JPanel();
-		JPanel habitatButtonPanel = new JPanel();
-		JPanel dateButtonPanel = new JPanel();
+		JPanel urbanLabelPanel = new JPanel();
 		
 		JLabel groupLabel = new JLabel("Please identify the group you are associated with, if any:");
 		groups = new JComboBox<String>(groupList);
@@ -121,6 +129,7 @@ public class UploadWindow implements ActionListener, ItemListener, ChangeListene
 		JLabel redStarEnd = new JLabel("*");
 		JLabel redStarGroup = new JLabel("*");
 		JLabel redStarHabitat = new JLabel("*");
+		JLabel redStarUrban = new JLabel("*");
 		redStarFile.setForeground(Color.RED);
 		redStarFile.setFont(new Font("Dialog", Font.BOLD, 24));
 		redStarStart.setForeground(Color.RED);
@@ -131,6 +140,11 @@ public class UploadWindow implements ActionListener, ItemListener, ChangeListene
 		redStarGroup.setFont(new Font("Dialog", Font.BOLD, 24));
 		redStarHabitat.setForeground(Color.RED);
 		redStarHabitat.setFont(new Font("Dialog", Font.BOLD, 24));
+		redStarUrban.setForeground(Color.RED);
+		redStarUrban.setFont(new Font("Dialog", Font.BOLD, 24));
+		
+		JLabel requiredStar = new JLabel("<html><b><font color='red' size = 6>*</font></b> indicates the field is required for submission.</html>");
+		//JLabel requiredText = new JLabel(" indicates the field is required for submuission.");
 		
 		
 		selectFolderHelp = new JTextField(" ?");
@@ -157,6 +171,7 @@ public class UploadWindow implements ActionListener, ItemListener, ChangeListene
 		habitatHelp.setEditable(false);
 		habitatHelp.setPreferredSize(new Dimension(23, 20));
 		habitatHelp.addMouseListener(this);
+		habitats = new ArrayList<String>();
 		
 		datesHelp = new JTextField(" ?");
 		datesHelp.setEditable(false);
@@ -167,6 +182,7 @@ public class UploadWindow implements ActionListener, ItemListener, ChangeListene
 		urbanHelp.setEditable(false);
 		urbanHelp.setPreferredSize(new Dimension(23, 20));
 		urbanHelp.addMouseListener(this);
+		urbanized = new ArrayList<String>();
 		
 		one = new JCheckBox("Hardwood Forest");
 		two = new JCheckBox("Mixed Forest");
@@ -177,9 +193,6 @@ public class UploadWindow implements ActionListener, ItemListener, ChangeListene
 		seven = new JCheckBox("Public Park/School Grounds/Lawn");
 		eight = new JCheckBox("Wetland Edge");
 		nine = new JCheckBox("Edge between two habitats");
-		ten = new JCheckBox("Rural");
-		eleven = new JCheckBox("Suburban/Moderately Urban");
-		twelve = new JCheckBox("Primarily Urban");
 		one.addItemListener(this);
 		two.addItemListener(this);
 		three.addItemListener(this);
@@ -189,9 +202,13 @@ public class UploadWindow implements ActionListener, ItemListener, ChangeListene
 		seven.addItemListener(this);
 		eight.addItemListener(this);
 		nine.addItemListener(this);
-		ten.addItemListener(this);
-		eleven.addItemListener(this);
-		twelve.addItemListener(this);
+		
+		rural = new JCheckBox("Rural");
+		sub = new JCheckBox("Suburban/Moderately Urban");
+		urban = new JCheckBox("Primarily Urban");
+		rural.addItemListener(this);
+		sub.addItemListener(this);
+		urban.addItemListener(this);
 		
 		// set window size
 		frame.setPreferredSize(new Dimension(800, 750));
@@ -199,7 +216,7 @@ public class UploadWindow implements ActionListener, ItemListener, ChangeListene
 		
 		// make window appear in middle of screen
 		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-		frame.setLocation(dim.width/2-350, dim.height/2-350);
+		frame.setLocation(dim.width/2-400, dim.height/2-375);
 		
 		// add components to panels
 		filePanel.add(redStarFile);
@@ -282,21 +299,17 @@ public class UploadWindow implements ActionListener, ItemListener, ChangeListene
 //		locationPanel.add(lonPanel);
 //		locationPanel.add(changeLonPanel);
 		
-		habitatPanel.setLayout(new GridLayout(1,3));
-		habitatPanel.add(redStarHabitat);
-		habitatPanel.add(new JLabel("Select the habitat:"));
-		habitatPanel.add(one);
-		habitatPanel.add(two);
-		habitatPanel.add(three);
-		habitatPanel.add(habitatHelp);
+		
 		locationPanel.setLayout(new GridLayout(2, 1));
 		locationLabelPanel.add(new JLabel("For this camera deployment, what was the latitude and longitude of the camera location?"));
 		locationPanel.add(latPanel);
 		locationPanel.add(lonPanel);
 		
-		habitatPanel.setLayout(new GridLayout(7, 3));
 		habitatLabelPanel.add(redStarHabitat);
 		habitatLabelPanel.add(new JLabel("<html>Which of the following terms would characterize the habitat in the location where the camera was placed?<br/>(check all that apply)</html>"));
+		habitatLabelPanel.add(habitatHelp);
+		//habitatPanel.setPreferredSize(new Dimension(800, 100));
+		habitatPanel.setLayout(new GridLayout(3, 3));
 		habitatPanel.add(one);
 		habitatPanel.add(two);
 		habitatPanel.add(three);
@@ -306,26 +319,40 @@ public class UploadWindow implements ActionListener, ItemListener, ChangeListene
 		habitatPanel.add(seven);
 		habitatPanel.add(eight);
 		habitatPanel.add(nine);
-		habitatPanel.add(ten);
-		habitatPanel.add(eleven);
-		habitatPanel.add(twelve);
-		habitatButtonPanel.add(habitatHelp);
+		
+		urbanLabelPanel.setPreferredSize(new Dimension(800, 30));
+		urbanLabelPanel.add(redStarUrban);
+		urbanLabelPanel.add(new JLabel("How urbanized is the location where the camera was placed? (Please check one)"));
+		urbanLabelPanel.add(urbanHelp);
+		urbanPanel.setLayout(new GridLayout(3,1));
+		urbanPanel.add(rural);
+		urbanPanel.add(sub);
+		urbanPanel.add(urban);
 		
 		JPanel startPanel = new JPanel();
 		JPanel endPanel = new JPanel();
 		startDate = new JTextField(20);
+		startDate.addFocusListener(this);
+		startDate.setForeground(Color.GRAY);
+		startDate.setText("MM-DD-YYYY");
 		endDate = new JTextField(20);
+		endDate.addFocusListener(this);
+		endDate.setText("MM-DD-YYYY");
+		endDate.setForeground(Color.GRAY);
 		startPanel.add(redStarStart);
-		startPanel.add(new JLabel("      For this deployment, on what date was the camera placed in the field? (MM-DD-YYYY):"));
+		startPanel.add(new JLabel("For this deployment, on what date was the camera placed in the field?   "));
 		startPanel.add(startDate);
+		startPanel.add(datesHelp);
 		endPanel.add(redStarEnd);
-		endPanel.add(new JLabel("  For this deployment, on what date was the camera removed from the field? (MM-DD-YYYY):"));
+		endPanel.add(new JLabel("For this deployment, on what date was the camera removed from the field?"));
 		endPanel.add(endDate);
 		datePanel.setLayout(new GridLayout(2, 1));
 		datePanel.add(startPanel);
-		dateButtonPanel.add(datesHelp);
 		datePanel.add(endPanel);
-		dateButtonPanel.setPreferredSize(new Dimension(750, 30));
+		
+		JPanel reqPanel = new JPanel();
+		reqPanel.add(requiredStar);
+		submitPanel.setPreferredSize(new Dimension(800, 30));
 		
 		panel.add(filePanel);
 		panel.add(groupPanel);
@@ -337,10 +364,11 @@ public class UploadWindow implements ActionListener, ItemListener, ChangeListene
 		panel.add(changeLonPanel);
 		panel.add(habitatLabelPanel);
 		panel.add(habitatPanel);
-		panel.add(habitatButtonPanel);
+		panel.add(urbanLabelPanel);
+		panel.add(urbanPanel);
 		panel.add(datePanel);
-		panel.add(dateButtonPanel);
 		panel.add(submitPanel);
+		panel.add(reqPanel);
 		
 		Border border = BorderFactory.createLineBorder(Color.BLACK);
 		
@@ -396,8 +424,8 @@ public class UploadWindow implements ActionListener, ItemListener, ChangeListene
 		datesHelpText.setLineWrap(true);
 		datesHelpText.setWrapStyleWord(true);
 		datesHelpText.setEditable(false);
-		datesHelpText.setText("Enter the the start and end dates of deployment for the camera.");
-		datesHelpText.setSize(150,92);
+		datesHelpText.setText("Enter the the start and end dates of deployment for the camera. Dates must be entered as MM-DD-YYYY");
+		datesHelpText.setSize(150,125);
 		datesHelpText.setBorder(BorderFactory.createCompoundBorder(border,
 	            BorderFactory.createEmptyBorder(10, 10, 10, 10)));
 		
@@ -422,7 +450,7 @@ public class UploadWindow implements ActionListener, ItemListener, ChangeListene
 		datesHelpPanel.setVisible(false);
 		
 		lonlatHelpPanel.setSize(lonlatHelpText.getSize());
-		lonlatHelpPanel.setLocation(470,255);
+		lonlatHelpPanel.setLocation(570,200);
 		lonlatHelpPanel.add(lonlatHelpText);
 		frame.add(lonlatHelpPanel);
 		lonlatHelpPanel.setVisible(false);
@@ -451,6 +479,12 @@ public class UploadWindow implements ActionListener, ItemListener, ChangeListene
 		frame.add(urbanHelpPanel);
 		urbanHelpPanel.setVisible(false);
 		
+//		JPanel reqPanel = new JPanel();
+//		reqPanel.setSize(requiredStar.getSize());
+//		reqPanel.setLocation(300, 300);
+//		reqPanel.add(requiredStar);
+//		frame.add(reqPanel);
+		
 		frame.add(panel);
 		frame.pack();
 		frame.setVisible(true);
@@ -470,19 +504,21 @@ public class UploadWindow implements ActionListener, ItemListener, ChangeListene
 		}
 	}
 	
+	public int cancelled() {
+		return cancelled;
+	}
+	
 	public void actionPerformed(ActionEvent evt) {
 		if (evt.getSource() == fileButton) {
 			fc = new JFileChooser(System.getProperty("user.home"));
 			fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 			/*
 			fc.setFileFilter(new javax.swing.filechooser.FileFilter() {
-
 				@Override
 				public boolean accept(File f) {
 					currentPath = fc.getCurrentDirectory().toString();
 					return (f.isDirectory() && f.getAbsolutePath().endsWith(":\\"));
 				}
-
 				@Override
 				public String getDescription() {
 					return "Only drives";
@@ -507,6 +543,9 @@ public class UploadWindow implements ActionListener, ItemListener, ChangeListene
 			}
 		}
 		if (evt.getSource() == submit) {
+			if(submit.getText().equals("Cancel")) {
+				cancelled++;
+			}
 			if (!uploading) {
 				latitude = latLabel.getText();
 				longitude = lonLabel.getText();
@@ -514,7 +553,7 @@ public class UploadWindow implements ActionListener, ItemListener, ChangeListene
 				endDateStr = endDate.getText();
 				completed();
 				if(completed) {
-					if (startDateStr.length() == 10 && endDateStr.length() == 10) {
+					if (startDateStr.length() == 10 && endDateStr.length() == 10 && !startDateStr.equals("MM-DD-YYYY") && !endDateStr.equals("MM-DD-YYYY")) {
 						for (int i = 0; i < 10; i++) {
 							if (i == 2 || i == 5) {
 								if (startDateStr.charAt(i) != '-' || endDateStr.charAt(i) != '-') {
@@ -530,8 +569,48 @@ public class UploadWindow implements ActionListener, ItemListener, ChangeListene
 								}
 							}
 						}
-						this.setUploading(true);
-						reset();
+						
+						
+						DateFormat format = new SimpleDateFormat("MM-dd-yyyy", Locale.ENGLISH);
+						Date startDate = null;
+						Date endDate = null;
+						Date today = Calendar.getInstance().getTime();
+						boolean load1 = false;
+						boolean load2 = false;
+						boolean load3 = false;
+						try {
+							startDate = format.parse(startDateStr);
+							endDate = format.parse(endDateStr);
+						} catch (ParseException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+							System.out.println("Error in date.");
+						}
+						if(startDate.after(endDate)) {
+							JOptionPane.showMessageDialog(new JFrame(),
+									"Incorrect date entry. The start date is after the end date.");
+							load1 = false;
+						} else {
+							load1 = true;
+						}
+						if(startDate.after(today) && load1) {
+							JOptionPane.showMessageDialog(new JFrame(),
+									"Incorrect date entry. The start date is after the current date.");
+							load2 = false;
+						} else {
+							load2 = true;
+						}
+						if(endDate.after(today) && load1 && load2) {
+							JOptionPane.showMessageDialog(new JFrame(),
+									"Incorrect date entry. The end date is after the current date.");
+							load3 = false;
+						} else {
+							load3 = true;
+						}
+						if(load1 && load2 && load3) {
+							this.setUploading(true);
+							reset();
+						}
 					} else {
 						JOptionPane.showMessageDialog(new JFrame(),
 								"Incorrect date format. Please enter a date in the format: MM-DD-YYYY");
@@ -569,7 +648,6 @@ public class UploadWindow implements ActionListener, ItemListener, ChangeListene
 					String longi = DMStoDD(lonLabel.getText());
 					lonLabel.setText(longi);
 					lonChange.setText("Convert to Degrees, Minutes, Seconds");
-					System.out.println(lonLabel.getText());
 				}
 			}
 		}
@@ -608,10 +686,16 @@ public class UploadWindow implements ActionListener, ItemListener, ChangeListene
 	public void itemStateChanged(ItemEvent e) {
 		JCheckBox cb = (JCheckBox) e.getItem();
 		if(e.getStateChange() == ItemEvent.SELECTED) {
-			habitats.add(cb.getText());
+			if(!cb.getText().equals("Rural") && !cb.getText().equals("Suburban/Moderately Urban") && !cb.getText().equals("Primarily Urban")) {
+				habitats.add(cb.getText());
+			} else {
+				urbanized.add(cb.getText());
+				
+			}
 		} else if (e.getStateChange() == ItemEvent.DESELECTED) {
 			habitats.remove(cb.getText());
-		}
+			urbanized.remove(cb.getText());
+		} 
 	}
 
 	@Override
@@ -642,12 +726,28 @@ public class UploadWindow implements ActionListener, ItemListener, ChangeListene
 		return endDateStr;
 	}
 	
+	//not used
 	public ArrayList<String> getHabitats() {
 		return habitats;
 	}
 	
 	public String getGroup() {
 		return groups.getSelectedItem().toString();
+	}
+	
+	//not used
+	public ArrayList<String> getUrban() {
+		return urbanized;
+//		if(rural.isSelected()) {
+//			return "Rural";
+//		}
+//		else if (sub.isSelected()) {
+//			return "Suburban/Moderately Urban";
+//		}
+//		else if(urban.isSelected()) {
+//			return "Primarily Urban";
+//		}
+//		return null;
 	}
 	
 	public String DMStoDD(String dms) {
@@ -747,18 +847,22 @@ public class UploadWindow implements ActionListener, ItemListener, ChangeListene
 	public void completed() {
 		boolean s = false;
 		boolean e = false;
-		boolean ott = false;
+		boolean hab = false;
+		boolean ur = false;
 		boolean g = false;
 		boolean f = false;
-		if(!startDate.getText().isEmpty()) {
+		if(!startDate.getText().isEmpty() || startDate.getText().equals("MM-DD-YYYY")) {
 			s = true;
 		}
-		if(!endDate.getText().isEmpty()) {
+		if(!endDate.getText().isEmpty() || endDate.getText().equals("MM-DD-YYYY")) {
 			e = true;
 		}
 		if(one.isSelected()|| two.isSelected() || three.isSelected() || four.isSelected() || five.isSelected() || six.isSelected()
-				|| seven.isSelected() || eight.isSelected() || nine.isSelected() || ten.isSelected() || eleven.isSelected() || twelve.isSelected()) {
-			ott = true;
+				|| seven.isSelected() || eight.isSelected() || nine.isSelected() ){
+			hab = true;
+		}
+		if(rural.isSelected() || sub.isSelected() || urban.isSelected()) {
+			ur = true;
 		}
 		if(groups.getSelectedIndex() != -1) {
 			g = true;
@@ -766,7 +870,7 @@ public class UploadWindow implements ActionListener, ItemListener, ChangeListene
 		if(!filePath.getText().isEmpty()) {
 			f = true;
 		}
-		if(s && e && ott && g && f) {
+		if(s && e && hab && ur && g && f) {
 			completed = true;
 		}
 		
@@ -778,16 +882,39 @@ public class UploadWindow implements ActionListener, ItemListener, ChangeListene
 		one.setSelected(false);
 		two.setSelected(false);
 		three.setSelected(false);
+		four.setSelected(false);
+		five.setSelected(false);
+		six.setSelected(false);
+		seven.setSelected(false);
+		eight.setSelected(false);
+		nine.setSelected(false);
+		rural.setSelected(false);
+		sub.setSelected(false);
+		urban.setSelected(false);
 		filePath.setText(null);
 		groups.setSelectedIndex(-1);
 		latLabel.setText("0.00");
 		lonLabel.setText("0.00");
+		lat.setValue(0);
+		lon.setValue(0);
+		startDate.setForeground(Color.GRAY);
+		startDate.setText("MM-DD-YYYY");
+		endDate.setForeground(Color.GRAY);
+		endDate.setText("MM-DD-YYYY");
+		habitats.clear();
+		urbanized.clear();
 	}
 
 	@Override
 	public void focusGained(FocusEvent evt) {
-		// TODO Auto-generated method stub
-		
+		if(evt.getSource() == startDate) {
+			startDate.setText("");
+			startDate.setForeground(Color.BLACK);
+		}
+		if(evt.getSource() == endDate) {
+			endDate.setText("");
+			endDate.setForeground(Color.BLACK);
+		}
 	}
 
 	@Override
