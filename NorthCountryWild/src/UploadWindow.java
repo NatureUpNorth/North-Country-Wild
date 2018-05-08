@@ -565,7 +565,7 @@ public class UploadWindow implements ActionListener, ItemListener, ChangeListene
 					lonLabel.setText(longi);
 					lonChange.setText("Convert to Decimal degrees");
 					System.out.println(lonLabel.getText());
-				} else if (lonLabel.getText().contains("\"") && lonChange.getText().equals("Convert to Decimal degrees")) {
+				} else if (lonLabel.getText().contains("\"") && lonChange.getText().equals("     Convert to Decimal Degrees     ")) {
 					String longi = DMStoDD(lonLabel.getText());
 					lonLabel.setText(longi);
 					lonChange.setText("Convert to Degrees, Minutes, Seconds");
