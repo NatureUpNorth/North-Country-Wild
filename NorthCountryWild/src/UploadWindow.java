@@ -512,7 +512,7 @@ public class UploadWindow implements ActionListener, ItemListener, ChangeListene
 		if (evt.getSource() == fileButton) {
 			fc = new JFileChooser(System.getProperty("user.home"));
 			fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-			/*
+			/* Option to set it so that only drives are chooseable in file menu
 			fc.setFileFilter(new javax.swing.filechooser.FileFilter() {
 				@Override
 				public boolean accept(File f) {
@@ -529,17 +529,34 @@ public class UploadWindow implements ActionListener, ItemListener, ChangeListene
 			if (fc.showOpenDialog(fc) == JFileChooser.APPROVE_OPTION) {
 				filePath.setText(fc.getSelectedFile().toString());
 				count = 0;
-				checkDirectory(getFilepath());
-				/*
-				JFrame optionFrame = new JFrame();
-				String[] options = {"Yes", "No"};
-				int n = JOptionPane.showOptionDialog(
-					    optionFrame, "This folder has approximately " + count + " files to be uploaded in it. Is this correct?",
-					    "Warning", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
-				if (n == 1) {
-					fileButton.doClick();
-				}
-				*/
+				
+				JOptionPane optionPane = new JOptionPane("Checking the selected folder for pictures... Please wait.", JOptionPane.INFORMATION_MESSAGE, JOptionPane.DEFAULT_OPTION, null, new Object[]{}, null);
+				JDialog dialog = new JDialog();
+				dialog.setTitle("Message");
+				dialog.setModal(true);
+
+				dialog.setContentPane(optionPane);
+
+				dialog.setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
+				dialog.pack();
+				Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+				dialog.setLocation(dim.width/2-dialog.getWidth()/2, dim.height/2-dialog.getHeight()/2);
+				Thread t = new Thread() {
+				    public void run() {
+				    	checkDirectory(getFilepath());
+				    	dialog.dispose();
+				    	JFrame optionFrame = new JFrame();
+						String[] options = {"Yes", "No"};
+						int n = JOptionPane.showOptionDialog(
+							    optionFrame, "This folder has approximately " + count + " files to be uploaded in it. Is this correct?",
+							    "Warning", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
+						if (n == 1) {
+							fileButton.doClick();
+						}
+				    }
+				};
+				t.start();
+				dialog.setVisible(true);
 			}
 		}
 		if (evt.getSource() == submit) {
