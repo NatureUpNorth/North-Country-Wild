@@ -26,7 +26,7 @@ public class LoginWindow implements ActionListener {
 		JButton submit = new JButton("Submit");
 		
 		// set window size
-		frame.setSize(350, 150);
+		frame.setSize(360, 160);
 		frame.setResizable(false);
 		
 		// add components to panel

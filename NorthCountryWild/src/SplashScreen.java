@@ -45,7 +45,7 @@ public class SplashScreen implements ActionListener{
 		ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
 		InputStream logoInput = classLoader.getResourceAsStream("nun_SLU.jpg");
 		InputStream titleInput = classLoader.getResourceAsStream("title.jpg");
-		InputStream gameInput = classLoader.getResourceAsStream("game_camera_pic.jpg");
+		InputStream gameInput = classLoader.getResourceAsStream("game_camera_pic.JPG");
 
 		try {
 			logo = ImageIO.read(logoInput);
