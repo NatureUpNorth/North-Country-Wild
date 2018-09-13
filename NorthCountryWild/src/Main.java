@@ -7,6 +7,7 @@ public class Main {
 		SplashScreen splash = new SplashScreen();
 		while(splash.isOpen());
 		splash.close();
+<<<<<<< HEAD
 		
 		LoginWindow login = new LoginWindow();
 		while (login.isOpen());  // wait for them to submit before closing the window
@@ -14,6 +15,14 @@ public class Main {
 		login.close();
 		
 		//String name = "Remi LeBlanc";
+=======
+		
+		LoginWindow login = new LoginWindow();
+		while (login.isOpen());  // wait for them to submit before closing the window
+		String name = login.getName();
+		login.close();
+		
+>>>>>>> 9d58dd18b96ba13c7e20352df9a46eabb78cc947
 		UploadWindow upload = new UploadWindow();
 		while (true) {
 			while (!upload.isUploading());  // wait for them to hit submit
