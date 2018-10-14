@@ -45,7 +45,7 @@ public class SplashScreen implements ActionListener{
 		ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
 		InputStream logoInput = classLoader.getResourceAsStream("nun_SLU.jpg");
 		InputStream titleInput = classLoader.getResourceAsStream("title.jpg");
-		InputStream gameInput = classLoader.getResourceAsStream("game_camera_pic.jpg");
+		InputStream gameInput = classLoader.getResourceAsStream("game_camera_pic.JPG");
 
 		try {
 			logo = ImageIO.read(logoInput);
@@ -114,7 +114,7 @@ public class SplashScreen implements ActionListener{
         info.setOpaque(false);
         info.setEditable(false);
 		info.setText("Before you begin you should:\n\n"
-				+ "1) Organize your photos on your hard drive so tha there is a single folder for each camera deployment. "
+				+ "1) Organize your photos on your hard drive so that there is a single folder for each camera deployment. "
 				+ "Each folder should contain only the image files that were produced during the deployment, and should include "
 				+ "ALL image files, even if there are no animals in the picture. You will use the Photo Uploader once for "
 				+ "each camera deployment.\n\n2) Make sure you have the latitude and longitude information for where the camera "
