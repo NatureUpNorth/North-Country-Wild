@@ -6335,6 +6335,7 @@ org.eclipse.recommenders.utils.Logs$LogTraceException
 !ENTRY org.eclipse.jdt.ui 2 0 2018-05-08 20:22:31.237
 !MESSAGE The 'org.eclipse.jdt.ui.TemplateProposalComputer' proposal computer from the 'org.eclipse.jdt.ui' plug-in did not complete normally. The extension took too long to return from the 'computeCompletionProposals()' operation.
 >>>>>>> 9d58dd18b96ba13c7e20352df9a46eabb78cc947
+<<<<<<< HEAD
 !SESSION 2018-09-20 22:25:26.828 -----------------------------------------------
 eclipse.buildId=4.7.2.M20171130-0510
 java.version=1.8.0_121
@@ -9805,3 +9806,18 @@ Caused by: java.lang.IllegalArgumentException: assertion failed.
 	at com.google.common.util.concurrent.AbstractIdleService$2$1.run(AbstractIdleService.java:54)
 	at com.google.common.util.concurrent.Callables$3.run(Callables.java:93)
 	at java.lang.Thread.run(Thread.java:745)
+=======
+
+!ENTRY org.eclipse.core.jobs 4 2 2018-10-14 14:20:26.686
+!MESSAGE An internal error occurred during: "Periodic workspace save.".
+!STACK 0
+java.lang.IllegalArgumentException: Cannot set lower sequence number for root (previous: 31, new: 29). Location: P:\North-Country-Wild\.metadata\.plugins\org.eclipse.core.resources\.safetable\org.eclipse.core.resources
+	at org.eclipse.core.runtime.Assert.isLegal(Assert.java:63)
+	at org.eclipse.core.internal.resources.SaveManager.validateMasterTableBeforeSave(SaveManager.java:1621)
+	at org.eclipse.core.internal.resources.SaveManager.saveMasterTable(SaveManager.java:1285)
+	at org.eclipse.core.internal.resources.SaveManager.saveMasterTable(SaveManager.java:1277)
+	at org.eclipse.core.internal.resources.SaveManager.save(SaveManager.java:1254)
+	at org.eclipse.core.internal.resources.SaveManager.save(SaveManager.java:1165)
+	at org.eclipse.core.internal.resources.DelayedSnapshotJob.run(DelayedSnapshotJob.java:52)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:56)
+>>>>>>> 53684e04bc2e41b5870c78da061c08ea79cbd4f3

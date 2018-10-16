@@ -156,3 +156,18 @@ NorthCountryWild/src/images/game_camera_pic.JPG
 /.metadata/
 /.recommenders/
 >>>>>>> 13fc848424bb8815f5b305710b4c5b15ff182e2f
+.metadata/.log
+*.zip
+.metadata/.log
+.metadata/.plugins/org.eclipse.m2e.logback.configuration/0.log
+*.log
+.metadata/.plugins/org.eclipse.m2e.logback.configuration/0.log
+*.snap
+*.resources
+.metadata/.plugins/org.eclipse.core.runtime/.settings/org.eclipse.jdt.launching.prefs
+.metadata/.plugins/org.eclipse.core.resources/.projects/MDTest/.markers.snap
+*.resources
+.metadata/.plugins/org.eclipse.core.resources/.projects/MDTest/.markers.snap
+.metadata/.plugins/org.eclipse.recommenders.news.impl/downloads/http%3A%2F%2Fwww.eclipse.org%2Fhome%2Feclipsenews.rss
+.metadata/.plugins/org.eclipse.m2e.logback.configuration/0.log
+.metadata/.log
