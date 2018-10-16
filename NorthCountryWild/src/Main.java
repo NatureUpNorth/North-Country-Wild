@@ -1,3 +1,5 @@
+import java.util.Iterator;
+
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
@@ -7,22 +9,15 @@ public class Main {
 		SplashScreen splash = new SplashScreen();
 		while(splash.isOpen());
 		splash.close();
-<<<<<<< HEAD
 		
-		LoginWindow login = new LoginWindow();
-		while (login.isOpen());  // wait for them to submit before closing the window
-		String name = login.getName();
-		login.close();
+//		LoginWindow login = new LoginWindow();
+//		while (login.isOpen());  // wait for them to submit before closing the window
+//		String name = login.getName();
+//		login.close();
 		
-		//String name = "Remi LeBlanc";
-=======
+		String name = "Remi LeBlanc";
+
 		
-		LoginWindow login = new LoginWindow();
-		while (login.isOpen());  // wait for them to submit before closing the window
-		String name = login.getName();
-		login.close();
-		
->>>>>>> 9d58dd18b96ba13c7e20352df9a46eabb78cc947
 		UploadWindow upload = new UploadWindow();
 		while (true) {
 			while (!upload.isUploading());  // wait for them to hit submit
@@ -31,17 +26,27 @@ public class Main {
 			String destination = affiliation + "/" + name + "/" + time;
 			String filepath = upload.getFilepath();
 			String hab = "";
-			for(String s: upload.habitats) {hab = hab.concat(s+ " & ");}
+			String startDate = upload.getStartDate();
+			String endDate = upload.getEndDate();
+			//System.out.println(upload.getHabitats().get(0));
+			Iterator<String> iter = upload.getHabitats().iterator();
+			while (iter.hasNext()) {
+			    String str = iter.next();
+			    hab = hab+str+" & ";
+			}
+			//for(String s: upload.habitats) {hab = hab.concat(s+ " & ");}
 			if(hab.length()>3) {hab = hab.substring(0, hab.length()-3);}
 			String urb = "";
-			for(String s: upload.urbanized) {urb = urb.concat(s);}
-			UploadThread thread = new UploadThread(filepath, destination, upload, upload.getCount(), hab, urb, affiliation);
+			//for(String s: upload.urbanized) {urb = urb.concat(s);}
+			urb = upload.getUrban();
+			UploadThread thread = new UploadThread(filepath, destination, upload, upload.getCount(), hab, urb, affiliation, startDate, endDate);
 			thread.start();
 			while(thread.isUploading()) {
 				if (!upload.isUploading()) {
 					thread.terminate();
 				}
 			};  // wait for it to be done uploading files
+			upload.reset();
 			upload.setUploading(false);
 			if(upload.cancelled()==0) {
 			JOptionPane.showMessageDialog(new JFrame(),

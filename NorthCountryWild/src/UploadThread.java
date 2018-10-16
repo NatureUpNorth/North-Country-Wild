@@ -38,8 +38,10 @@ public class UploadThread extends Thread {
 	private String habitat;
 	private String urbanized;
 	private String affiliation;
+	private String startDate;
+	private String endDate;
 	
-	UploadThread(String path, String destination, UploadWindow uw, int files, String habit, String urba, String a) {
+	UploadThread(String path, String destination, UploadWindow uw, int files, String habit, String urba, String a, String st, String en) {
 		filePath = path;
 		destinationPath = destination;
 		uploading = true;
@@ -49,6 +51,8 @@ public class UploadThread extends Thread {
 		habitat = habit;
 		urbanized = urba;
 		affiliation = a;
+		startDate = st;
+		endDate = en;
 	}
 	
 	private void write(ArrayList<Metadata> meta, String method, String fileName) {
@@ -82,8 +86,6 @@ public class UploadThread extends Thread {
     			}
     			String lat = upload.getLat();
     			String lon = upload.getLon();
-    			String startDate = upload.getStartDate();
-    			String endDate = upload.getEndDate();
     			if(lat.contains("\"")) {
     				lat = DMStoDD(lat);
     			}

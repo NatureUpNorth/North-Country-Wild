@@ -2,6 +2,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
+import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -12,20 +13,20 @@ import java.awt.event.ItemListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.File;
-import java.text.DateFormat;
+import java.net.URL;
 import java.text.DecimalFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.Hashtable;
-import java.util.Locale;
 
 import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+
+import com.github.lgooddatepicker.components.DatePicker;
+import com.github.lgooddatepicker.components.DatePickerSettings;
+import com.github.lgooddatepicker.demo.FullDemo;
 
 public class UploadWindow implements ActionListener, ItemListener, ChangeListener, MouseListener, FocusListener {
 
@@ -54,20 +55,22 @@ public class UploadWindow implements ActionListener, ItemListener, ChangeListene
 	private JSlider lon;
 	private JTextField latLabel;
 	private JTextField lonLabel;
-	private JTextField startDate;
-	private JTextField endDate;
-	private String startDateStr;
-	private String endDateStr;
+	//private JTextField startDate;
+	//private JTextField endDate;
+	//private String startDateStr;
+	//private String endDateStr;
 	private String latitude;
 	private String longitude;
 	JComboBox<String> groups; 
 	ArrayList<String> habitats;
-	ArrayList<String> urbanized;
+	String urbanized;
 	private volatile boolean uploading = false;
 	private final String DEGREE  = "\u00b0";
 	private boolean completed = false;
 	private int count;
 	private int cancelled = 0;
+	static DatePicker startDatePicker;
+	static DatePicker endDatePicker;
 	
 	private JTextField selectFolderHelp;
 	private JTextField groupHelp;
@@ -182,7 +185,6 @@ public class UploadWindow implements ActionListener, ItemListener, ChangeListene
 		urbanHelp.setEditable(false);
 		urbanHelp.setPreferredSize(new Dimension(23, 20));
 		urbanHelp.addMouseListener(this);
-		urbanized = new ArrayList<String>();
 		
 		one = new JCheckBox("Hardwood Forest");
 		two = new JCheckBox("Mixed Forest");
@@ -329,23 +331,44 @@ public class UploadWindow implements ActionListener, ItemListener, ChangeListene
 		urbanPanel.add(sub);
 		urbanPanel.add(urban);
 		
+		DatePickerSettings dateSettings;
+		DatePickerSettings dateSettings2;
+		URL dateImageURL = FullDemo.class.getResource("/images/datepickerbutton1.png");
+        Image dateExampleImage = Toolkit.getDefaultToolkit().getImage(dateImageURL);
+        ImageIcon dateExampleIcon = new ImageIcon(dateExampleImage);
+        // Create the date picker, and apply the image icon.
+        dateSettings = new DatePickerSettings();
+        dateSettings2 = new DatePickerSettings();
+        startDatePicker = new DatePicker(dateSettings);
+        endDatePicker = new DatePicker(dateSettings2);
+        startDatePicker.setDateToToday();
+        endDatePicker.setDateToToday();
+        JButton datePickerButton = startDatePicker.getComponentToggleCalendarButton();
+        JButton datePickerButton2 = endDatePicker.getComponentToggleCalendarButton();
+        datePickerButton.setText("");
+        datePickerButton2.setText("");
+        datePickerButton.setIcon(dateExampleIcon);
+        datePickerButton2.setIcon(dateExampleIcon);
+        //datePanel.add(startDatePicker);
+		
 		JPanel startPanel = new JPanel();
 		JPanel endPanel = new JPanel();
-		startDate = new JTextField(20);
-		startDate.addFocusListener(this);
-		startDate.setForeground(Color.GRAY);
-		startDate.setText("MM-DD-YYYY");
-		endDate = new JTextField(20);
-		endDate.addFocusListener(this);
-		endDate.setText("MM-DD-YYYY");
-		endDate.setForeground(Color.GRAY);
+//		startDate = new JTextField(20);
+//		startDate.addFocusListener(this);
+//		startDate.setForeground(Color.GRAY);
+//		startDate.setText("MM-DD-YYYY");
+//		endDate = new JTextField(20);
+//		endDate.addFocusListener(this);
+//		endDate.setText("MM-DD-YYYY");
+//		endDate.setForeground(Color.GRAY);
 		startPanel.add(redStarStart);
 		startPanel.add(new JLabel("For this deployment, on what date was the camera placed in the field?   "));
-		startPanel.add(startDate);
+		startPanel.add(startDatePicker);
 		startPanel.add(datesHelp);
 		endPanel.add(redStarEnd);
 		endPanel.add(new JLabel("For this deployment, on what date was the camera removed from the field?"));
-		endPanel.add(endDate);
+		endPanel.add(endDatePicker);
+//		endPanel.add(endDate);
 		datePanel.setLayout(new GridLayout(2, 1));
 		datePanel.add(startPanel);
 		datePanel.add(endPanel);
@@ -424,7 +447,7 @@ public class UploadWindow implements ActionListener, ItemListener, ChangeListene
 		datesHelpText.setLineWrap(true);
 		datesHelpText.setWrapStyleWord(true);
 		datesHelpText.setEditable(false);
-		datesHelpText.setText("Enter the the start and end dates of deployment for the camera. Dates must be entered as MM-DD-YYYY");
+		datesHelpText.setText("Enter the the start and end dates of deployment for the camera. Click the calender icon to select date.");
 		datesHelpText.setSize(150,125);
 		datesHelpText.setBorder(BorderFactory.createCompoundBorder(border,
 	            BorderFactory.createEmptyBorder(10, 10, 10, 10)));
@@ -566,58 +589,61 @@ public class UploadWindow implements ActionListener, ItemListener, ChangeListene
 			if (!uploading) {
 				latitude = latLabel.getText();
 				longitude = lonLabel.getText();
-				startDateStr = startDate.getText();
-				endDateStr = endDate.getText();
+				//startDateStr = startDate.getText();
+				//endDateStr = endDate.getText();
 				completed();
 				if(completed) {
-					if (startDateStr.length() == 10 && endDateStr.length() == 10 && !startDateStr.equals("MM-DD-YYYY") && !endDateStr.equals("MM-DD-YYYY")) {
-						for (int i = 0; i < 10; i++) {
-							if (i == 2 || i == 5) {
-								if (startDateStr.charAt(i) != '-' || endDateStr.charAt(i) != '-') {
-									JOptionPane.showMessageDialog(new JFrame(),
-											"Incorrect date format. Please enter a date in the format: MM-DD-YYYY");
-									break;
-								}
-							} else {
-								if (!Character.isDigit(startDateStr.charAt(i)) || !Character.isDigit(endDateStr.charAt(i))) {
-									JOptionPane.showMessageDialog(new JFrame(),
-											"Incorrect date format. Please enter a date in the format: MM-DD-YYYY");
-									break;
-								}
-							}
-						}
-						
-						
-						DateFormat format = new SimpleDateFormat("MM-dd-yyyy", Locale.ENGLISH);
-						Date startDate = null;
-						Date endDate = null;
-						Date today = Calendar.getInstance().getTime();
-						boolean load1 = false;
-						boolean load2 = false;
-						boolean load3 = false;
-						try {
-							startDate = format.parse(startDateStr);
-							endDate = format.parse(endDateStr);
-						} catch (ParseException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-							System.out.println("Error in date.");
-						}
-						if(startDate.after(endDate)) {
+
+					//					if (startDateStr.length() == 10 && endDateStr.length() == 10 && !startDateStr.equals("MM-DD-YYYY") && !endDateStr.equals("MM-DD-YYYY")) {
+					//						for (int i = 0; i < 10; i++) {
+					//							if (i == 2 || i == 5) {
+					//								if (startDateStr.charAt(i) != '-' || endDateStr.charAt(i) != '-') {
+					//									JOptionPane.showMessageDialog(new JFrame(),
+					//											"Incorrect date format. Please enter a date in the format: MM-DD-YYYY");
+					//									break;
+					//								}
+					//							} else {
+					//								if (!Character.isDigit(startDateStr.charAt(i)) || !Character.isDigit(endDateStr.charAt(i))) {
+					//									JOptionPane.showMessageDialog(new JFrame(),
+					//											"Incorrect date format. Please enter a date in the format: MM-DD-YYYY");
+					//									break;
+					//								}
+					//							}
+					//						}
+
+
+					//						DateFormat format = new SimpleDateFormat("MM-dd-yyyy", Locale.ENGLISH);
+					//						Date startDate = null;
+					//						Date endDate = null;
+					//						Date today = Calendar.getInstance().getTime();
+					LocalDate today = LocalDate.now();
+					LocalDate startDate = null;
+					LocalDate endDate = null;
+					boolean load1 = false;
+					boolean load2 = false;
+					boolean load3 = false;
+					startDate = startDatePicker.getDate();
+					endDate = endDatePicker.getDate();
+					if(startDate==null || endDate == null){
+						JOptionPane.showMessageDialog(new JFrame(),
+								"Incorrect date entry. Please enter all the required fields.");
+					} else {
+
+						if(startDate.isAfter(endDate)) {
 							JOptionPane.showMessageDialog(new JFrame(),
 									"Incorrect date entry. The start date is after the end date.");
 							load1 = false;
 						} else {
 							load1 = true;
 						}
-						if(startDate.after(today) && load1) {
+						if(startDate.isAfter(today) && load1) {
 							JOptionPane.showMessageDialog(new JFrame(),
 									"Incorrect date entry. The start date is after the current date.");
 							load2 = false;
 						} else {
 							load2 = true;
 						}
-						if(endDate.after(today) && load1 && load2) {
+						if(endDate.isAfter(today) && load1 && load2) {
 							JOptionPane.showMessageDialog(new JFrame(),
 									"Incorrect date entry. The end date is after the current date.");
 							load3 = false;
@@ -626,12 +652,10 @@ public class UploadWindow implements ActionListener, ItemListener, ChangeListene
 						}
 						if(load1 && load2 && load3) {
 							this.setUploading(true);
-							reset();
+							
 						}
-					} else {
-						JOptionPane.showMessageDialog(new JFrame(),
-								"Incorrect date format. Please enter a date in the format: MM-DD-YYYY");
 					}
+
 				} else {
 					JOptionPane.showMessageDialog(new JFrame(),
 							"Please enter all the required fields");
@@ -640,6 +664,8 @@ public class UploadWindow implements ActionListener, ItemListener, ChangeListene
 				this.setUploading(false);
 			}
 		}
+		
+		
 		if(evt.getSource() == latChange) {
 			if(!latLabel.getText().isEmpty()) {
 				if(latLabel.getText().contains(".") && latChange.getText().equals("Convert to Degrees, Minutes, Seconds")){
@@ -653,14 +679,13 @@ public class UploadWindow implements ActionListener, ItemListener, ChangeListene
 				}
 			}
 		}
-		
+
 		if(evt.getSource() == lonChange) {
 			if(!lonLabel.getText().isEmpty()) {
 				if(lonLabel.getText().contains(".") && lonChange.getText().equals("Convert to Degrees, Minutes, Seconds")) {
 					String longi = DDtoDMS(lonLabel.getText());
 					lonLabel.setText(longi);
-					lonChange.setText("Convert to Decimal degrees");
-					System.out.println(lonLabel.getText());
+					lonChange.setText("     Convert to Decimal Degrees     ");
 				} else if (lonLabel.getText().contains("\"") && lonChange.getText().equals("     Convert to Decimal Degrees     ")) {
 					String longi = DMStoDD(lonLabel.getText());
 					lonLabel.setText(longi);
@@ -706,12 +731,40 @@ public class UploadWindow implements ActionListener, ItemListener, ChangeListene
 			if(!cb.getText().equals("Rural") && !cb.getText().equals("Suburban/Moderately Urban") && !cb.getText().equals("Primarily Urban")) {
 				habitats.add(cb.getText());
 			} else {
-				urbanized.add(cb.getText());
+				if(cb.getText().equals("Rural")){
+					rural.setSelected(true);
+					sub.setSelected(false);
+					urban.setSelected(false);
+					urbanized = "Rural";
+				} else if(cb.getText().equals("Suburban/Moderately Urban")) {
+					rural.setSelected(false);
+					sub.setSelected(true);
+					urban.setSelected(false);
+					urbanized = "Suburban/Moderately Urban";
+				} else if (cb.getText().equals("Primarily Urban")) {
+					rural.setSelected(false);
+					sub.setSelected(false);
+					urban.setSelected(true);
+					urbanized = "Primarily Urban";
+				}
 				
 			}
 		} else if (e.getStateChange() == ItemEvent.DESELECTED) {
 			habitats.remove(cb.getText());
-			urbanized.remove(cb.getText());
+			if(cb.getText().equals("Rural")){
+				if(cb.isSelected()) {
+					urbanized = "Rural";
+				}
+			} else if(cb.getText().equals("Suburban/Moderately Urban")) {
+				if(cb.isSelected()) {
+					urbanized = "Suburban/Moderately Urban";
+				}
+				
+			} else if (cb.getText().equals("Primarily Urban")) {
+				if(cb.isSelected()) {
+					urbanized = "Primarily Urban";
+				}
+			}
 		} 
 	}
 
@@ -736,11 +789,11 @@ public class UploadWindow implements ActionListener, ItemListener, ChangeListene
 	}
 	
 	public String getStartDate() {
-		return startDateStr;
+		return startDatePicker.getDate().toString();
 	}
 	
 	public String getEndDate() {
-		return endDateStr;
+		return endDatePicker.getDate().toString();
 	}
 	
 	//not used
@@ -753,18 +806,8 @@ public class UploadWindow implements ActionListener, ItemListener, ChangeListene
 	}
 	
 	//not used
-	public ArrayList<String> getUrban() {
+	public String getUrban() {
 		return urbanized;
-//		if(rural.isSelected()) {
-//			return "Rural";
-//		}
-//		else if (sub.isSelected()) {
-//			return "Suburban/Moderately Urban";
-//		}
-//		else if(urban.isSelected()) {
-//			return "Primarily Urban";
-//		}
-//		return null;
 	}
 	
 	public String DMStoDD(String dms) {
@@ -868,12 +911,19 @@ public class UploadWindow implements ActionListener, ItemListener, ChangeListene
 		boolean ur = false;
 		boolean g = false;
 		boolean f = false;
-		if(!startDate.getText().isEmpty() || startDate.getText().equals("MM-DD-YYYY")) {
+		LocalDate today = LocalDate.now();
+		if(startDatePicker.getDate()!=null){
 			s = true;
 		}
-		if(!endDate.getText().isEmpty() || endDate.getText().equals("MM-DD-YYYY")) {
+		if(endDatePicker.getDate()!=null) {
 			e = true;
 		}
+//		if(!startDate.getText().isEmpty() || startDate.getText().equals("MM-DD-YYYY")) {
+//			s = true;
+//		}
+//		if(!endDate.getText().isEmpty() || endDate.getText().equals("MM-DD-YYYY")) {
+//			e = true;
+//		}
 		if(one.isSelected()|| two.isSelected() || three.isSelected() || four.isSelected() || five.isSelected() || six.isSelected()
 				|| seven.isSelected() || eight.isSelected() || nine.isSelected() ){
 			hab = true;
@@ -893,9 +943,7 @@ public class UploadWindow implements ActionListener, ItemListener, ChangeListene
 		
 	}
 	
-	private void reset() {
-		startDate.setText(null);
-		endDate.setText(null);
+	void reset() {
 		one.setSelected(false);
 		two.setSelected(false);
 		three.setSelected(false);
@@ -914,25 +962,23 @@ public class UploadWindow implements ActionListener, ItemListener, ChangeListene
 		lonLabel.setText("0.00");
 		lat.setValue(0);
 		lon.setValue(0);
-		startDate.setForeground(Color.GRAY);
-		startDate.setText("MM-DD-YYYY");
-		endDate.setForeground(Color.GRAY);
-		endDate.setText("MM-DD-YYYY");
+		startDatePicker.setDateToToday();
+		endDatePicker.setDateToToday();
 		habitats.clear();
-		urbanized.clear();
+		urbanized = "";
 	}
 
-	@Override
-	public void focusGained(FocusEvent evt) {
-		if(evt.getSource() == startDate) {
-			startDate.setText("");
-			startDate.setForeground(Color.BLACK);
-		}
-		if(evt.getSource() == endDate) {
-			endDate.setText("");
-			endDate.setForeground(Color.BLACK);
-		}
-	}
+//	@Override
+//	public void focusGained(FocusEvent evt) {
+//		if(evt.getSource() == startDate) {
+//			startDate.setText("");
+//			startDate.setForeground(Color.BLACK);
+//		}
+//		if(evt.getSource() == endDate) {
+//			endDate.setText("");
+//			endDate.setForeground(Color.BLACK);
+//		}
+//	}
 
 	@Override
 	public void focusLost(FocusEvent evt) {
@@ -949,6 +995,11 @@ public class UploadWindow implements ActionListener, ItemListener, ChangeListene
 			lat.setValue((int)latPosUpdated);
 		} 
 
+	}
+
+	@Override
+	public void focusGained(FocusEvent e) {
+		
 	}
 
 }
