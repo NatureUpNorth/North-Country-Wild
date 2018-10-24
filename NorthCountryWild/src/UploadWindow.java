@@ -353,14 +353,6 @@ public class UploadWindow implements ActionListener, ItemListener, ChangeListene
 		
 		JPanel startPanel = new JPanel();
 		JPanel endPanel = new JPanel();
-//		startDate = new JTextField(20);
-//		startDate.addFocusListener(this);
-//		startDate.setForeground(Color.GRAY);
-//		startDate.setText("MM-DD-YYYY");
-//		endDate = new JTextField(20);
-//		endDate.addFocusListener(this);
-//		endDate.setText("MM-DD-YYYY");
-//		endDate.setForeground(Color.GRAY);
 		startPanel.add(redStarStart);
 		startPanel.add(new JLabel("For this deployment, on what date was the camera placed in the field?   "));
 		startPanel.add(startDatePicker);
@@ -368,7 +360,6 @@ public class UploadWindow implements ActionListener, ItemListener, ChangeListene
 		endPanel.add(redStarEnd);
 		endPanel.add(new JLabel("For this deployment, on what date was the camera removed from the field?"));
 		endPanel.add(endDatePicker);
-//		endPanel.add(endDate);
 		datePanel.setLayout(new GridLayout(2, 1));
 		datePanel.add(startPanel);
 		datePanel.add(endPanel);
@@ -918,12 +909,6 @@ public class UploadWindow implements ActionListener, ItemListener, ChangeListene
 		if(endDatePicker.getDate()!=null) {
 			e = true;
 		}
-//		if(!startDate.getText().isEmpty() || startDate.getText().equals("MM-DD-YYYY")) {
-//			s = true;
-//		}
-//		if(!endDate.getText().isEmpty() || endDate.getText().equals("MM-DD-YYYY")) {
-//			e = true;
-//		}
 		if(one.isSelected()|| two.isSelected() || three.isSelected() || four.isSelected() || five.isSelected() || six.isSelected()
 				|| seven.isSelected() || eight.isSelected() || nine.isSelected() ){
 			hab = true;
@@ -968,17 +953,6 @@ public class UploadWindow implements ActionListener, ItemListener, ChangeListene
 		urbanized = "";
 	}
 
-//	@Override
-//	public void focusGained(FocusEvent evt) {
-//		if(evt.getSource() == startDate) {
-//			startDate.setText("");
-//			startDate.setForeground(Color.BLACK);
-//		}
-//		if(evt.getSource() == endDate) {
-//			endDate.setText("");
-//			endDate.setForeground(Color.BLACK);
-//		}
-//	}
 
 	@Override
 	public void focusLost(FocusEvent evt) {

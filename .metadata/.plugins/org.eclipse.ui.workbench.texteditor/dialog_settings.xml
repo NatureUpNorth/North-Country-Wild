@@ -2,12 +2,19 @@
 <section name="Workbench">
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog">
 		<item value="false" key="isRegEx"/>
-		<item value="Cancel" key="selection"/>
+		<item value="out" key="selection"/>
 		<item value="false" key="casesensitive"/>
 		<item value="false" key="incremental"/>
 		<item value="true" key="wrap"/>
 		<item value="false" key="wholeword"/>
 		<list key="findhistory">
+			<item value="out"/>
+			<item value="rural"/>
+			<item value="here"/>
+			<item value="decim"/>
+			<item value="dece"/>
+			<item value="out."/>
+			<item value="system.out"/>
 			<item value="cancel"/>
 			<item value="affiliation"/>
 			<item value="affiliationHelp"/>
@@ -16,10 +23,6 @@
 			<item value="filepath"/>
 			<item value="loading"/>
 			<item value="load"/>
-			<item value="upload"/>
-			<item value="setUp"/>
-			<item value="uploading"/>
-			<item value="path"/>
 		</list>
 		<list key="replacehistory">
 			<item value="groupHelp"/>
@@ -29,7 +32,7 @@
 		<item value="290" key="DIALOG_WIDTH"/>
 		<item value="1|.AppleSystemUIFont|11.0|0|COCOA|1|.AppleSystemUIFont" key="DIALOG_FONT_NAME"/>
 		<item value="409" key="DIALOG_HEIGHT"/>
-		<item value="889" key="DIALOG_X_ORIGIN"/>
-		<item value="135" key="DIALOG_Y_ORIGIN"/>
+		<item value="844" key="DIALOG_X_ORIGIN"/>
+		<item value="410" key="DIALOG_Y_ORIGIN"/>
 	</section>
 </section>
