@@ -20,7 +20,7 @@ public class LoadingBar extends JPanel {
         	g.fillRect(10, 10, (int)(((double) uploaded_files / total_files) * 470), 20);
         }
         g.setColor(Color.black);
-        g.drawString("Uploading " + filePath + "...", 10, 60);
+        g.drawString(filePath + "...", 10, 60);
     }
 	
 	// for incrementing the loading bar as progress is made

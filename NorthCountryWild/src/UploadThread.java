@@ -148,7 +148,7 @@ public class UploadThread extends Thread {
         			if (running) {
 						client.files().uploadBuilder("/" + destinationPath + "/" + file.getName()).uploadAndFinish(in);
 						count++;
-						loading.changeBar(total_files, count, file.getAbsolutePath());
+						loading.changeBar(total_files, count, "Uploading " + file.getAbsolutePath());
         			} else {
         				loading.close();
         				break;

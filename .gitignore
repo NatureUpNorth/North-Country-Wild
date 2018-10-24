@@ -171,3 +171,4 @@ NorthCountryWild/src/images/game_camera_pic.JPG
 .metadata/.plugins/org.eclipse.recommenders.news.impl/downloads/http%3A%2F%2Fwww.eclipse.org%2Fhome%2Feclipsenews.rss
 .metadata/.plugins/org.eclipse.m2e.logback.configuration/0.log
 .metadata/.log
+*.xmi
