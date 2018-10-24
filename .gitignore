@@ -172,3 +172,8 @@ NorthCountryWild/src/images/game_camera_pic.JPG
 .metadata/.plugins/org.eclipse.m2e.logback.configuration/0.log
 .metadata/.log
 *.xmi
+*.prefs
+*.log
+*.ini
+*.txt
+.metadata/.plugins/org.eclipse.jdt.core/savedIndexNames.txt

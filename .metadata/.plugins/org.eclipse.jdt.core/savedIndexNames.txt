@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 INDEX VERSION 1.130+P:\North-Country-Wild\.metadata\.plugins\org.eclipse.jdt.core
 326805980.index
 3854475047.index
@@ -23,3 +24,29 @@ INDEX VERSION 1.130+P:\North-Country-Wild\.metadata\.plugins\org.eclipse.jdt.cor
 728296283.index
 1870878615.index
 2773834657.index
+=======
+INDEX VERSION 1.131+/Users/remileblanc/Dropbox/College/Nature Up North/North-Country-Wild-Workspace/.metadata/.plugins/org.eclipse.jdt.core
+3927758025.index
+2647691692.index
+218188382.index
+2132672051.index
+1271342938.index
+2255771374.index
+680827947.index
+3334288320.index
+2981997152.index
+2762063732.index
+1499520195.index
+1321305507.index
+124275899.index
+1416793072.index
+3810885406.index
+1302770079.index
+245377473.index
+3158197321.index
+3720681883.index
+2084021475.index
+3484117950.index
+1888666045.index
+1999298954.index
+>>>>>>> 85f63d6902c59bce6a2b8c7079ecf8c37093022d

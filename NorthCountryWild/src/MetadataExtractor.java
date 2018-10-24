@@ -1,3 +1,4 @@
+
 import com.drew.imaging.ImageMetadataReader;
 import com.drew.imaging.ImageProcessingException;
 import com.drew.metadata.Directory;
@@ -12,7 +13,7 @@ import java.util.ArrayList;
 public class MetadataExtractor {
 	
 	private static ArrayList<Metadata> meta = new ArrayList<Metadata>();
-	private static String directories = "JPEG Exif IFD0 Exif SubIFD Huffman File Type File";
+	//private static String directories = "JPEG Exif IFD0 Exif SubIFD Huffman File Type File";
 	//Interoperability, Reconyx HyperFire Makernote, Exif Thumbnail, GPS   
 	
 	//*JPEG: all data and all common
