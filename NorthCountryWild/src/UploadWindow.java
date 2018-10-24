@@ -68,6 +68,7 @@ public class UploadWindow implements ActionListener, ItemListener, ChangeListene
 	private final String DEGREE  = "\u00b0";
 	private boolean completed = false;
 	private int count;
+	private boolean count_interrupt;
 	private int cancelled = 0;
 	static DatePicker startDatePicker;
 	static DatePicker endDatePicker;
@@ -524,53 +525,51 @@ public class UploadWindow implements ActionListener, ItemListener, ChangeListene
 	
 	public void actionPerformed(ActionEvent evt) {
 		if (evt.getSource() == fileButton) {
-			fc = new JFileChooser(System.getProperty("user.home"));
-			fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-			/* Option to set it so that only drives are chooseable in file menu
-			fc.setFileFilter(new javax.swing.filechooser.FileFilter() {
-				@Override
-				public boolean accept(File f) {
-					currentPath = fc.getCurrentDirectory().toString();
-					return (f.isDirectory() && f.getAbsolutePath().endsWith(":\\"));
+			if (fileButton.getText().equals("Browse")) {
+				count_interrupt = false;
+				fc = new JFileChooser(System.getProperty("user.home"));
+				fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+				/* Option to set it so that only drives are chooseable in file menu
+				fc.setFileFilter(new javax.swing.filechooser.FileFilter() {
+					@Override
+					public boolean accept(File f) {
+						currentPath = fc.getCurrentDirectory().toString();
+						return (f.isDirectory() && f.getAbsolutePath().endsWith(":\\"));
+					}
+					@Override
+					public String getDescription() {
+						return "Only drives";
+					}
+					
+				});
+				*/
+				if (fc.showOpenDialog(fc) == JFileChooser.APPROVE_OPTION) {
+					filePath.setText(fc.getSelectedFile().toString());
+	
+					Thread t = new Thread() {
+					    public void run() {
+					    	fileButton.setText("Cancel");
+					    	LoadingWindow loading = new LoadingWindow();
+					    	int total = checkDirectory(getFilepath(), loading, 0);
+					    	loading.close();
+					    	if (!count_interrupt) {
+						    	count = total;
+						    	JFrame optionFrame = new JFrame();
+								String[] options = {"Yes", "No"};
+								int n = JOptionPane.showOptionDialog(
+									    optionFrame, "This folder has approximately " + total + " files to be uploaded in it. Is this correct?",
+									    "Warning", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
+								if (n == 1) {
+									fileButton.doClick();
+								}
+					    	}
+					    }
+					};
+					t.start();
 				}
-				@Override
-				public String getDescription() {
-					return "Only drives";
-				}
-				
-			});
-			*/
-			if (fc.showOpenDialog(fc) == JFileChooser.APPROVE_OPTION) {
-				filePath.setText(fc.getSelectedFile().toString());
-				count = 0;
-				
-				JOptionPane optionPane = new JOptionPane("Checking the selected folder for pictures... Please wait.", JOptionPane.INFORMATION_MESSAGE, JOptionPane.DEFAULT_OPTION, null, new Object[]{}, null);
-				JDialog dialog = new JDialog();
-				dialog.setTitle("Message");
-				dialog.setModal(true);
-
-				dialog.setContentPane(optionPane);
-
-				dialog.setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
-				dialog.pack();
-				Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-				dialog.setLocation(dim.width/2-dialog.getWidth()/2, dim.height/2-dialog.getHeight()/2);
-				Thread t = new Thread() {
-				    public void run() {
-				    	checkDirectory(getFilepath());
-				    	dialog.dispose();
-				    	JFrame optionFrame = new JFrame();
-						String[] options = {"Yes", "No"};
-						int n = JOptionPane.showOptionDialog(
-							    optionFrame, "This folder has approximately " + count + " files to be uploaded in it. Is this correct?",
-							    "Warning", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
-						if (n == 1) {
-							fileButton.doClick();
-						}
-				    }
-				};
-				t.start();
-				dialog.setVisible(true);
+			} else if (fileButton.getText().equals("Cancel")) {
+				fileButton.setText("Browse");
+				count_interrupt = true;
 			}
 		}
 		if (evt.getSource() == submit) {
@@ -701,17 +700,32 @@ public class UploadWindow implements ActionListener, ItemListener, ChangeListene
 		return count;
 	}
 
-	public void checkDirectory(String path) {
-		File dir = new File(path);
-
-		for (File file: dir.listFiles()) {
-			if (file.isDirectory()) {
-				checkDirectory(file.getAbsolutePath());
-			} else {
-				if (file.getName().endsWith(".JPG")) {
-					count++;
+	public int checkDirectory(String path, LoadingWindow loading, int total) {
+		if (!count_interrupt) {
+			File dir = new File(path);
+			// reset the loading bar to 0 for the new directory of photos
+			loading.changeBar(0,  0, path);
+			int checked = 0;
+			
+			for (File file: dir.listFiles()) {
+				if (file.getName().toUpperCase().endsWith(".JPG") || file.getName().toUpperCase().endsWith(".PNG")) {
+					total++;
 				}
 			}
+	
+			for (File file: dir.listFiles()) {
+				if (file.isDirectory() && !count_interrupt) {
+					total = checkDirectory(file.getAbsolutePath(), loading, total);
+				} else {
+					if (file.getName().toUpperCase().endsWith(".JPG") || file.getName().toUpperCase().endsWith(".PNG")) {
+						checked++;
+						loading.changeBar(total, checked, path);
+					}
+				}
+			}
+			return total;
+		} else {
+			return 0;
 		}
 	}
 

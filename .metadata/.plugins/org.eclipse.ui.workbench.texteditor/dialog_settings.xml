@@ -2,12 +2,17 @@
 <section name="Workbench">
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog">
 		<item value="false" key="isRegEx"/>
+<<<<<<< HEAD
 		<item value="out" key="selection"/>
+=======
+		<item value=".close()" key="selection"/>
+>>>>>>> 393993bf0d6647801abb10e80cf689ed5b0bbb2a
 		<item value="false" key="casesensitive"/>
 		<item value="false" key="incremental"/>
 		<item value="true" key="wrap"/>
 		<item value="false" key="wholeword"/>
 		<list key="findhistory">
+<<<<<<< HEAD
 			<item value="out"/>
 			<item value="rural"/>
 			<item value="here"/>
@@ -15,24 +20,44 @@
 			<item value="dece"/>
 			<item value="out."/>
 			<item value="system.out"/>
+=======
+			<item value=".close()"/>
+			<item value="count"/>
+			<item value="change"/>
+			<item value="loading"/>
+			<item value="oading"/>
+			<item value="thread"/>
+			<item value="uploadthread"/>
+>>>>>>> 393993bf0d6647801abb10e80cf689ed5b0bbb2a
 			<item value="cancel"/>
 			<item value="affiliation"/>
 			<item value="affiliationHelp"/>
 			<item value="meta "/>
 			<item value="meta"/>
 			<item value="filepath"/>
-			<item value="loading"/>
 			<item value="load"/>
+<<<<<<< HEAD
+=======
+			<item value="upload"/>
+>>>>>>> 393993bf0d6647801abb10e80cf689ed5b0bbb2a
 		</list>
 		<list key="replacehistory">
 			<item value="groupHelp"/>
 		</list>
 	</section>
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog_dialogBounds">
+<<<<<<< HEAD
 		<item value="290" key="DIALOG_WIDTH"/>
 		<item value="1|.AppleSystemUIFont|11.0|0|COCOA|1|.AppleSystemUIFont" key="DIALOG_FONT_NAME"/>
 		<item value="409" key="DIALOG_HEIGHT"/>
 		<item value="844" key="DIALOG_X_ORIGIN"/>
 		<item value="410" key="DIALOG_Y_ORIGIN"/>
+=======
+		<item value="284" key="DIALOG_WIDTH"/>
+		<item value="1|Segoe UI|9.0|0|WINDOWS|1|-12|0|0|0|400|0|0|0|1|0|0|0|0|Segoe UI" key="DIALOG_FONT_NAME"/>
+		<item value="391" key="DIALOG_HEIGHT"/>
+		<item value="889" key="DIALOG_X_ORIGIN"/>
+		<item value="135" key="DIALOG_Y_ORIGIN"/>
+>>>>>>> 393993bf0d6647801abb10e80cf689ed5b0bbb2a
 	</section>
 </section>

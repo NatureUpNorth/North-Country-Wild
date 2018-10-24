@@ -35,9 +35,6 @@ public class LoadingWindow {
 		
 		public void changeBar(int total, int uploaded, String path) {
 			bar.increment(total, uploaded, path);
-			if (total == uploaded) {
-				frame.dispose();
-			}
 		}
 
 }
