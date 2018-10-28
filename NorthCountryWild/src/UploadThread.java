@@ -184,9 +184,10 @@ public class UploadThread extends Thread {
         if (filePath.equals(this.filePath)) {
         	uploading = false;
         }
+        
         // closing the loading bar window
         loading.close();
-	}
+        }
 	
 	public boolean isUploading() {
 		return uploading;
