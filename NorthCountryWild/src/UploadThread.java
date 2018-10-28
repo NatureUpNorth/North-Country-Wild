@@ -28,7 +28,7 @@ public class UploadThread extends Thread {
 	private String destinationPath;
 	private int total_files;
 	private int count;
-	private static final String ACCESS_TOKEN = "Ot337FVMgnAAAAAAAAAAsbxu_FAGR3s-rifTdgzY9-mIjanUH1hPKX6f9Jnb4pAP";//"kdJxVuoW-DAAAAAAAAAA15HtUot88rO-JjNXvFlyZ-jEyadtfk3bCyCGoihbHqn3";
+	private static final String ACCESS_TOKEN = "Ot337FVMgnAAAAAAAAAAsbxu_FAGR3s-rifTdgzY9-mIjanUH1hPKX6f9Jnb4pAP";
 	private volatile boolean uploading;
 	private static ArrayList<Metadata> meta = new ArrayList<Metadata>();
 	private LoadingWindow loading;

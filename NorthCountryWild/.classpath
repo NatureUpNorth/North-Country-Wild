@@ -3,10 +3,10 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" path="Images"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8"/>
-	<classpathentry kind="lib" path="/Users/remileblanc/Dropbox/College/Nature Up North/JarFiles/dropbox-core-sdk-3.0.5.jar"/>
-	<classpathentry kind="lib" path="/Users/remileblanc/Dropbox/College/Nature Up North/JarFiles/jackson-core-2.7.4.jar"/>
-	<classpathentry kind="lib" path="/Users/remileblanc/Dropbox/College/Nature Up North/JarFiles/LGoodDatePicker-10.4.1.jar"/>
-	<classpathentry kind="lib" path="/Users/remileblanc/Dropbox/College/Nature Up North/JarFiles/metadata-extractor-2.11.0.jar"/>
-	<classpathentry kind="lib" path="/Users/remileblanc/Dropbox/College/Nature Up North/JarFiles/xmpcore-5.1.2.jar"/>
+	<classpathentry kind="lib" path="C:/Users/grgilm15/Downloads/LGoodDatePicker-10.4.1.jar"/>
+	<classpathentry kind="lib" path="C:/Users/grgilm15/Downloads/jar_files/dropbox-core-sdk-3.0.5.jar"/>
+	<classpathentry kind="lib" path="C:/Users/grgilm15/Downloads/jar_files/jackson-core-2.7.4.jar"/>
+	<classpathentry kind="lib" path="C:/Users/grgilm15/Downloads/jar_files/metadata-extractor-2.11.0.jar"/>
+	<classpathentry kind="lib" path="C:/Users/grgilm15/Downloads/jar_files/xmpcore-5.1.2.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
