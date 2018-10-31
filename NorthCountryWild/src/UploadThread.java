@@ -5,12 +5,11 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.nio.file.attribute.BasicFileAttributes;
-import java.nio.file.attribute.FileTime;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+
+import javax.imageio.ImageIO;
 
 import com.drew.imaging.ImageMetadataReader;
 import com.drew.imaging.ImageProcessingException;
@@ -20,7 +19,6 @@ import com.drew.metadata.Tag;
 import com.dropbox.core.DbxException;
 import com.dropbox.core.DbxRequestConfig;
 import com.dropbox.core.v2.DbxClientV2;
-import com.dropbox.core.v2.files.UploadErrorException;
 
 public class UploadThread extends Thread {
 	
@@ -28,7 +26,7 @@ public class UploadThread extends Thread {
 	private String destinationPath;
 	private int total_files;
 	private int count;
-	private static final String ACCESS_TOKEN = "Ot337FVMgnAAAAAAAAAAsbxu_FAGR3s-rifTdgzY9-mIjanUH1hPKX6f9Jnb4pAP";
+	private static final String ACCESS_TOKEN = "Ot337FVMgnAAAAAAAAAAsbxu_FAGR3s-rifTdgzY9-mIjanUH1hPKX6f9Jnb4pAP"; //"ILJ9haPVAAAAAAAAAAAAR7cBhQSEWdj0K4CkmEPrTYii1sCbJsZ1StCB8sO2YT4k";//access token for info@natureupnorth.org dropbox
 	private volatile boolean uploading;
 	private static ArrayList<Metadata> meta = new ArrayList<Metadata>();
 	private LoadingWindow loading;
@@ -130,10 +128,12 @@ public class UploadThread extends Thread {
         	dir = new File(filePath);
     		for(File file: dir.listFiles()){
     			if (file.isDirectory()) {
-    				upload(file.getAbsolutePath(), destinationPath);
+    				//if(ImageIO.read(file) != null) {
+    					upload(file.getAbsolutePath(), destinationPath);
+    				//}
     			}
-    			
-    			else if (file.getName().endsWith(".JPG")) {
+    		
+    			else if( ImageIO.read(file) != null){
 	    			Metadata metadata = ImageMetadataReader.readMetadata(file);
 	    			meta.add(metadata);
     			}
@@ -142,22 +142,24 @@ public class UploadThread extends Thread {
         } catch (ImageProcessingException e) {
         } catch (IOException e) {
         }     
-        
+
 		// upload pics and csv file to dropbox client
-        for(File file: dir.listFiles()) {
-        	try (InputStream in = new FileInputStream(file.getAbsolutePath())) {
-        		try {
-        			if (running) {
-						client.files().uploadBuilder("/" + destinationPath + "/" + file.getName()).uploadAndFinish(in);
-						count++;
-						loading.changeBar(total_files, count, "Uploading " + file.getAbsolutePath());
-        			} else {
-        				loading.close();
-        				break;
-        			}
+		for(File file: dir.listFiles()) {
+			try (InputStream in = new FileInputStream(file.getAbsolutePath())) {
+				try {
+					if(ImageIO.read(file) != null) {
+						if (running) {
+							client.files().uploadBuilder("/" + destinationPath + "/" + file.getName()).uploadAndFinish(in);
+							count++;
+							loading.changeBar(total_files, count, "Uploading " + file.getAbsolutePath());
+						} else {
+							loading.close();
+							break;
+						}
+					}
 				} catch (DbxException e) {
 				}
-        	} catch (FileNotFoundException e) {
+			} catch (FileNotFoundException e) {
 			} catch (IOException e) {
 			}
 		}

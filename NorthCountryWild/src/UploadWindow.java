@@ -13,12 +13,14 @@ import java.awt.event.ItemListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.File;
+import java.io.IOException;
 import java.net.URL;
 import java.text.DecimalFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Hashtable;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.event.ChangeEvent;
@@ -55,10 +57,6 @@ public class UploadWindow implements ActionListener, ItemListener, ChangeListene
 	private JSlider lon;
 	private JTextField latLabel;
 	private JTextField lonLabel;
-	//private JTextField startDate;
-	//private JTextField endDate;
-	//private String startDateStr;
-	//private String endDateStr;
 	private String latitude;
 	private String longitude;
 	JComboBox<String> groups; 
@@ -68,6 +66,7 @@ public class UploadWindow implements ActionListener, ItemListener, ChangeListene
 	private final String DEGREE  = "\u00b0";
 	private boolean completed = false;
 	private int count;
+	private int fileTotal;
 	private boolean count_interrupt;
 	private int cancelled = 0;
 	static DatePicker startDatePicker;
@@ -350,6 +349,8 @@ public class UploadWindow implements ActionListener, ItemListener, ChangeListene
         datePickerButton2.setText("");
         datePickerButton.setIcon(dateExampleIcon);
         datePickerButton2.setIcon(dateExampleIcon);
+        dateSettings.setAllowKeyboardEditing(false);
+        dateSettings2.setAllowKeyboardEditing(false);
         //datePanel.add(startDatePicker);
 		
 		JPanel startPanel = new JPanel();
@@ -494,12 +495,6 @@ public class UploadWindow implements ActionListener, ItemListener, ChangeListene
 		frame.add(urbanHelpPanel);
 		urbanHelpPanel.setVisible(false);
 		
-//		JPanel reqPanel = new JPanel();
-//		reqPanel.setSize(requiredStar.getSize());
-//		reqPanel.setLocation(300, 300);
-//		reqPanel.add(requiredStar);
-//		frame.add(reqPanel);
-		
 		frame.add(panel);
 		frame.pack();
 		frame.setVisible(true);
@@ -526,9 +521,14 @@ public class UploadWindow implements ActionListener, ItemListener, ChangeListene
 	public void actionPerformed(ActionEvent evt) {
 		if (evt.getSource() == fileButton) {
 			if (fileButton.getText().equals("Browse")) {
+				JOptionPane.showMessageDialog(new JFrame(),
+						"When choosing images to upload, be sure to only upload images\nfrom a single camera deployment. If you wish to upload images\nfrom more than one deployment, you have the option to upload again\nafter you complete this upload.");
 				count_interrupt = false;
 				fc = new JFileChooser(System.getProperty("user.home"));
 				fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+				if(fc.CANCEL_OPTION == 1) {
+					filePath.setText("");
+				}
 				/* Option to set it so that only drives are chooseable in file menu
 				fc.setFileFilter(new javax.swing.filechooser.FileFilter() {
 					@Override
@@ -557,7 +557,7 @@ public class UploadWindow implements ActionListener, ItemListener, ChangeListene
 						    	JFrame optionFrame = new JFrame();
 								String[] options = {"Yes", "No"};
 								int n = JOptionPane.showOptionDialog(
-									    optionFrame, "This folder has approximately " + total + " files to be uploaded in it. Is this correct?",
+									    optionFrame, "This folder has approximately " + fileTotal + " files, and "+total+" images to be uploaded in it. Is this correct?",
 									    "Warning", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
 								if (n == 1) {
 									fileButton.doClick();
@@ -569,6 +569,7 @@ public class UploadWindow implements ActionListener, ItemListener, ChangeListene
 				}
 			} else if (fileButton.getText().equals("Cancel")) {
 				fileButton.setText("Browse");
+				filePath.setText("");
 				count_interrupt = true;
 			}
 		}
@@ -584,28 +585,6 @@ public class UploadWindow implements ActionListener, ItemListener, ChangeListene
 				completed();
 				if(completed) {
 
-					//					if (startDateStr.length() == 10 && endDateStr.length() == 10 && !startDateStr.equals("MM-DD-YYYY") && !endDateStr.equals("MM-DD-YYYY")) {
-					//						for (int i = 0; i < 10; i++) {
-					//							if (i == 2 || i == 5) {
-					//								if (startDateStr.charAt(i) != '-' || endDateStr.charAt(i) != '-') {
-					//									JOptionPane.showMessageDialog(new JFrame(),
-					//											"Incorrect date format. Please enter a date in the format: MM-DD-YYYY");
-					//									break;
-					//								}
-					//							} else {
-					//								if (!Character.isDigit(startDateStr.charAt(i)) || !Character.isDigit(endDateStr.charAt(i))) {
-					//									JOptionPane.showMessageDialog(new JFrame(),
-					//											"Incorrect date format. Please enter a date in the format: MM-DD-YYYY");
-					//									break;
-					//								}
-					//							}
-					//						}
-
-
-					//						DateFormat format = new SimpleDateFormat("MM-dd-yyyy", Locale.ENGLISH);
-					//						Date startDate = null;
-					//						Date endDate = null;
-					//						Date today = Calendar.getInstance().getTime();
 					LocalDate today = LocalDate.now();
 					LocalDate startDate = null;
 					LocalDate endDate = null;
@@ -708,8 +687,15 @@ public class UploadWindow implements ActionListener, ItemListener, ChangeListene
 			int checked = 0;
 			
 			for (File file: dir.listFiles()) {
-				if (file.getName().toUpperCase().endsWith(".JPG") || file.getName().toUpperCase().endsWith(".PNG")) {
-					total++;
+				//if (file.getName().toUpperCase().endsWith(".JPG") || file.getName().toUpperCase().endsWith(".PNG")) {
+				try {
+					fileTotal++;
+					if( ImageIO.read(file) != null) {
+						total++;
+					}
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
 				}
 			}
 	
@@ -965,6 +951,7 @@ public class UploadWindow implements ActionListener, ItemListener, ChangeListene
 		endDatePicker.setDateToToday();
 		habitats.clear();
 		urbanized = "";
+		fileButton.setText("Browse");
 	}
 
 

@@ -10,12 +10,12 @@ public class Main {
 		while(splash.isOpen());
 		splash.close();
 		
-		LoginWindow login = new LoginWindow();
-		while (login.isOpen());  // wait for them to submit before closing the window
-		String name = login.getName();
-		login.close();
+//		LoginWindow login = new LoginWindow();
+//		while (login.isOpen());  // wait for them to submit before closing the window
+//		String name = login.getName();
+//		login.close();
 		
-		//String name = "Remi LeBlanc";
+		String name = "Remi LeBlanc";
 		
 		UploadWindow upload = new UploadWindow();
 		while (true) {
