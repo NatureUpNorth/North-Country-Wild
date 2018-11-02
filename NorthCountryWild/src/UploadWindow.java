@@ -562,6 +562,8 @@ public class UploadWindow implements ActionListener, ItemListener, ChangeListene
 								if (n == 1) {
 									fileButton.doClick();
 								}
+								fileTotal=0;
+								fileButton.setText("Browse");
 					    	}
 					    }
 					};
@@ -570,6 +572,7 @@ public class UploadWindow implements ActionListener, ItemListener, ChangeListene
 			} else if (fileButton.getText().equals("Cancel")) {
 				fileButton.setText("Browse");
 				filePath.setText("");
+				fileTotal = 0;
 				count_interrupt = true;
 			}
 		}
@@ -682,31 +685,38 @@ public class UploadWindow implements ActionListener, ItemListener, ChangeListene
 	public int checkDirectory(String path, LoadingWindow loading, int total) {
 		if (!count_interrupt) {
 			File dir = new File(path);
-			// reset the loading bar to 0 for the new directory of photos
-			loading.changeBar(0,  0, path);
 			int checked = 0;
+			int inner_total = 0;
 			
+			// count all files except for the directories and hidden files
 			for (File file: dir.listFiles()) {
-				//if (file.getName().toUpperCase().endsWith(".JPG") || file.getName().toUpperCase().endsWith(".PNG")) {
-				try {
+				if (!file.isDirectory() && !file.isHidden()) {
 					fileTotal++;
-					if( ImageIO.read(file) != null) {
-						total++;
-					}
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					inner_total++;
 				}
 			}
-	
+			
+			// recurse through the directories first
 			for (File file: dir.listFiles()) {
 				if (file.isDirectory() && !count_interrupt) {
 					total = checkDirectory(file.getAbsolutePath(), loading, total);
-				} else {
-					if (file.getName().toUpperCase().endsWith(".JPG") || file.getName().toUpperCase().endsWith(".PNG")) {
-						checked++;
-						loading.changeBar(total, checked, path);
+				}
+			}
+			
+			// reset the loading bar to 0 for the new directory of photos
+			loading.changeBar(0,  0, path);
+			for (File file: dir.listFiles()) {
+				try {
+					if (ImageIO.read(file) != null && !count_interrupt) {
+						total++;
+					} else {
+						break;
 					}
+				} catch (IOException e) {
+				}
+				if (!file.isDirectory() && !file.isHidden()) {
+					checked++;
+					loading.changeBar(inner_total, checked, path);
 				}
 			}
 			return total;
