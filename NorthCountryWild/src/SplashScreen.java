@@ -130,9 +130,9 @@ public class SplashScreen implements ActionListener{
 		credits.setWrapStyleWord(true);
 		credits.setOpaque(false);
 		credits.setEditable(false);
-		credits.setText("     Program created for Nature Up North by St. Lawrence University\ncomputer science interns Guinevere Gilman and Remi LeBlanc in 2018.");
+		credits.setText("  Program created for Nature Up North by St. Lawrence University computer\nscience interns Aleksei Bingham, Guinevere Gilman, and Remi LeBlanc in 2018.");
 		creditsPanel.setSize(credits.getSize());
-		creditsPanel.setLocation(frame.getWidth()-435, frame.getHeight()-60);
+		creditsPanel.setLocation(frame.getWidth()-475, frame.getHeight()-60);
 		creditsPanel.add(credits);
 
 		version.setFont(nun);

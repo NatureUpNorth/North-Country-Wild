@@ -782,11 +782,19 @@ public class UploadWindow implements ActionListener, ItemListener, ChangeListene
 	}
 	
 	public String getLat() {
-		return latitude;
+		if(latitude.equals("0.00") || latitude.equals("0.0")) {
+			return "";
+		} else {
+			return latitude;
+		}
 	}
 	
 	public String getLon() {
-		return longitude;
+		if(longitude.equals("0.00") || longitude.equals("0.0")) {
+			return "";
+		} else {
+			return longitude;
+		}
 	}
 	
 	public String getStartDate() {
@@ -962,6 +970,7 @@ public class UploadWindow implements ActionListener, ItemListener, ChangeListene
 		habitats.clear();
 		urbanized = "";
 		fileButton.setText("Browse");
+		fileTotal = 0;
 	}
 
 
