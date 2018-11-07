@@ -39,6 +39,7 @@ public class UploadThread extends Thread {
 	private String startDate;
 	private String endDate;
 	
+	
 	UploadThread(String path, String destination, UploadWindow uw, int files, String habit, String urba, String a, String st, String en) {
 		filePath = path;
 		destinationPath = destination;
@@ -189,6 +190,7 @@ public class UploadThread extends Thread {
         
         // closing the loading bar window
         loading.close();
+        meta.clear();
         }
 	
 	public boolean isUploading() {

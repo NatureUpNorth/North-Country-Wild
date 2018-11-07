@@ -931,8 +931,15 @@ public class UploadWindow implements ActionListener, ItemListener, ChangeListene
 				|| seven.isSelected() || eight.isSelected() || nine.isSelected() ){
 			hab = true;
 		}
+		if(!one.isSelected() && !two.isSelected() && !three.isSelected() && !four.isSelected() && !five.isSelected() && !six.isSelected()
+				&& !seven.isSelected() && !eight.isSelected() && !nine.isSelected() ){
+			hab = false;
+		}
 		if(rural.isSelected() || sub.isSelected() || urban.isSelected()) {
 			ur = true;
+		}
+		if(!rural.isSelected() && !sub.isSelected() && !urban.isSelected()) {
+			ur = false;
 		}
 		if(groups.getSelectedIndex() != -1) {
 			g = true;
