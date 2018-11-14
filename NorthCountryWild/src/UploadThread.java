@@ -38,6 +38,7 @@ public class UploadThread extends Thread {
 	private String affiliation;
 	private String startDate;
 	private String endDate;
+	private boolean interrupted;
 	
 	
 	UploadThread(String path, String destination, UploadWindow uw, int files, String habit, String urba, String a, String st, String en) {
@@ -52,6 +53,7 @@ public class UploadThread extends Thread {
 		affiliation = a;
 		startDate = st;
 		endDate = en;
+		interrupted = false;
 	}
 	
 	private void write(ArrayList<Metadata> meta, String method, String fileName) {
@@ -129,14 +131,12 @@ public class UploadThread extends Thread {
         	dir = new File(filePath);
     		for(File file: dir.listFiles()){
     			if (file.isDirectory()) {
-    				//if(ImageIO.read(file) != null) {
-    					upload(file.getAbsolutePath(), destinationPath);
-    				//}
-    			}
-    		
-    			else if( ImageIO.read(file) != null){
+    				upload(file.getAbsolutePath(), destinationPath);
+    			} else if(ImageIO.read(file) != null && loading.isUploading()) {
 	    			Metadata metadata = ImageMetadataReader.readMetadata(file);
 	    			meta.add(metadata);
+    			} else if (!loading.isUploading()) {
+    				interrupted = true;
     			}
     		}
             
@@ -148,7 +148,7 @@ public class UploadThread extends Thread {
 		for(File file: dir.listFiles()) {
 			try (InputStream in = new FileInputStream(file.getAbsolutePath())) {
 				try {
-					if(ImageIO.read(file) != null) {
+					if(ImageIO.read(file) != null && loading.isUploading()) {
 						if (running) {
 							client.files().uploadBuilder("/" + destinationPath + "/" + file.getName()).uploadAndFinish(in);
 							count++;
@@ -157,7 +157,9 @@ public class UploadThread extends Thread {
 							loading.close();
 							break;
 						}
-					}
+					} else if (!loading.isUploading()) {
+	    				interrupted = true;
+	    			}
 				} catch (DbxException e) {
 				}
 			} catch (FileNotFoundException e) {
@@ -191,7 +193,11 @@ public class UploadThread extends Thread {
         // closing the loading bar window
         loading.close();
         meta.clear();
-        }
+    }
+	
+	public boolean wasInterrupted() {
+		return interrupted;
+	}
 	
 	public boolean isUploading() {
 		return uploading;

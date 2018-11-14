@@ -68,7 +68,6 @@ public class UploadWindow implements ActionListener, ItemListener, ChangeListene
 	private int count;
 	private int fileTotal;
 	private boolean count_interrupt;
-	private int cancelled = 0;
 	static DatePicker startDatePicker;
 	static DatePicker endDatePicker;
 	
@@ -507,79 +506,61 @@ public class UploadWindow implements ActionListener, ItemListener, ChangeListene
 	
 	public void setUploading(boolean status) {
 		uploading = status;
-		if (status) {
-			submit.setText("Cancel");
-		} else {
-			submit.setText("Submit");
-		}
-	}
-	
-	public int cancelled() {
-		return cancelled;
 	}
 	
 	public void actionPerformed(ActionEvent evt) {
 		if (evt.getSource() == fileButton) {
-			if (fileButton.getText().equals("Browse")) {
-				JOptionPane.showMessageDialog(new JFrame(),
-						"When choosing images to upload, be sure to only upload images\nfrom a single camera deployment. If you wish to upload images\nfrom more than one deployment, you have the option to upload again\nafter you complete this upload.");
-				count_interrupt = false;
-				fc = new JFileChooser(System.getProperty("user.home"));
-				fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-				if(fc.CANCEL_OPTION == 1) {
-					filePath.setText("");
-				}
-				/* Option to set it so that only drives are chooseable in file menu
-				fc.setFileFilter(new javax.swing.filechooser.FileFilter() {
-					@Override
-					public boolean accept(File f) {
-						currentPath = fc.getCurrentDirectory().toString();
-						return (f.isDirectory() && f.getAbsolutePath().endsWith(":\\"));
-					}
-					@Override
-					public String getDescription() {
-						return "Only drives";
-					}
-					
-				});
-				*/
-				if (fc.showOpenDialog(fc) == JFileChooser.APPROVE_OPTION) {
-					filePath.setText(fc.getSelectedFile().toString());
-	
-					Thread t = new Thread() {
-					    public void run() {
-					    	fileButton.setText("Cancel");
-					    	LoadingWindow loading = new LoadingWindow();
-					    	int total = checkDirectory(getFilepath(), loading, 0);
-					    	loading.close();
-					    	if (!count_interrupt) {
-						    	count = total;
-						    	JFrame optionFrame = new JFrame();
-								String[] options = {"Yes", "No"};
-								int n = JOptionPane.showOptionDialog(
-									    optionFrame, "This folder has approximately " + fileTotal + " files, and "+total+" images to be uploaded in it. Is this correct?",
-									    "Warning", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
-								if (n == 1) {
-									fileButton.doClick();
-								}
-								fileTotal=0;
-								fileButton.setText("Browse");
-					    	}
-					    }
-					};
-					t.start();
-				}
-			} else if (fileButton.getText().equals("Cancel")) {
-				fileButton.setText("Browse");
+			disable();
+			JOptionPane.showMessageDialog(new JFrame(),
+					"When choosing images to upload, be sure to only upload images\nfrom a single camera deployment. If you wish to upload images\nfrom more than one deployment, you have the option to upload again\nafter you complete this upload.");
+			count_interrupt = false;
+			fc = new JFileChooser(System.getProperty("user.home"));
+			fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+			if(fc.showOpenDialog(fc) != JFileChooser.APPROVE_OPTION) {
 				filePath.setText("");
-				fileTotal = 0;
-				count_interrupt = true;
+				enable();
+			}
+			/* Option to set it so that only drives are chooseable in file menu
+			fc.setFileFilter(new javax.swing.filechooser.FileFilter() {
+				@Override
+				public boolean accept(File f) {
+					currentPath = fc.getCurrentDirectory().toString();
+					return (f.isDirectory() && f.getAbsolutePath().endsWith(":\\"));
+				}
+				@Override
+				public String getDescription() {
+					return "Only drives";
+				}
+				
+			});
+			*/
+			else if (fc.showOpenDialog(fc) == JFileChooser.APPROVE_OPTION) {
+				filePath.setText(fc.getSelectedFile().toString());
+				
+				Thread t = new Thread() {
+				    public void run() {
+				    	LoadingWindow loading = new LoadingWindow();
+				    	int total = checkDirectory(getFilepath(), loading, 0);
+				    	loading.close();
+				    	if (!count_interrupt) {
+					    	count = total;
+					    	JFrame optionFrame = new JFrame();
+							String[] options = {"Yes", "No"};
+							int n = JOptionPane.showOptionDialog(
+								    optionFrame, "This folder has approximately " + fileTotal + " files, and "+total+" images to be uploaded in it. Is this correct?",
+								    "Warning", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
+							if (n == 1) {
+								fileButton.doClick();
+							}
+							fileTotal=0;
+				    	}
+				    	enable();
+				    }
+				};
+				t.start();
 			}
 		}
 		if (evt.getSource() == submit) {
-			if(submit.getText().equals("Cancel")) {
-				cancelled++;
-			}
 			if (!uploading) {
 				latitude = latLabel.getText();
 				longitude = lonLabel.getText();
@@ -700,6 +681,10 @@ public class UploadWindow implements ActionListener, ItemListener, ChangeListene
 			for (File file: dir.listFiles()) {
 				if (file.isDirectory() && !count_interrupt) {
 					total = checkDirectory(file.getAbsolutePath(), loading, total);
+					if (!loading.isUploading()) {
+						fileTotal = 0;
+						count_interrupt = true;
+					}
 				}
 			}
 			
@@ -709,12 +694,16 @@ public class UploadWindow implements ActionListener, ItemListener, ChangeListene
 				try {
 					if (ImageIO.read(file) != null && !count_interrupt) {
 						total++;
+						if (!loading.isUploading()) {
+							fileTotal = 0;
+							count_interrupt = true;
+						}
 					} else {
 						break;
 					}
 				} catch (IOException e) {
 				}
-				if (!file.isDirectory() && !file.isHidden()) {
+				if (!file.isDirectory() && !file.isHidden() && !count_interrupt) {
 					checked++;
 					loading.changeBar(inner_total, checked, path);
 				}
@@ -767,6 +756,18 @@ public class UploadWindow implements ActionListener, ItemListener, ChangeListene
 				}
 			}
 		} 
+	}
+	
+	// disable main window during loading times
+	public void disable() {
+		submit.setEnabled(false);
+		fileButton.setEnabled(false);
+	}
+	
+	// re-enable
+	public void enable() {
+		submit.setEnabled(true);
+		fileButton.setEnabled(true);
 	}
 
 	@Override

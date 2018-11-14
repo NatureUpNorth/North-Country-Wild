@@ -10,14 +10,16 @@ public class Main {
 		while(splash.isOpen());
 		splash.close();
 		
-		LoginWindow login = new LoginWindow();
+		/*LoginWindow login = new LoginWindow();
 		while (login.isOpen());  // wait for them to submit before closing the window
 		String name = login.getName();
-		login.close();
+		login.close();*/
+		String name = "Guin";
 		
 		UploadWindow upload = new UploadWindow();
 		while (true) {
 			while (!upload.isUploading());  // wait for them to hit submit
+			upload.disable();
 			String affiliation = upload.getGroup();
 			String time = String.valueOf(System.nanoTime());
 			String destination = affiliation + "/" + name + "/" + time;
@@ -45,15 +47,16 @@ public class Main {
 			};  // wait for it to be done uploading files
 			upload.reset();
 			upload.setUploading(false);
-			if(upload.cancelled()==0) {
+			if(!thread.wasInterrupted()) {
 			JOptionPane.showMessageDialog(new JFrame(),
 					"Congratulations! You have successfully uploaded your images to Nature Up North's Dropbox!\nYou may either continue"
 					+ " on the app and submit more photos, or close out of the app if you are done.\n\n"
 					+ "Thank you for your contributions to science!");
-			} else if(upload.cancelled()>0){
+			} else {
 				JOptionPane.showMessageDialog(new JFrame(),
 						"Your upload has been cancelled.");
 			}
+			upload.enable();
 		}
 	}
 
