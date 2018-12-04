@@ -534,7 +534,7 @@ public class UploadWindow implements ActionListener, ItemListener, ChangeListene
 				
 			});
 			*/
-			else if (fc.showOpenDialog(fc) == JFileChooser.APPROVE_OPTION) {
+			else {
 				filePath.setText(fc.getSelectedFile().toString());
 				
 				Thread t = new Thread() {
@@ -691,6 +691,7 @@ public class UploadWindow implements ActionListener, ItemListener, ChangeListene
 			// reset the loading bar to 0 for the new directory of photos
 			loading.changeBar(0,  0, path);
 			for (File file: dir.listFiles()) {
+				System.out.println(file.getAbsolutePath());
 				try {
 					if (ImageIO.read(file) != null && !count_interrupt) {
 						total++;

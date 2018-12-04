@@ -9,7 +9,39 @@
       <title>eclipse.org</title>
       <link>http://www.eclipse.org</link>
     </image>
-     <item>
+    <item>
+      <title><![CDATA[Read the newest Jakarta EE Newsletter!]]></title>
+      <link><![CDATA[https://www.eclipse.org/community/eclipse_newsletter/2018/november/]]></link>
+      <description><![CDATA[This month we bring you a fully loaded Jakarta EE newsletter with a mix of technical content, community news, and a tutorial!]]></description>
+      <pubDate>Fri, 30 Nov 2018 09:15:00 EST</pubDate>
+      <category>news</category>
+      <pressrelease>0</pressrelease>
+    </item>
+    <item>
+      <title><![CDATA[Eclipse Foundation Specification Process, Part III: Creation]]></title>
+      <link><![CDATA[https://blogs.eclipse.org/post/wayne-beaton/eclipse-foundation-specification-process-part-iii-creation]]></link>
+      <description><![CDATA[Creation' is an integral part of the Eclipse Foundation Specification Process. Read Wayne Beaton's newest blog on the topic.]]></description>
+      <pubDate>Fri, 30 Nov 2018 09:15:00 EST</pubDate>
+      <category>news</category>
+      <pressrelease>0</pressrelease>
+    </item>
+    <item>
+      <title><![CDATA[How is the Eclipse Foundation Specification Process (EFSP) different from Java Community Process (JCP)?]]></title>
+      <link><![CDATA[https://blogs.eclipse.org/post/tanja-obradovic/how-eclipse-foundation-specification-process-efsp-different-java-community]]></link>
+      <description><![CDATA[There are many differences between Eclipse Foundation Specification Process (EFSP) and Java Community Process (JCP), let's focus on my top 5!]]></description>
+      <pubDate>Tue, 27 Nov 2018 12:15:00 EST</pubDate>
+      <category>news</category>
+      <pressrelease>0</pressrelease>
+    </item>
+    <item>
+      <title><![CDATA[Eclipse Foundation Specification Process, Part II: the EFSP]]></title>
+      <link><![CDATA[https://blogs.eclipse.org/post/wayne-beaton/eclipse-foundation-specification-process-part-ii-efsp]]></link>
+      <description><![CDATA[The Eclipse Foundation Specification Process defines a general framework for developing specifications in open source at the Eclipse Foundation.]]></description>
+      <pubDate>Tue, 27 Nov 2018 12:15:00 EST</pubDate>
+      <category>news</category>
+      <pressrelease>0</pressrelease>
+    </item>
+    <item>
       <title><![CDATA[Eclipse Foundation Specification Process, Part I: The EDP]]></title>
       <link><![CDATA[https://blogs.eclipse.org/post/wayne-beaton/eclipse-foundation-specification-process-part-i-edp]]></link>
       <description><![CDATA[A quick Eclipse Development Process (EDP) primer.]]></description>
