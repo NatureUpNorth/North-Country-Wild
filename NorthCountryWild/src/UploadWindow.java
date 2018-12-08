@@ -668,9 +668,10 @@ public class UploadWindow implements ActionListener, ItemListener, ChangeListene
 			File dir = new File(path);
 			int checked = 0;
 			int inner_total = 0;
+			File[] files = dir.listFiles();
 			
 			// count all files except for the directories and hidden files
-			for (File file: dir.listFiles()) {
+			for (File file: files) {
 				if (!file.isDirectory() && !file.isHidden()) {
 					fileTotal++;
 					inner_total++;
@@ -678,7 +679,7 @@ public class UploadWindow implements ActionListener, ItemListener, ChangeListene
 			}
 			
 			// recurse through the directories first
-			for (File file: dir.listFiles()) {
+			for (File file: files) {
 				if (file.isDirectory() && !count_interrupt) {
 					total = checkDirectory(file.getAbsolutePath(), loading, total);
 					if (!loading.isUploading()) {
@@ -690,8 +691,7 @@ public class UploadWindow implements ActionListener, ItemListener, ChangeListene
 			
 			// reset the loading bar to 0 for the new directory of photos
 			loading.changeBar(0,  0, path);
-			for (File file: dir.listFiles()) {
-				System.out.println(file.getAbsolutePath());
+			for (File file: files) {
 				try {
 					if (ImageIO.read(file) != null && !count_interrupt) {
 						total++;
@@ -699,7 +699,7 @@ public class UploadWindow implements ActionListener, ItemListener, ChangeListene
 							fileTotal = 0;
 							count_interrupt = true;
 						}
-					} else {
+					} else if (count_interrupt) {
 						break;
 					}
 				} catch (IOException e) {
