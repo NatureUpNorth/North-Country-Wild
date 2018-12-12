@@ -520,20 +520,7 @@ public class UploadWindow implements ActionListener, ItemListener, ChangeListene
 				filePath.setText("");
 				enable();
 			}
-			/* Option to set it so that only drives are chooseable in file menu
-			fc.setFileFilter(new javax.swing.filechooser.FileFilter() {
-				@Override
-				public boolean accept(File f) {
-					currentPath = fc.getCurrentDirectory().toString();
-					return (f.isDirectory() && f.getAbsolutePath().endsWith(":\\"));
-				}
-				@Override
-				public String getDescription() {
-					return "Only drives";
-				}
-				
-			});
-			*/
+
 			else {
 				filePath.setText(fc.getSelectedFile().toString());
 				
@@ -551,6 +538,9 @@ public class UploadWindow implements ActionListener, ItemListener, ChangeListene
 								    "Warning", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
 							if (n == 1) {
 								fileButton.doClick();
+							}
+							if(n == JOptionPane.NO_OPTION) {
+								filePath.setText("");
 							}
 							fileTotal=0;
 				    	}
@@ -698,6 +688,7 @@ public class UploadWindow implements ActionListener, ItemListener, ChangeListene
 						if (!loading.isUploading()) {
 							fileTotal = 0;
 							count_interrupt = true;
+							filePath.setText("");
 						}
 					} else if (count_interrupt) {
 						break;
