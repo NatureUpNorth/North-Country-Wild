@@ -15,6 +15,8 @@ public class Main {
 		String name = login.getName();
 		login.close();
 		
+		// a new comment
+		
 		UploadWindow upload = new UploadWindow();
 		while (true) {
 			while (!upload.isUploading());  // wait for them to hit submit
