@@ -1,4 +1,4 @@
-import java.swing.JPanel;
+import javax.swing.JPanel;
 
 // parent class for a panel in the tab
 public class TabItem {
