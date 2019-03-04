@@ -177,3 +177,9 @@ NorthCountryWild/src/images/game_camera_pic.JPG
 *.ini
 *.txt
 .metadata/.plugins/org.eclipse.jdt.core/savedIndexNames.txt
+.metadata/.log
+*.zip
+*.index
+*.resources
+*.ini
+*.xml
