@@ -8,5 +8,6 @@
 	<classpathentry kind="lib" path="lib/LGoodDatePicker-10.4.1.jar"/>
 	<classpathentry kind="lib" path="lib/metadata-extractor-2.11.0.jar"/>
 	<classpathentry kind="lib" path="lib/xmpcore-5.1.2.jar"/>
+	<classpathentry kind="lib" path="C:/Users/guine/Documents/North-Country-Wild/NorthCountryWild/lib/json-20180813.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
