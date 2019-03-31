@@ -9,10 +9,50 @@
       <title>eclipse.org</title>
       <link>http://www.eclipse.org</link>
     </image>
+     <item>
+      <title><![CDATA[Incubation in the Eclipse Development Process]]></title>
+      <link><![CDATA[https://blogs.eclipse.org/post/wayne-beaton/incubation-eclipse-development-process]]></link>
+      <description><![CDATA[The Eclipse Development Process has a notion of phases. Two of those phases are Incubation and Mature.]]></description>
+      <pubDate>Fri, 15 Mar 2019 15:30:00 EST</pubDate>
+      <category>news</category>
+      <pressrelease>0</pressrelease>
+    </item>
+    <item>
+      <title><![CDATA[That's A Wrap, Folks! Thank You for Participating in Our 2019 IoT Developer Survey!]]></title>
+      <link><![CDATA[https://blogs.eclipse.org/post/jameka-woodberry/thats-wrap-folks-thank-you-participating-our-2019-iot-developer-survey]]></link>
+      <description><![CDATA[We are proud to announce that our 2019 IoT Developer Survey, organized by the Eclipse IoT Working Group, was a huge success with over 1,700 responses!]]></description>
+      <pubDate>Mon, 11 Mar 2019 13:40:00 EST</pubDate>
+      <category>news</category>
+      <pressrelease>0</pressrelease>
+    </item>
+    <item>
+      <title><![CDATA[Eclipse Foundation Specification Process Step-by-Step]]></title>
+      <link><![CDATA[https://blogs.eclipse.org/post/wayne-beaton/eclipse-foundation-specification-process-step-step]]></link>
+      <description><![CDATA[The Eclipse Foundation Specification Process (EFSP) provides a framework and governance model for developers engaged in the process of developing specifications.]]></description>
+      <pubDate>Fri, 08 Mar 2019 13:30:00 EST</pubDate>
+      <category>news</category>
+      <pressrelease>0</pressrelease>
+    </item>
+    <item>
+      <title><![CDATA[Eclipse Foundation Board Election Results]]></title>
+      <link><![CDATA[https://www.eclipse.org/org/press-release/20190305-boardelection.php]]></link>
+      <description><![CDATA[See the results of the Eclipse Foundation Sustaining Member and Committer Member elections for representatives to our Board of Directors.]]></description>
+      <pubDate>Wed, 06 Mar 2019 10:00:00 EST</pubDate>
+      <category>news</category>
+      <pressrelease>0</pressrelease>
+    </item>
+     <item>
+      <title><![CDATA[The 2019 Jakarta EE Developer Survey is underway!]]></title>
+      <link><![CDATA[https://blogs.eclipse.org/post/paul-buck/2019-jakarta-ee-developer-survey-underway]]></link>
+      <description><![CDATA[The Jakarta EE Working Group is launching the Jakarta EE Developer Survey for 2019!]]></description>
+      <pubDate>Tue, 05 Mar 2019 10:00:00 EST</pubDate>
+      <category>news</category>
+      <pressrelease>0</pressrelease>
+    </item>
     <item>
       <title><![CDATA[Jakarta EE - What's New in 2019?]]></title>
       <link><![CDATA[https://www.eclipse.org/community/eclipse_newsletter/2019/february/]]></link>
-      <description><![CDATA[Check out what's new in 2019 for Jakarta EE!.]]></description>
+      <description><![CDATA[Check out what's new in 2019 for Jakarta EE!]]></description>
       <pubDate>Mon, 04 Mar 2019 08:00:00 EST</pubDate>
       <category>news</category>
       <pressrelease>0</pressrelease>
