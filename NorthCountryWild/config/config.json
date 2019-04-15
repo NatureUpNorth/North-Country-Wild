@@ -91,7 +91,7 @@
 	"title": "Any Comments?",
 	"panels": [
 		{"type": "form",
-		"desc": "Is there anything else you’d like to share about this batch of pictures?",
+		"desc": "Is there anything else you'd like to share about this batch of pictures?",
 		"returnValue": "Comments"
 		}
 	]}

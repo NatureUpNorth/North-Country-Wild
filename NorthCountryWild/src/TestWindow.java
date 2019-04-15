@@ -1,5 +1,7 @@
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.BufferedReader;
@@ -12,18 +14,21 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 import org.json.*;
 
-public class TestWindow extends JPanel implements ActionListener {
+public class TestWindow extends JPanel implements ActionListener, ChangeListener {
 
-	private JPanel[] pages;
+	private Tab[] pages;
 	private int length;
 	private int current;  // current page
 	private JButton next;
 	private JButton prev;
 	private JTabbedPane tabularpane;
 	private int max = 0;
+	private JPanel buttons;
 	
 	public TestWindow() {
 		JTabbedPane tabularpane = new JTabbedPane();
@@ -43,15 +48,15 @@ public class TestWindow extends JPanel implements ActionListener {
 		
 		JSONObject obj = new JSONObject(str);
 		JSONArray tabs = obj.getJSONArray("tabs");
+		pages = new Tab[tabs.length()];
+		
 		for (int i = 0; i < tabs.length(); i++) {
 			JSONObject tab = (JSONObject) tabs.get(i);
 			JSONArray panels = tab.getJSONArray("panels");
-			JPanel[] jpanels = makePanels(panels);
-			JPanel temp = new JPanel();
-			for (int j = 0; j < jpanels.length; j++) {
-				temp.add(jpanels[j]);
-			}
-			pages[i] = temp;
+			TabItem[] jpanels = makePanels(panels);
+			String title = tab.getString("title");
+			Tab newTab = new Tab(jpanels, title);
+			pages[i] = newTab;
 		}
 	
 		tabularpane = new JTabbedPane();
@@ -66,69 +71,79 @@ public class TestWindow extends JPanel implements ActionListener {
 		next.addActionListener(this);
 		prev.addActionListener(this);
 		
-		tabularpane.add(pages[0], "Tab 0");
-		
-		this.setLayout(new FlowLayout());
-		this.add(tabularpane);
+		// Start with only first tab enabled
+		tabularpane.add(pages[0].getPanel(), pages[0].getTitle());
+
+		for(int index = 0; index < length; index++) {
+			tabularpane.add(pages[index].getPanel(), pages[index].getTitle());
+			tabularpane.setEnabledAt(index, false);
+		}
+		tabularpane.setEnabledAt(0, true);
+		tabularpane.addChangeListener(this);
+
 		prev.setEnabled(false);
-		this.add(prev);
-		this.add(next);
+		this.setLayout(new GridBagLayout());
+		GridBagConstraints constraints = new GridBagConstraints();
+
+		constraints.gridx = 0;
+		constraints.gridy = 0;
+		constraints.fill = GridBagConstraints.HORIZONTAL;
+		this.add(tabularpane, constraints);
+
+		buttons = new JPanel();
+		buttons.add(prev);
+		buttons.add(next);
+
+		constraints.gridx = 0;
+		constraints.gridy = 1;
+		this.add(buttons, constraints);
 	}
 	
 	// go through the panels in a tab and make the required displays
-	private JPanel[] makePanels(JSONArray panels) {
-		JPanel[] jpanels = new JPanel[panels.length()];
-		for (int j = 0; j < panels.length(); j++) {
-			JSONObject panel = (JSONObject) panels.get(j);
+	private TabItem[] makePanels(JSONArray panels) {
+		TabItem[] jpanels = new TabItem[panels.length()];
+		for (int index = 0; index < panels.length(); index++) {
+			JSONObject panel = (JSONObject) panels.get(index);
 			String type = panel.getString("type");
-			String desc = "";
-			String hint = "";
-			String returnval = "";
+			TabItem thisPanel;
 			
 			switch (type) {
 				case "fileSelect":
-					desc = panel.getString("desc");
-					hint = panel.getString("hint");
-					returnval = panel.getString("returnValue");
+					thisPanel = new PanelFileSelect(panel);
+                    jpanels[index] = (thisPanel);
 					break;
 				case "multiPanel":
-					JPanel[] subpanels = makePanels(panel.getJSONArray("subPanels"));
-					JPanel temp = new JPanel();
-					for (int i = 0; i < subpanels.length; i++) {
-						temp.add(subpanels[i]);
-					}
-					jpanels[j] = temp;
+					TabItem[] subpanels = makePanels(panel.getJSONArray("subPanels"));
+                    thisPanel = new PanelMultiSubpanels(panel, subpanels);
+					jpanels[index] = (thisPanel);
 					break;
 				case "dropdown":
-					desc = panel.getString("desc");
-					hint = panel.getString("hint");
-					returnval = panel.getString("returnValue");
+					thisPanel = new PanelDropdown(panel);
+                    jpanels[index] = (thisPanel);
 					break;
 				case "text":
+					thisPanel = new PanelText(panel);
+                    jpanels[index] = (thisPanel);
 					break;
 				case "date":
-					desc = panel.getString("desc");
-					hint = panel.getString("hint");
-					returnval = panel.getString("returnValue");
+					thisPanel = new PanelDate(panel);
+                    jpanels[index] = (thisPanel);
 					break;
 				case "slider":
-					desc = panel.getString("desc");
-					hint = panel.getString("hint");
-					returnval = panel.getString("returnValue");
+					thisPanel = new PanelSlider(panel);
+                    jpanels[index] = (thisPanel);
 					break;
 				case "multiChoiceList":
-					desc = panel.getString("desc");
-					hint = panel.getString("hint");
-					returnval = panel.getString("returnValue");
+					thisPanel = new PanelMultiChoice(panel);
+                    jpanels[index] = (thisPanel);
 					break;
 				case "singleChoiceList":
-					desc = panel.getString("desc");
-					hint = panel.getString("hint");
-					returnval = panel.getString("returnValue");
+					thisPanel = new PanelSingleChoice(panel);
+                    jpanels[index] = (thisPanel);
 					break;
 				case "form":
-					desc = panel.getString("desc");
-					returnval = panel.getString("returnValue");
+					thisPanel = new PanelForm(panel);
+                    jpanels[index] = (thisPanel);
 					break;
 				default:
 					throw new RuntimeException("Error: unrecognized panel type: " + type);
@@ -149,14 +164,25 @@ public class TestWindow extends JPanel implements ActionListener {
 			next.setEnabled(true);
 		}
 		
+		this.setLayout(new GridBagLayout());
+		GridBagConstraints constraints = new GridBagConstraints();
+
+		constraints.gridx = 0;
+		constraints.gridy = 0;
+		constraints.fill = GridBagConstraints.HORIZONTAL;
+		this.add(tabularpane, constraints);
+		
 		tabularpane.setSelectedIndex(current);
-		// nothing to remove the first time
-			this.removeAll();
-			this.add(tabularpane);
-			this.add(prev);
-			this.add(next);
-			this.revalidate();
-			this.repaint();
+		this.removeAll();
+		this.add(tabularpane);
+		constraints.gridx = 0;
+		constraints.gridy = 1;
+		this.add(buttons, constraints);
+
+		this.revalidate();
+		this.repaint();
+		this.revalidate();
+		this.repaint();
 	}
 	
 	@Override
@@ -169,8 +195,12 @@ public class TestWindow extends JPanel implements ActionListener {
 				max = current;
 			}
 			tabularpane = new JTabbedPane();
-			for (int i = 0; i <= max; i++) {
-				tabularpane.add(pages[i], "Tab " + Integer.toString(i));
+			for(int index = 0; index < length; index++) {
+				tabularpane.add(pages[index].getPanel(), pages[index].getTitle());
+				tabularpane.setEnabledAt(index, false);
+			}
+			for(int i = 0; i <= max; i++) {
+				tabularpane.setEnabledAt(i, true);
 			}
 		}
 		display();
@@ -183,6 +213,12 @@ public class TestWindow extends JPanel implements ActionListener {
 		frame.pack();
 		frame.setVisible(true);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	}
+
+	@Override
+	public void stateChanged(ChangeEvent arg0) {
+		// TODO Auto-generated method stub
+		
 	}
 	
 }

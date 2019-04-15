@@ -148,7 +148,7 @@ public class UploadWindow implements ActionListener, ItemListener, ChangeListene
 		redStarUrban.setFont(new Font("Dialog", Font.BOLD, 24));
 		
 		JLabel requiredStar = new JLabel("<html><b><font color='red' size = 6>*</font></b> indicates the field is required for submission.</html>");
-		//JLabel requiredText = new JLabel(" indicates the field is required for submuission.");
+		//JLabel requiredText = new JLabel(" indicates the field is required for submission.");
 		
 		
 		selectFolderHelp = new JTextField(" ?");

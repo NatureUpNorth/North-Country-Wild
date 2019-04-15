@@ -1,4 +1,8 @@
+import java.awt.Dimension;
+
 import javax.swing.JPanel;
+
+import org.json.JSONObject;
 
 // parent class for a panel in the tab
 public class TabItem {
@@ -6,12 +10,25 @@ public class TabItem {
 	private String desc;
 	private String hint;
 	private String returnValue;
-	private JPanel panel;
+	protected JPanel panel;
 	
-	public TabItem(String desc, String hint, String rv) {
-		this.desc = desc;
-		this.hint = hint;
-		this.returnValue = rv;
+	public TabItem(JSONObject jsonpanel) {
+		// Fetch data from config file
+        try {
+        	desc = jsonpanel.getString("desc");
+        } catch (org.json.JSONException e) {
+        	desc = "";
+        }
+        try {
+        	returnValue = jsonpanel.getString("returnValue");
+        } catch (org.json.JSONException e) {
+        	returnValue = "";
+        }
+        try {
+        	hint = jsonpanel.getString("hint");
+        } catch (org.json.JSONException e) {
+        	hint = "";
+        }
 		panel = new JPanel();
 	}
 	
@@ -23,6 +40,10 @@ public class TabItem {
 	}
 	public String getReturnValue() {
 		return returnValue;
+	}
+	
+	public JPanel getPanel() {
+		return panel;
 	}
 	
 }
