@@ -5,13 +5,13 @@ import org.json.JSONObject;
 import javax.swing.*;
 import java.awt.*;
 import java.net.URL;
+import java.time.LocalDate;
 import java.util.Date;
 
 public class PanelDate extends TabItem {
 
     private JTextField help;
-    private Date start;
-    private Date end;
+    private DatePicker calendar;
     
     public PanelDate(JSONObject jsonpanel) {
 
@@ -46,7 +46,7 @@ public class PanelDate extends TabItem {
         ImageIcon dateExampleIcon = new ImageIcon(dateExampleImage);
 
         dateSettings = new DatePickerSettings();
-        DatePicker calendar = new DatePicker(dateSettings);
+        calendar = new DatePicker(dateSettings);
         calendar.setDateToToday();
         JButton datePickerButton = calendar.getComponentToggleCalendarButton();
         datePickerButton.setText("");
@@ -75,13 +75,16 @@ public class PanelDate extends TabItem {
         panel.add(row2, constraints);
     }
 
-    public boolean validDate () {
+    public boolean validDate (Date start, Date end) {
         return (start.before(end));
     }
     
-    public Date[] getDates() {
-    	Date[] dates = {start, end};
-    	return dates;
+    public LocalDate getDate() {
+    	return calendar.getDate();
+    }
+    
+    public String getFinalValue() {
+    	return calendar.getDate().toString();
     }
 
 }

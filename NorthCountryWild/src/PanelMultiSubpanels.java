@@ -1,7 +1,9 @@
-
 import org.json.JSONObject;
-import javax.swing.*;
 import java.awt.*;
+import java.time.LocalDate;
+
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 
 public class PanelMultiSubpanels extends TabItem {
 	
@@ -26,6 +28,42 @@ public class PanelMultiSubpanels extends TabItem {
     
     public TabItem[] getSubpanels() {
     	return subpanels;
+    }
+    
+    // currently only used by date subpanels, but others could be implemented
+    public boolean compare(String type) {
+    	if (type.equals("Date")) {
+    		LocalDate startDate = null;
+        	LocalDate endDate = null;
+        	for (int i = 0; i < subpanels.length; i++) {
+        		if (subpanels[i].getClass().toString().equals("PanelDate")) {
+        			if (subpanels[i].getReturnValue().equals("Start Date")) {
+        				PanelDate startpanel = (PanelDate) subpanels[i];
+        				startDate = startpanel.getDate();
+        			} else {
+        				PanelDate endpanel = (PanelDate) subpanels[i];
+        				endDate = endpanel.getDate();
+        			}
+        		}
+        	}
+        	if(startDate==null || endDate == null){
+    			JOptionPane.showMessageDialog(new JFrame(),
+    					"Incorrect date entry. Please enter all the required fields.");
+    			return false;
+    		}
+        	if (startDate.isAfter(endDate)) {
+        		JOptionPane.showMessageDialog(new JFrame(),
+    					"Incorrect date entry. The start date is after the end date.");
+        		return false;
+        	}
+        	LocalDate today = LocalDate.now();
+        	if(startDate.isAfter(today)) {
+    			JOptionPane.showMessageDialog(new JFrame(),
+    					"Incorrect date entry. The start date is after the current date.");
+    			return false;
+        	}
+    	}
+    	return true;
     }
 
 }

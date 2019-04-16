@@ -9,7 +9,9 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
 
+import javax.swing.AbstractButton;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -29,6 +31,8 @@ public class TestWindow extends JPanel implements ActionListener, ChangeListener
 	private JTabbedPane tabularpane;
 	private int max = 0;
 	private JPanel buttons;
+	private boolean uploading = false;
+	private ArrayList<String> values;
 	
 	public TestWindow() {
 		JTabbedPane tabularpane = new JTabbedPane();
@@ -48,7 +52,7 @@ public class TestWindow extends JPanel implements ActionListener, ChangeListener
 		
 		JSONObject obj = new JSONObject(str);
 		JSONArray tabs = obj.getJSONArray("tabs");
-		pages = new Tab[tabs.length()];
+		pages = new Tab[tabs.length() + 1];
 		
 		for (int i = 0; i < tabs.length(); i++) {
 			JSONObject tab = (JSONObject) tabs.get(i);
@@ -58,6 +62,11 @@ public class TestWindow extends JPanel implements ActionListener, ChangeListener
 			Tab newTab = new Tab(jpanels, title);
 			pages[i] = newTab;
 		}
+		
+		// add the tab which will be the review tab
+		TabItem[] reviews = {new PanelText("Please review the information you have entered:<br/><br/>", "", "")};
+		Tab review = new Tab(reviews, "Review");
+		pages[pages.length - 1] = review;
 	
 		tabularpane = new JTabbedPane();
 		length = pages.length;
@@ -97,6 +106,12 @@ public class TestWindow extends JPanel implements ActionListener, ChangeListener
 		constraints.gridx = 0;
 		constraints.gridy = 1;
 		this.add(buttons, constraints);
+		
+		JFrame frame = new JFrame();
+		frame.add(this);
+		frame.pack();
+		frame.setVisible(true);
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
 	
 	// go through the panels in a tab and make the required displays
@@ -157,8 +172,8 @@ public class TestWindow extends JPanel implements ActionListener, ChangeListener
 		// check if buttons need to be en-/disabled
 		if (current == 0) {
 			prev.setEnabled(false);
-		} else if (current == length - 1) {
-			next.setEnabled(false);
+		} else if (current == length - 2) {
+			next.setText("Review");
 		} else {
 			prev.setEnabled(true);
 			next.setEnabled(true);
@@ -188,37 +203,118 @@ public class TestWindow extends JPanel implements ActionListener, ChangeListener
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
 		if (arg0.getSource().equals(prev)) {
+			next.setText("Next");
 			current--;
 		} else if (arg0.getSource().equals(next)) {
-			current++;
-			if (max < current) {
-				max = current;
-			}
-			tabularpane = new JTabbedPane();
-			for(int index = 0; index < length; index++) {
-				tabularpane.add(pages[index].getPanel(), pages[index].getTitle());
-				tabularpane.setEnabledAt(index, false);
-			}
-			for(int i = 0; i <= max; i++) {
-				tabularpane.setEnabledAt(i, true);
+			if (next.getText().equals("Review")) {
+				next.setText("Upload");
+				review();
+				current++;
+				if (max < current) {
+					max = current;
+				}
+				tabularpane = new JTabbedPane();
+				for(int index = 0; index < length; index++) {
+					tabularpane.add(pages[index].getPanel(), pages[index].getTitle());
+					tabularpane.setEnabledAt(index, false);
+				}
+				for(int i = 0; i <= max; i++) {
+					tabularpane.setEnabledAt(i, true);
+				}
+			} else if (next.getText().equals("Upload")) {
+				if (!uploading) {
+					this.setUploading(true);
+				}
+			} else {
+				current++;
+				if (max < current) {
+					max = current;
+				}
+				tabularpane = new JTabbedPane();
+				for(int index = 0; index < length; index++) {
+					tabularpane.add(pages[index].getPanel(), pages[index].getTitle());
+					tabularpane.setEnabledAt(index, false);
+				}
+				for(int i = 0; i <= max; i++) {
+					tabularpane.setEnabledAt(i, true);
+				}
 			}
 		}
 		display();
-	}
-	
-	public static void main(String args[]) {
-		TestWindow test = new TestWindow();
-		JFrame frame = new JFrame();
-		frame.add(test);
-		frame.pack();
-		frame.setVisible(true);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
 
 	@Override
 	public void stateChanged(ChangeEvent arg0) {
 		// TODO Auto-generated method stub
 		
+	}
+	
+	// set up the review page once it's clicked on
+	public void review() {
+		((PanelText) pages[pages.length-1].getPanels()[0]).setText("Please review the information you have entered:<br/><br/>");
+		String str = "";
+		values = new ArrayList<String>();
+		for (int i = 0; i < pages.length - 1; i++) {
+			Tab tab = pages[i];
+			TabItem[] subpanels = tab.getPanels();
+			for (int j = 0; j < tab.getPanels().length; j++) {
+				TabItem panel = subpanels[j];
+				if (panel.getClass().toString().equals("class PanelMultiSubpanels")) {
+					str += checkMultiPanel((PanelMultiSubpanels) panel);
+				} else if (!panel.getReturnValue().equals("") && !(panel.getReturnValue() == null)) {
+					values.add(panel.getReturnValue());
+					values.add(panel.getFinalValue());
+					str += "<b>" + panel.getReturnValue()+ "</b>" + ": " + panel.getFinalValue() + "<br/><br/>";
+				}
+			}
+		}
+		((PanelText) pages[pages.length-1].getPanels()[0]).appendText(str);
+	}
+	
+	private String checkMultiPanel(PanelMultiSubpanels panel) {
+		TabItem[] panels = panel.getSubpanels();
+		String str = "";
+		for (int k = 0; k < panels.length; k++) {
+			if (!panels[k].getReturnValue().equals("") && !(panels[k].getReturnValue() == null)) {
+				if (panels[k].getClass().toString().equals("class PanelMultiSubpanels")) {
+					str += checkMultiPanel((PanelMultiSubpanels) panels[k]);
+				}
+				values.add(panel.getReturnValue());
+				values.add(panel.getFinalValue());
+				str += "<b>" + panels[k].getReturnValue()+ "</b>: " + panels[k].getFinalValue() + "<br/><br/>";
+			}
+		}
+		return str;
+	}
+	
+	public void setUploading(boolean status) {
+		uploading = status;
+	}
+	
+	public void disable() {
+		next.setEnabled(false);
+		prev.setEnabled(false);
+	}
+	
+	public void enable() {
+		next.setEnabled(true);
+		prev.setEnabled(true);
+	}
+	
+	public synchronized boolean isUploading() {
+		return uploading;
+	}
+	
+	public Tab[] getTabs() {
+		return pages;
+	}
+	
+	public int getCount() {
+		return ((PanelFileSelect) pages[0].getPanels()[0]).getCount();
+	}
+	
+	public ArrayList<String> getValues() {
+		return values;
 	}
 	
 }

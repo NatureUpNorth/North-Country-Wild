@@ -4,11 +4,10 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.awt.*;
-import java.util.ArrayList;
 
 public class PanelSingleChoice extends TabItem {
-	
-	private String[] options;
+
+	private JList<String> choices;
 
     public PanelSingleChoice(JSONObject jsonpanel) {
 
@@ -25,12 +24,8 @@ public class PanelSingleChoice extends TabItem {
         constraints.gridy = 0;
         panel.add(description, constraints);
 
-        // Add radioButtons to their own panel (enables alignment)
-        JPanel radioButtons = new JPanel();
-        radioButtons.setLayout(new GridBagLayout());
-
         JSONArray values = jsonpanel.getJSONArray("values");
-        options = new String[values.length()];
+        String[] options = new String[values.length()];
         for (int i = 0; i < jsonpanel.getJSONArray("values").length(); i++)  {
 
             constraints.insets = new Insets(0, 0, 0, 0);
@@ -39,21 +34,23 @@ public class PanelSingleChoice extends TabItem {
             constraints.gridy = i;
 
             String title = (String) values.get(i);
-            JRadioButton option = new JRadioButton(title);
             options[i] = title;
-            radioButtons.add(option, constraints);
         }
+        
+        choices = new JList<String>(options);
+        choices.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        choices.setLayout(new GridBagLayout());
 
         // Add radioButtons to panel
         constraints.anchor = GridBagConstraints.CENTER;
         constraints.gridx = 0;
         constraints.gridy = 1;
-        panel.add(radioButtons, constraints);
+        panel.add(choices, constraints);
 
     }
     
-    public String[] getOptions() {
-    	return options;
+    public String getFinalValue() {
+    	return choices.getSelectedValue();
     }
 
 }

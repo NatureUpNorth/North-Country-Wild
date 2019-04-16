@@ -30,17 +30,18 @@ public class UploadThread extends Thread {
 	private volatile boolean uploading;
 	private static ArrayList<Metadata> meta = new ArrayList<Metadata>();
 	private LoadingWindow loading;
-	private UploadWindow upload;
+	private TestWindow upload;
 	private volatile boolean running = true;
-	private final String DEGREE  = "\u00b0";
+	private ArrayList<String> values;
+	/*
 	private String habitat;
 	private String urbanized;
-	private String affiliation;
 	private String startDate;
 	private String endDate;
+	*/
 	private boolean interrupted;
 	
-	
+	/*
 	UploadThread(String path, String destination, UploadWindow uw, int files, String habit, String urba, String a, String st, String en) {
 		filePath = path;
 		destinationPath = destination;
@@ -53,6 +54,18 @@ public class UploadThread extends Thread {
 		affiliation = a;
 		startDate = st;
 		endDate = en;
+		interrupted = false;
+	}
+	*/
+	
+	UploadThread(String path, String destination, TestWindow uw, int files, ArrayList<String> values) {
+		filePath = path;
+		destinationPath = destination;
+		uploading = true;
+		loading = new LoadingWindow();
+		upload = uw;
+		total_files = files;
+		this.values = values;
 		interrupted = false;
 	}
 	
@@ -69,7 +82,11 @@ public class UploadThread extends Thread {
     				fileWriter.append(tag.getTagName()+",");
     			}
     		}
-    		fileWriter.append("Affiliation,Longitude,Latitude,Habitat,Urban,Start Date,End Date,File Path");
+    		
+    		for (int i = 0; i < values.size(); i+=2) {
+    			fileWriter.append(values.get(i)+",");
+    		}
+    		//fileWriter.append("Affiliation,Longitude,Latitude,Habitat,Urban,Start Date,End Date,File Path");
     		fileWriter.append("\n");
     		
     		for(Metadata metadata : meta){
@@ -85,6 +102,7 @@ public class UploadThread extends Thread {
     					System.err.println("ERROR: " + error);
         			}
     			}
+    			/*
     			String lat = upload.getLat();
     			String lon = upload.getLon();
     			if(lat.contains("\"")) {
@@ -93,7 +111,11 @@ public class UploadThread extends Thread {
     			if(lon.contains("\"")) {
     				lon = DMStoDD(lon);
     			}
-    			fileWriter.append(affiliation+","+lat+","+lon+","+habitat+","+urbanized+","+startDate+","+endDate+","+destinationPath);
+    			*/
+    			for (int i = 1; i < values.size(); i+=2) {
+    				fileWriter.append(values.get(i)+",");
+    			}
+    			//fileWriter.append(affiliation+","+lat+","+lon+","+habitat+","+urbanized+","+startDate+","+endDate+","+destinationPath);
     			fileWriter.append("\n");
     		}
 
@@ -121,34 +143,48 @@ public class UploadThread extends Thread {
 		running = false;
 	}
 	
+	private File[] getFiles(File dir) {
+		File[] files = new File[total_files];
+		int k = 0;
+		for (File file: dir.listFiles()) {
+			if (file.isDirectory()) {
+				File[] new_files = getFiles(file);
+				for (int i = 0; i < new_files.length; i++) {
+					try {
+						new_files[i].getAbsolutePath();  // i don't get this bs but this needs to be here
+						files[k] = new_files[i];
+						k++;
+					} catch (NullPointerException e) {
+						break;
+					}
+				}
+			} else
+				try {
+					if(ImageIO.read(file) != null && loading.isUploading() && file != null) {
+						Metadata metadata = ImageMetadataReader.readMetadata(file);
+						meta.add(metadata);
+						files[k] = file;
+						k++;
+					}
+				} catch (ImageProcessingException | IOException e) {
+				}
+		}
+		return files;
+	}
+	
 	public void upload(String filePath, String destinationPath) {
 		// Create Dropbox client
-        DbxRequestConfig config = new DbxRequestConfig("dropbox/java-tutorial", "en_US");
-        DbxClientV2 client = new DbxClientV2(config, ACCESS_TOKEN);  
-		
-		File dir = null;
-		try {
-        	dir = new File(filePath);
-    		for(File file: dir.listFiles()){
-    			if (file.isDirectory()) {
-    				upload(file.getAbsolutePath(), destinationPath);
-    			} else if(ImageIO.read(file) != null && loading.isUploading()) {
-	    			Metadata metadata = ImageMetadataReader.readMetadata(file);
-	    			meta.add(metadata);
-    			} else if (!loading.isUploading()) {
-    				interrupted = true;
-    			}
-    		}
-            
-        } catch (ImageProcessingException e) {
-        } catch (IOException e) {
-        }     
+		DbxRequestConfig config = new DbxRequestConfig("dropbox/java-tutorial", "en_US");
+        DbxClientV2 client = new DbxClientV2(config, ACCESS_TOKEN);
+		File dir = new File(filePath);
+		File[] files = getFiles(dir);
 
 		// upload pics and csv file to dropbox client
-		for(File file: dir.listFiles()) {
+		for(int i = 0; i < files.length; i++) {
+			File file = files[i];
 			try (InputStream in = new FileInputStream(file.getAbsolutePath())) {
 				try {
-					if(ImageIO.read(file) != null && loading.isUploading()) {
+					if(loading.isUploading()) {
 						if (running) {
 							client.files().uploadBuilder("/" + destinationPath + "/" + file.getName()).uploadAndFinish(in);
 							count++;
@@ -167,7 +203,7 @@ public class UploadThread extends Thread {
 			}
 		}
         
-        if (count == total_files) {
+		if (count == total_files) {
 			write(meta, "Using ImageMetadataReader", filePath);
 			InputStream in = null;
 			try {
@@ -201,22 +237,6 @@ public class UploadThread extends Thread {
 	
 	public boolean isUploading() {
 		return uploading;
-	}
-	
-	public String DMStoDD(String dms) {
-		int x = dms.indexOf(DEGREE);
-		String deg = dms.substring(0, x);
-		int y = dms.indexOf("'");
-		String min = dms.substring(x+1, y);
-		int z = dms.indexOf("\"");
-		String sec = dms.substring(y+1, z);
-		double d = Double.parseDouble(deg);
-		double m = Double.parseDouble(min);
-		double s = Double.parseDouble(sec);
-		Double dd = d + (m/60.0) + (s/3600.0);
-		DecimalFormat df4 = new DecimalFormat("#.##");
-		dd = Double.valueOf(df4.format(dd));
-		return dd.toString();
 	}
 	
 }

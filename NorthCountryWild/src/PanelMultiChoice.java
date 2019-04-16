@@ -1,16 +1,23 @@
 import org.json.JSONArray;
 import org.json.JSONObject;
 import javax.swing.*;
-import java.awt.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
-public class PanelMultiChoice extends TabItem {
+import java.awt.*;
+import java.awt.event.ItemEvent;
+import java.util.ArrayList;
+
+public class PanelMultiChoice extends TabItem implements ChangeListener {
 	
-	private String[] options;
+	private String[] options;  // a list of all available options
+	private ArrayList<String> choices;  // a list of all the ones the user has selected
 
     public PanelMultiChoice(JSONObject jsonpanel) {
 
         super(jsonpanel);
-
+        choices = new ArrayList<String>();
+        
         // Prepare panel layout
         panel.setLayout(new GridBagLayout());
         GridBagConstraints constraints = new GridBagConstraints();
@@ -38,7 +45,8 @@ public class PanelMultiChoice extends TabItem {
             constraints.gridy = i;
             
             options[i] = title;
-
+            option.addChangeListener(this);
+            option.setRolloverEnabled(false);
             checkBoxPanel.add(option, constraints);
         }
 
@@ -53,5 +61,26 @@ public class PanelMultiChoice extends TabItem {
     public String[] getOptions() {
     	return options;
     }
+    
+    public String getFinalValue() {
+    	if (choices.size() == 0) {
+    		return "";
+    	}
+    	String str = choices.get(0);
+    	for (int i = 1; i < choices.size(); i++) {
+    		str += ", " + choices.get(i);
+    	}
+    	return str;
+    }
+
+	@Override
+	public void stateChanged(ChangeEvent e) {
+		JCheckBox cb = (JCheckBox) e.getSource();
+		if(cb.isSelected() && choices.indexOf(cb.getText()) < 0) {
+			choices.add(cb.getText());
+		} else {
+			choices.remove(cb.getText());
+		} 
+	}
 
 }

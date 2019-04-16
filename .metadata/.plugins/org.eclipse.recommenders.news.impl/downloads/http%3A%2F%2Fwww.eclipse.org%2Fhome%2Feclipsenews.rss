@@ -10,6 +10,38 @@
       <link>http://www.eclipse.org</link>
     </image>
      <item>
+      <title><![CDATA[Renaming Java EE Specifications for Jakarta EE]]></title>
+      <link><![CDATA[https://blogs.eclipse.org/post/wayne-beaton/renaming-java-ee-specifications-jakarta-ee]]></link>
+      <description><![CDATA[As we prepare to engage in actual specification work, it's time to start thinking about changing the names of the specifications and the projects that contain their artifacts.]]></description>
+      <pubDate>Fri, 05 Apr 2019 07:40:00 EST</pubDate>
+      <category>news</category>
+      <pressrelease>0</pressrelease>
+    </item>
+     <item>
+      <title><![CDATA[How to participate in advancing Jakarta EE Specification: Technical and Collateral material related work]]></title>
+      <link><![CDATA[https://blogs.eclipse.org/post/tanja-obradovic/how-participate-advancing-jakarta-ee-specification-technical-and-collateral]]></link>
+      <description><![CDATA[We have heard from members of the community some suggestions on what they need from the specification, but we can always use more!]]></description>
+      <pubDate>Fri, 05 Apr 2019 07:40:00 EST</pubDate>
+      <category>news</category>
+      <pressrelease>0</pressrelease>
+    </item>
+    <item>
+      <title><![CDATA[Welcome Gabriela!]]></title>
+      <link><![CDATA[https://blogs.eclipse.org/post/thabang-mashologu/welcome-gabriela]]></link>
+      <description><![CDATA[We'd like to welcome Gabriela Motroc to the Eclipse Foundation as a Content Marketing Specialist based in Germany!]]></description>
+      <pubDate>Mon, 01 Apr 2019 09:40:00 EST</pubDate>
+      <category>news</category>
+      <pressrelease>0</pressrelease>
+    </item>
+    <item>
+      <title><![CDATA[Thank You for Taking the Jakarta EE 2019 Developer Survey!]]></title>
+      <link><![CDATA[https://blogs.eclipse.org/post/thabang-mashologu/thank-you-taking-jakarta-ee-2019-developer-survey]]></link>
+      <description><![CDATA[The survey wrapped up at midnight on Monday, March 25, with over 1,770 responses from developers around the globe.]]></description>
+      <pubDate>Mon, 01 Apr 2019 08:40:00 EST</pubDate>
+      <category>news</category>
+      <pressrelease>0</pressrelease>
+    </item>
+     <item>
       <title><![CDATA[Incubation in the Eclipse Development Process]]></title>
       <link><![CDATA[https://blogs.eclipse.org/post/wayne-beaton/incubation-eclipse-development-process]]></link>
       <description><![CDATA[The Eclipse Development Process has a notion of phases. Two of those phases are Incubation and Mature.]]></description>

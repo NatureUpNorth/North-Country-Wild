@@ -3,11 +3,11 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import javax.swing.*;
 import java.awt.*;
-import java.util.ArrayList;
 
 public class PanelDropdown extends TabItem {
 	
 	private String[] options;
+	private JComboBox<String> box;
 
     public PanelDropdown (JSONObject jsonpanel) {
 
@@ -33,7 +33,7 @@ public class PanelDropdown extends TabItem {
         }
 
         // Add comboBoxes
-        JComboBox<String> box = new JComboBox<String>(options);
+        box = new JComboBox<String>(options);
         constraints.gridx = 0;
         constraints.gridy = 1;
         constraints.fill = GridBagConstraints.HORIZONTAL;
@@ -42,6 +42,10 @@ public class PanelDropdown extends TabItem {
     
     public String[] getOptions() {
     	return options;
+    }
+    
+    public String getFinalValue() {
+    	return (String) box.getSelectedItem();
     }
 
 }

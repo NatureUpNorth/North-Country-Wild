@@ -1,5 +1,3 @@
-import java.awt.Dimension;
-
 import javax.swing.JPanel;
 
 import org.json.JSONObject;
@@ -32,12 +30,21 @@ public class TabItem {
 		panel = new JPanel();
 	}
 	
+	public TabItem(String desc, String hint, String returnValue) {
+		this.desc = desc;
+		this.hint = hint;
+		this.returnValue = returnValue;
+		panel = new JPanel();
+	}
+	
 	public String getDesc() {
 		return desc;
 	}
+	
 	public String getHint() {
 		return hint;
 	}
+	
 	public String getReturnValue() {
 		return returnValue;
 	}
@@ -46,4 +53,8 @@ public class TabItem {
 		return panel;
 	}
 	
+	// to be implemented by children
+	public String getFinalValue() {
+		return "";
+	}
 }

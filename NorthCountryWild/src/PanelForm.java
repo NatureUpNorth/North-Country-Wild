@@ -4,6 +4,8 @@ import javax.swing.*;
 import java.awt.*;
 
 public class PanelForm extends TabItem {
+	
+	private JTextField textBox;
 
     public PanelForm(JSONObject jsonpanel) {
 
@@ -28,13 +30,17 @@ public class PanelForm extends TabItem {
         }
 
         // Add textField
-        JTextField textBox = new JTextField();
+        textBox = new JTextField();
         constraints.gridx = 0;
         constraints.gridy = 2;
         constraints.fill = GridBagConstraints.HORIZONTAL;
         constraints.anchor = GridBagConstraints.WEST;
         panel.add(textBox, constraints);
 
+    }
+    
+    public String getFinalValue() {
+    	return textBox.getText();
     }
 
 }
