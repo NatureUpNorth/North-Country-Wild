@@ -278,10 +278,11 @@ public class TestWindow extends JPanel implements ActionListener, ChangeListener
 			if (!panels[k].getReturnValue().equals("") && !(panels[k].getReturnValue() == null)) {
 				if (panels[k].getClass().toString().equals("class PanelMultiSubpanels")) {
 					str += checkMultiPanel((PanelMultiSubpanels) panels[k]);
+				} else if (!panels[k].getReturnValue().equals("") && !(panels[k].getReturnValue() == null)) {
+					values.add(panels[k].getReturnValue());
+					values.add(panels[k].getFinalValue());
+					str += "<b>" + panels[k].getReturnValue()+ "</b>" + ": " + panels[k].getFinalValue() + "<br/><br/>";
 				}
-				values.add(panel.getReturnValue());
-				values.add(panel.getFinalValue());
-				str += "<b>" + panels[k].getReturnValue()+ "</b>: " + panels[k].getFinalValue() + "<br/><br/>";
 			}
 		}
 		return str;
