@@ -74,10 +74,6 @@ public class PanelDate extends TabItem {
         constraints.fill = GridBagConstraints.HORIZONTAL;
         panel.add(row2, constraints);
     }
-
-    public boolean validDate (Date start, Date end) {
-        return (start.before(end));
-    }
     
     public LocalDate getDate() {
     	return calendar.getDate();

@@ -27,7 +27,7 @@ public class PanelText extends TabItem {
     }
     
     public PanelText(String desc, String hint, String returnValue) {
-    	super(desc, hint, returnValue);
+    	super(desc, hint, returnValue, false);
     	
     	// Set panel layout
         panel.setLayout(new GridBagLayout());

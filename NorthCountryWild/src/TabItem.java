@@ -1,3 +1,5 @@
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import org.json.JSONObject;
@@ -8,6 +10,7 @@ public class TabItem {
 	private String desc;
 	private String hint;
 	private String returnValue;
+	private boolean required;
 	protected JPanel panel;
 	
 	public TabItem(JSONObject jsonpanel) {
@@ -27,13 +30,24 @@ public class TabItem {
         } catch (org.json.JSONException e) {
         	hint = "";
         }
+        try {
+        	String str = jsonpanel.getString("required");
+        	if (str.equals("true")) {
+        		required = true;
+        	} else {
+        		required = false;
+        	}
+        } catch (org.json.JSONException e) {
+        	required = false;
+        }
 		panel = new JPanel();
 	}
 	
-	public TabItem(String desc, String hint, String returnValue) {
+	public TabItem(String desc, String hint, String returnValue, boolean required) {
 		this.desc = desc;
 		this.hint = hint;
 		this.returnValue = returnValue;
+		this.required = required;
 		panel = new JPanel();
 	}
 	
@@ -49,6 +63,10 @@ public class TabItem {
 		return returnValue;
 	}
 	
+	public boolean isRequired() {
+		return required;
+	}
+	
 	public JPanel getPanel() {
 		return panel;
 	}
@@ -56,5 +74,15 @@ public class TabItem {
 	// to be implemented by children
 	public String getFinalValue() {
 		return "";
+	}
+	
+	public boolean check() {
+		if ((getFinalValue() == null || getFinalValue().equals("")) && required) {
+			JOptionPane.showMessageDialog(new JFrame(),
+					"Incorrect entry for " + returnValue.toLowerCase() + ". Please enter all the required fields.");
+			return false;
+		} else {
+			return true;
+		}
 	}
 }

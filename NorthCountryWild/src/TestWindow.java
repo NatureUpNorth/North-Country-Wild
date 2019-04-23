@@ -69,6 +69,7 @@ public class TestWindow extends JPanel implements ActionListener, ChangeListener
 		pages[pages.length - 1] = review;
 	
 		tabularpane = new JTabbedPane();
+		tabularpane.addChangeListener(this);
 		length = pages.length;
 		current = 0;  // start on first page
 		
@@ -214,6 +215,7 @@ public class TestWindow extends JPanel implements ActionListener, ChangeListener
 					max = current;
 				}
 				tabularpane = new JTabbedPane();
+				tabularpane.addChangeListener(this);
 				for(int index = 0; index < length; index++) {
 					tabularpane.add(pages[index].getPanel(), pages[index].getTitle());
 					tabularpane.setEnabledAt(index, false);
@@ -226,27 +228,53 @@ public class TestWindow extends JPanel implements ActionListener, ChangeListener
 					this.setUploading(true);
 				}
 			} else {
-				current++;
-				if (max < current) {
-					max = current;
+				Tab tab = pages[current];
+				TabItem[] tabpanels = tab.getPanels();
+				boolean pass = true;
+				for (int i = 0; i < tabpanels.length; i++) {
+					if (!tabpanels[i].check()) {
+						pass = false;
+					}
 				}
-				tabularpane = new JTabbedPane();
-				for(int index = 0; index < length; index++) {
-					tabularpane.add(pages[index].getPanel(), pages[index].getTitle());
-					tabularpane.setEnabledAt(index, false);
-				}
-				for(int i = 0; i <= max; i++) {
-					tabularpane.setEnabledAt(i, true);
+				if (pass) {
+					current++;
+					if (max < current) {
+						max = current;
+					}
 				}
 			}
+			tabularpane = new JTabbedPane();
+			for(int index = 0; index < length; index++) {
+				tabularpane.add(pages[index].getPanel(), pages[index].getTitle());
+				tabularpane.setEnabledAt(index, false);
+			}
+			for(int i = 0; i <= max; i++) {
+				tabularpane.setEnabledAt(i, true);
+			}
+			tabularpane.setSelectedIndex(current);
+			tabularpane.addChangeListener(this);
 		}
 		display();
 	}
 
 	@Override
 	public void stateChanged(ChangeEvent arg0) {
-		// TODO Auto-generated method stub
-		
+		if (arg0.getSource().equals(tabularpane)) {
+			current = tabularpane.getSelectedIndex();
+			if (current == pages.length - 1) {
+				next.setText("Upload");
+			} else if (current == pages.length - 2) {
+				next.setText("Review");
+			} else {
+				next.setText("Next");
+			}
+			
+			if (current == 0) {
+				prev.setEnabled(false);
+			} else {
+				prev.setEnabled(true);
+			}
+		}
 	}
 	
 	// set up the review page once it's clicked on

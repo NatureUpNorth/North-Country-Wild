@@ -5,7 +5,8 @@
 		{"type": "fileSelect",
 		"desc": "Select your pictures:",
 		"hint": "Browse for the folder that contains the images that you wish to upload. This folder can have sub-folders within it.",
-		"returnValue": "filepath"
+		"returnValue": "File path",
+		"required": "true"
 		},
 		
 		{"type": "multiPanel",
@@ -13,12 +14,14 @@
 			{"type": "date",
 			"desc": "For this deployment, on what date was the camera placed in the field?   ",
 			"hint": "Enter the the start and end dates of deployment for the camera. Click the calender icon to select date.",
-			"returnValue": "Start Date"
+			"returnValue": "Start Date",
+			"required": "true"
 			},
 		
 			{"type": "date",
 			"desc": "For this deployment, on what date was the camera removed from the field?",
-			"returnValue": "End Date"
+			"returnValue": "End Date",
+			"required": "true"
 			}
 		]},
 
@@ -28,7 +31,8 @@
 		"values": [
 			"Unaffiliated"
 		],
-		"returnValue": "Affiliation"
+		"returnValue": "Affiliation",
+		"required": "true"
 		}
 	]},
 		
@@ -72,7 +76,8 @@
 			"Wetland Edge",
 			"Edge between two habitats"
 		],
-		"returnValue": "Habitats"
+		"returnValue": "Habitat",
+		"required": "true"
 		},
 		
 		{"type": "singleChoiceList",
@@ -83,7 +88,8 @@
 			"Suburban/Moderately Urban",
 			"Primarily Urban"
 		],
-		"returnValue": "Urbanization"
+		"returnValue": "Urbanization",
+		"required": "true"
 		}
 	]},
 	
