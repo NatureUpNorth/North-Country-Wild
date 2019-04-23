@@ -10,10 +10,10 @@ public class Main {
 		while(splash.isOpen());
 		splash.close();
 		
-		//LoginWindow login = new LoginWindow();
-		//while (login.isOpen());  // wait for them to submit before closing the window
-		String name = "Guinevere";//login.getName();
-		//login.close();
+		LoginWindow login = new LoginWindow();
+		while (login.isOpen());  // wait for them to submit before closing the window
+		String name = login.getName();
+		login.close();
 		
 		// a new comment
 		
