@@ -8,7 +8,6 @@ import javax.swing.JOptionPane;
 public class PanelMultiSubpanels extends TabItem {
 	
 	private TabItem[] subpanels;
-
     public PanelMultiSubpanels(JSONObject jsonpanel, TabItem[] subpanels) {
 
     	super(jsonpanel);
@@ -19,11 +18,10 @@ public class PanelMultiSubpanels extends TabItem {
         GridBagConstraints constraints = new GridBagConstraints();
 
         for (int i = 0; i < subpanels.length; i++) {
-            constraints.gridx = 0;
+        	constraints.gridx = 0;
             constraints.gridy = i;
-			panel.add(subpanels[i].getPanel(), constraints);
+        	panel.add(subpanels[i].getPanel(), constraints);
 		}
-
     }
     
     public TabItem[] getSubpanels() {
@@ -71,5 +69,4 @@ public class PanelMultiSubpanels extends TabItem {
     	}
     	return true;
     }
-
 }

@@ -14,7 +14,6 @@ public class PanelMultiChoice extends TabItem implements ChangeListener {
 	private ArrayList<String> choices;  // a list of all the ones the user has selected
 
     public PanelMultiChoice(JSONObject jsonpanel) {
-
         super(jsonpanel);
         choices = new ArrayList<String>();
         
@@ -25,10 +24,16 @@ public class PanelMultiChoice extends TabItem implements ChangeListener {
 
         // Add description
         JLabel description = new JLabel(getDesc());
+        constraints.fill = GridBagConstraints.HORIZONTAL;
         constraints.gridx = 0;
         constraints.gridy = 0;
         panel.add(description, constraints);
-
+        
+        if (help()) {
+        	constraints.gridx = 1;
+        	panel.add(getHelpTag(), constraints);
+        }
+        
         // Add checkboxes to their own panel (enables alignment)
         JPanel checkBoxPanel = new JPanel();
         checkBoxPanel.setLayout(new GridBagLayout());
@@ -82,5 +87,4 @@ public class PanelMultiChoice extends TabItem implements ChangeListener {
 			choices.remove(cb.getText());
 		} 
 	}
-
 }

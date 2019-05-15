@@ -6,14 +6,14 @@
 		"desc": "Select your pictures:",
 		"hint": "Browse for the folder that contains the images that you wish to upload. This folder can have sub-folders within it.",
 		"returnValue": "File path",
-		"required": "true"
+		"required": "true" 
 		},
 		
 		{"type": "multiPanel",
 		"subPanels": [
 			{"type": "date",
-			"desc": "For this deployment, on what date was the camera placed in the field?   ",
-			"hint": "Enter the the start and end dates of deployment for the camera. Click the calender icon to select date.",
+			"desc": "For this deployment, on what date was the camera placed in the field?",
+			"hint": "Enter the the start and end dates of deployment for the camera. Click the calendar icon to select date.",
 			"returnValue": "Start Date",
 			"required": "true"
 			},
@@ -29,7 +29,8 @@
 		"desc": "Please select the group or organization you are working with on this project, if any:",
 		"hint": "Some people engage with North Country Wild through collaborations with school groups or by checking a game camera out from Nature Up North or local library. If you are affiliated with a group, please enter it here.",
 		"values": [
-			"Unaffiliated"
+			"Unaffiliated",
+			"+ ADD NEW"
 		],
 		"returnValue": "Affiliation",
 		"required": "true"
@@ -45,13 +46,13 @@
 		
 		{"type": "multiPanel",
 		"subPanels": [
-			{"type": "slider",
+			{"type": "form",
 			"desc": "Latitude:",
 			"hint": "If you do not know the longitude and latitude of the camera location, you can search for them here: https://mynasadata.larc.nasa.gov/latitudelongitude-finder/",
 			"returnValue": "Latitude"
 			},
 			
-			{"type": "slider",
+			{"type": "form",
 			"desc": "Longitude:",
 			"hint": "If you do not know the longitude and latitude of the camera location, you can search for them here: https://mynasadata.larc.nasa.gov/latitudelongitude-finder/",
 			"returnValue": "Longitude"

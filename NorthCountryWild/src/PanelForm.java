@@ -6,7 +6,6 @@ import java.awt.*;
 public class PanelForm extends TabItem {
 	
 	private JTextField textBox;
-
     public PanelForm(JSONObject jsonpanel) {
 
         super(jsonpanel);
@@ -17,18 +16,17 @@ public class PanelForm extends TabItem {
         constraints.insets = new Insets(15, 15, 15, 15);
 
         // Add description
-        JLabel description = new JLabel(getDesc());
+        JLabel description = new JLabel(getDesc());      
         constraints.gridx = 0;
         constraints.gridy = 0;
         constraints.fill = GridBagConstraints.HORIZONTAL;
         panel.add(description, constraints);
-
-        // Add hint if present
-        if (getHint() != "") {
-            JLabel hint = new JLabel(getHint());
-            panel.add(hint);
+        
+        if (help()) {
+        	constraints.gridx = 1;
+        	panel.add(getHelpTag(), constraints);
         }
-
+        
         // Add textField
         textBox = new JTextField();
         constraints.gridx = 0;
@@ -42,5 +40,4 @@ public class PanelForm extends TabItem {
     public String getFinalValue() {
     	return textBox.getText();
     }
-
 }

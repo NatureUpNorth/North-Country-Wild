@@ -8,7 +8,6 @@ import java.awt.*;
 public class PanelSingleChoice extends TabItem {
 
 	private JList<String> choices;
-
     public PanelSingleChoice(JSONObject jsonpanel) {
 
     	super(jsonpanel);
@@ -23,6 +22,11 @@ public class PanelSingleChoice extends TabItem {
         constraints.gridx = 0;
         constraints.gridy = 0;
         panel.add(description, constraints);
+        
+        if (help()) {
+        	constraints.gridx = 1;
+        	panel.add(getHelpTag(), constraints);
+        }
 
         JSONArray values = jsonpanel.getJSONArray("values");
         String[] options = new String[values.length()];
@@ -52,5 +56,4 @@ public class PanelSingleChoice extends TabItem {
     public String getFinalValue() {
     	return choices.getSelectedValue();
     }
-
 }
