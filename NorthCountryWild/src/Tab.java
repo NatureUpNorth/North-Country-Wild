@@ -8,7 +8,6 @@ public class Tab {
 	private TabItem[] panels;
 	private String title;
 	private JPanel panel;
-	private boolean multiChoice;
 	
 	public Tab(TabItem[] panels, String title) {
 		this.panels = panels;
@@ -17,18 +16,20 @@ public class Tab {
 		panel.setLayout(new GridBagLayout());
         GridBagConstraints constraints = new GridBagConstraints();
         
-        // Determine if one of the panel types is multiChoice (extra long - format side-by-side)
+        // Determine if tab consists of just one form (in which case is should be enlarged)
+        int formCount = 0;
         for (int i = 0; i < panels.length; i++) {
-        	String type;			
+        	String type;
 			type = panels[i].getType();
 			if (type == null) {
 				type = "none";
 			}
-			if(type.equals("multiChoiceList")) {
-	    		multiChoice = true;
-    		}
+			if(type.contentEquals("form")) {
+				formCount++;
+			}
         }
         
+        // Add panels to tab
 		for (int i = 0; i < panels.length; i++) {
 			String type;			
 			type = panels[i].getType();
@@ -39,20 +40,13 @@ public class Tab {
 			constraints.fill = GridBagConstraints.HORIZONTAL;
 			constraints.anchor = GridBagConstraints.WEST;
 			
-			if(multiChoice) {
-				panel.setLayout(new GridLayout(1, 0));
-	    		constraints.gridx = i;
-				constraints.gridy = 0;
-				constraints.weightx = 0.0;
-				if(type.equals("multiChoiceList")) {
-					constraints.weightx = 100;
-				}
-				panel.add(panels[i].getPanel());			
-	    	} else {
-				constraints.gridx = 0;
-				constraints.gridy = i;
-				panel.add(panels[i].getPanel(), constraints);			
-	    	}
+			if(formCount == 1) {
+				((PanelForm) panels[i]).enlarge();
+			}
+		
+			constraints.gridx = 0;
+			constraints.gridy = i;
+			panel.add(panels[i].getPanel(), constraints);			
 		}
 	}
 	

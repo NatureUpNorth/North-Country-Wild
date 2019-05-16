@@ -38,7 +38,7 @@ public class TestWindow extends JPanel implements ActionListener, ChangeListener
 	private ArrayList<String> values;
 	static JFrame frame = new JFrame();
 	private static int tabularW = 800;
-	private static int tabularH = 500;
+	private static int tabularH = 550;
 	private static int frameW = ((Toolkit.getDefaultToolkit().getScreenSize()).width-tabularW)/2;
 	private static int frameH = ((Toolkit.getDefaultToolkit().getScreenSize()).height-tabularW)/2;
 	
