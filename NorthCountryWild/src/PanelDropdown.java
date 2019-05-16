@@ -77,7 +77,7 @@ public class PanelDropdown extends TabItem implements ActionListener {
     }
     
     public String getFinalValue() {
-    	if (box.getSelectedItem() == "+ ADD NEW") {
+    	if (((String)box.getSelectedItem()).equals("+ ADD NEW")) {
     		return textBox.getText();
     	}
     	return (String) box.getSelectedItem();
