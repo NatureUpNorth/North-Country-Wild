@@ -2,6 +2,8 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.Point;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.BufferedReader;
@@ -9,8 +11,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
-
 import javax.swing.AbstractButton;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -23,19 +25,25 @@ import org.json.*;
 
 public class TestWindow extends JPanel implements ActionListener, ChangeListener {
 
-	private Tab[] pages;
-	private int length;
-	private int current;  // current page
+	private static Tab[] pages;
+	static int length;
+	private static int current;  // current page
 	private JButton next;
 	private JButton prev;
 	private JTabbedPane tabularpane;
 	private int max = 0;
 	private JPanel buttons;
 	private boolean uploading = false;
+	private String[][] tabText;
 	private ArrayList<String> values;
+	static JFrame frame = new JFrame();
+	private static int tabularW = 800;
+	private static int tabularH = 550;
+	private static int frameW = ((Toolkit.getDefaultToolkit().getScreenSize()).width-tabularW)/2;
+	private static int frameH = ((Toolkit.getDefaultToolkit().getScreenSize()).height-tabularW)/2;
 	
 	public TestWindow() {
-		JTabbedPane tabularpane = new JTabbedPane();
+		refreshPane();
 		
 		File file = new File("config/config.json"); 
 		String str = new String();
@@ -64,11 +72,11 @@ public class TestWindow extends JPanel implements ActionListener, ChangeListener
 		}
 		
 		// add the tab which will be the review tab
-		TabItem[] reviews = {new PanelText("Please review the information you have entered:<br/><br/>", "", "")};
+		TabItem[] reviews = {new PanelReview("Please review the information you have entered: ", "", "")};
 		Tab review = new Tab(reviews, "Review");
 		pages[pages.length - 1] = review;
 	
-		tabularpane = new JTabbedPane();
+		refreshPane();
 		tabularpane.addChangeListener(this);
 		length = pages.length;
 		current = 0;  // start on first page
@@ -108,7 +116,8 @@ public class TestWindow extends JPanel implements ActionListener, ChangeListener
 		constraints.gridy = 1;
 		this.add(buttons, constraints);
 		
-		JFrame frame = new JFrame();
+		frame.setResizable(false);
+		frame.setLocation(frameW, frameH);		
 		frame.add(this);
 		frame.pack();
 		frame.setVisible(true);
@@ -203,19 +212,31 @@ public class TestWindow extends JPanel implements ActionListener, ChangeListener
 	
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
+		
+		// Check for button press in PanelReview buttons
+		if (PanelReview.dataFilled) {
+			for (int i = 0; i < PanelReview.buttons.length; i++) {
+				if (arg0.getSource().equals(PanelReview.buttons[i])) {
+					current = i;
+				}
+			}
+		}
+
 		if (arg0.getSource().equals(prev)) {
 			next.setText("Next");
 			current--;
 		} else if (arg0.getSource().equals(next)) {
 			if (next.getText().equals("Review")) {
-				next.setText("Upload");
 				review();
-				current++;
+				current = pages.length - 1;
+				
 				if (max < current) {
 					max = current;
 				}
-				tabularpane = new JTabbedPane();
+				refreshPane();
 				tabularpane.addChangeListener(this);
+				int curr = current;
+				
 				for(int index = 0; index < length; index++) {
 					tabularpane.add(pages[index].getPanel(), pages[index].getTitle());
 					tabularpane.setEnabledAt(index, false);
@@ -223,6 +244,8 @@ public class TestWindow extends JPanel implements ActionListener, ChangeListener
 				for(int i = 0; i <= max; i++) {
 					tabularpane.setEnabledAt(i, true);
 				}
+				current = curr;
+				next.setText("Upload");
 			} else if (next.getText().equals("Upload")) {
 				if (!uploading) {
 					this.setUploading(true);
@@ -243,7 +266,8 @@ public class TestWindow extends JPanel implements ActionListener, ChangeListener
 					}
 				}
 			}
-			tabularpane = new JTabbedPane();
+
+			refreshPane();
 			for(int index = 0; index < length; index++) {
 				tabularpane.add(pages[index].getPanel(), pages[index].getTitle());
 				tabularpane.setEnabledAt(index, false);
@@ -279,41 +303,70 @@ public class TestWindow extends JPanel implements ActionListener, ChangeListener
 	
 	// set up the review page once it's clicked on
 	public void review() {
-		((PanelText) pages[pages.length-1].getPanels()[0]).setText("Please review the information you have entered:<br/><br/>");
-		String str = "";
-		values = new ArrayList<String>();
-		for (int i = 0; i < pages.length - 1; i++) {
-			Tab tab = pages[i];
-			TabItem[] subpanels = tab.getPanels();
-			for (int j = 0; j < tab.getPanels().length; j++) {
+		int nonReviewTabCount = pages.length - 1;
+		tabText = new String[nonReviewTabCount][];
+		values = new ArrayList<String>();  // Used for error checking
+		
+		for (int i = 0; i < nonReviewTabCount; i++) {  // For each tab
+			TabItem[] subpanels = parseSubpanels(i);
+			tabText[i] = new String[subpanels.length];
+			
+			for (int j = 0; j < tabText[i].length; j++) {  // For each subpanel
+				String str = "";
 				TabItem panel = subpanels[j];
-				if (panel.getClass().toString().equals("class PanelMultiSubpanels")) {
-					str += checkMultiPanel((PanelMultiSubpanels) panel);
-				} else if (!panel.getReturnValue().equals("") && !(panel.getReturnValue() == null)) {
+
+				if (!panel.getFinalValue().equals("") && !(panel.getFinalValue() == null)) {
 					values.add(panel.getReturnValue());
-					values.add(panel.getFinalValue());
-					str += "<b>" + panel.getReturnValue()+ "</b>" + ": " + panel.getFinalValue() + "<br/><br/>";
+					values.add(panel.getFinalValue());					
+					str = panel.getReturnValue() + ": " + panel.getFinalValue();
 				}
+				
+				tabText[i][j] = str;  // Add string to this tab's index
 			}
 		}
-		((PanelText) pages[pages.length-1].getPanels()[0]).appendText(str);
+		
+		PanelReview.setData(tabText); 
+		PanelReview.dataFilled = true;
+		PanelReview reviewPanel = new PanelReview("Please review the information you have entered: ", "", "");
+		
+		for (int i = 0; i < PanelReview.buttons.length; i++) {
+			PanelReview.buttons[i].addActionListener(this);
+		}
+	
+		TabItem[] reviewTabItem = {reviewPanel};
+		Tab reviewTab = new Tab (reviewTabItem, "Review");
+		pages[pages.length - 1] = reviewTab;
 	}
 	
-	private String checkMultiPanel(PanelMultiSubpanels panel) {
-		TabItem[] panels = panel.getSubpanels();
-		String str = "";
-		for (int k = 0; k < panels.length; k++) {
-			if (!panels[k].getReturnValue().equals("") && !(panels[k].getReturnValue() == null)) {
-				if (panels[k].getClass().toString().equals("class PanelMultiSubpanels")) {
-					str += checkMultiPanel((PanelMultiSubpanels) panels[k]);
-				} else if (!panels[k].getReturnValue().equals("") && !(panels[k].getReturnValue() == null)) {
-					values.add(panels[k].getReturnValue());
-					values.add(panels[k].getFinalValue());
-					str += "<b>" + panels[k].getReturnValue()+ "</b>" + ": " + panels[k].getFinalValue() + "<br/><br/>";
+	private TabItem[] parseSubpanels(int page) {
+		Tab tab = pages[page];
+		ArrayList<TabItem> listSubs = new ArrayList<>();
+		TabItem[] tempSubs = tab.getPanels();
+		
+		// ArrayList of all panels, including those within multiPanels
+		for (int i = 0; i < tempSubs.length; i++) {  // For each main subPanel
+			TabItem panel = tempSubs[i];
+			if (panel.getClass().toString().equals("class PanelMultiSubpanels")) {  // If multiPanel
+				TabItem[] multiSubs = ((PanelMultiSubpanels) panel).getSubpanels();
+				for (int j = 0; j < multiSubs.length; j++) {  // For each subPanel
+					listSubs.add(multiSubs[j]);
 				}
+			} else {
+				listSubs.add(panel);
 			}
 		}
-		return str;
+		
+		// Translate ArrayList to array
+		TabItem[] subs = new TabItem[listSubs.size()];
+		for (int k = 0; k < listSubs.size(); k++) {
+			subs[k] = listSubs.get(k);
+		}
+		return subs;
+	}
+	
+	public void refreshPane() {
+		tabularpane = new JTabbedPane();
+		tabularpane.setPreferredSize(new Dimension(tabularW, tabularH));
 	}
 	
 	public void setUploading(boolean status) {
@@ -334,7 +387,7 @@ public class TestWindow extends JPanel implements ActionListener, ChangeListener
 		return uploading;
 	}
 	
-	public Tab[] getTabs() {
+	public static Tab[] getTabs() {
 		return pages;
 	}
 	
@@ -346,6 +399,22 @@ public class TestWindow extends JPanel implements ActionListener, ChangeListener
 		return values;
 	}
 	
+	public static Point getFramePosition() {
+		return new Point(frameW, frameH);
+	}
+	
+	public static int getTabularW() {
+		return tabularW;
+	}
+	
+	public static int getTabularH() {
+		return tabularH;
+	}
+	
+	public static void setCurrent(int pageNum) {
+		current = pageNum;
+	}
+		
 }
 	
 

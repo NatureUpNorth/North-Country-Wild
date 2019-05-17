@@ -5,18 +5,21 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.IOException;
 
 public class PanelFileSelect extends TabItem implements ActionListener {
 
     private JTextField filePath;
-    private JTextField help;
+    private JTextField helpText;
+    private JTextArea hint;
     private JButton browse;
     private JFileChooser fc;
     private boolean count_interrupt = false;
     private int count = 0;
     private int fileTotal = 0;
+    private JPanel helpPanel;
 
     public PanelFileSelect(JSONObject jsonpanel) {
     	
@@ -50,17 +53,13 @@ public class PanelFileSelect extends TabItem implements ActionListener {
         constraints.fill = GridBagConstraints.HORIZONTAL;
         panel.add(browse, constraints);
 
-        // Add help panel
-        help = new JTextField(" ?");
-        help.setEditable(false);
-        help.setPreferredSize(new Dimension(23, 20));
-//        help.addMouseListener(this);
-        constraints.insets = new Insets(0, 15, 15, 15);
-        constraints.gridx = 2;
-        constraints.gridy = 1;
-        constraints.fill = GridBagConstraints.HORIZONTAL;
-        panel.add(help, constraints);
-
+        if (help()) {
+        	constraints.insets = new Insets(0, 15, 15, 15);
+            constraints.gridx = 2;
+            constraints.gridy = 1;
+            constraints.fill = GridBagConstraints.HORIZONTAL;
+        	panel.add(getHelpTag(), constraints);
+        }
     }
     
     public void actionPerformed(ActionEvent evt) {
@@ -169,5 +168,4 @@ public class PanelFileSelect extends TabItem implements ActionListener {
 			return 0;
 		}
 	}
-    
 }

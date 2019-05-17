@@ -30,11 +30,6 @@ public class PanelDate extends TabItem {
         constraints.fill = GridBagConstraints.HORIZONTAL;
         panel.add(description, constraints);
 
-        // Add hint if present
-        if (getHint() != "") {
-        	JLabel hint = new JLabel(getHint());
-        }
-
         // Prepare row for textField, calendar icon, and help panel
         JPanel row2 = new JPanel();
         row2.setLayout(new GridBagLayout());
@@ -57,16 +52,18 @@ public class PanelDate extends TabItem {
         constraints.gridy = 0;
         constraints.fill = GridBagConstraints.HORIZONTAL;
         row2.add(calendar, constraints);
+        
+        if (getHint() != "") {
+        	// Add help panel
+            help = getHelpTag();
 
-        // Add help panel
-        help = new JTextField(" ?");
-        help.setEditable(false);
-        help.setPreferredSize(new Dimension(23, 20));
-//        help.addMouseListener(this);
-        constraints.gridx = 1;
-        constraints.gridy = 0;
-        constraints.fill = GridBagConstraints.HORIZONTAL;
-        row2.add(help, constraints);
+            constraints.gridx = 1;
+            constraints.gridy = 0;
+            constraints.fill = GridBagConstraints.HORIZONTAL;
+            row2.add(help, constraints);
+            
+            getHelpPanel().setLocation(help.RIGHT, help.BOTTOM);
+        }
 
         // Add second row to panel
         constraints.gridx = 0;
@@ -82,5 +79,4 @@ public class PanelDate extends TabItem {
     public String getFinalValue() {
     	return calendar.getDate().toString();
     }
-
 }
