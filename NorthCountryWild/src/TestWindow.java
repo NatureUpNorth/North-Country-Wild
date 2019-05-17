@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import javax.swing.AbstractButton;
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.event.ChangeEvent;
@@ -37,6 +38,7 @@ public class TestWindow extends JPanel implements ActionListener, ChangeListener
 	private String[][] tabText;
 	private ArrayList<String> values;
 	static JFrame frame = new JFrame();
+	private boolean switched = false; // for stateChanged, keeps track of if we need to display a dialogue box or not
 	private static int tabularW = 800;
 	private static int tabularH = 550;
 	private static int frameW = ((Toolkit.getDefaultToolkit().getScreenSize()).width-tabularW)/2;
@@ -227,25 +229,36 @@ public class TestWindow extends JPanel implements ActionListener, ChangeListener
 			current--;
 		} else if (arg0.getSource().equals(next)) {
 			if (next.getText().equals("Review")) {
-				review();
-				current = pages.length - 1;
-				
-				if (max < current) {
-					max = current;
+				Tab tab = pages[current];
+				TabItem[] tabpanels = tab.getPanels();
+				boolean pass = true;
+				for (int i = 0; i < tabpanels.length; i++) {
+					if (!tabpanels[i].check()) {
+						pass = false;
+						break;
+					}
 				}
-				refreshPane();
-				tabularpane.addChangeListener(this);
-				int curr = current;
-				
-				for(int index = 0; index < length; index++) {
-					tabularpane.add(pages[index].getPanel(), pages[index].getTitle());
-					tabularpane.setEnabledAt(index, false);
+				if (pass) {
+					review();
+					current = pages.length - 1;
+					
+					if (max < current) {
+						max = current;
+					}
+					refreshPane();
+					tabularpane.addChangeListener(this);
+					int curr = current;
+					
+					for(int index = 0; index < length; index++) {
+						tabularpane.add(pages[index].getPanel(), pages[index].getTitle());
+						tabularpane.setEnabledAt(index, false);
+					}
+					for(int i = 0; i <= max; i++) {
+						tabularpane.setEnabledAt(i, true);
+					}
+					current = curr;
+					next.setText("Upload");
 				}
-				for(int i = 0; i <= max; i++) {
-					tabularpane.setEnabledAt(i, true);
-				}
-				current = curr;
-				next.setText("Upload");
 			} else if (next.getText().equals("Upload")) {
 				if (!uploading) {
 					this.setUploading(true);
@@ -283,20 +296,39 @@ public class TestWindow extends JPanel implements ActionListener, ChangeListener
 
 	@Override
 	public void stateChanged(ChangeEvent arg0) {
-		if (arg0.getSource().equals(tabularpane)) {
-			current = tabularpane.getSelectedIndex();
-			if (current == pages.length - 1) {
-				next.setText("Upload");
-			} else if (current == pages.length - 2) {
-				next.setText("Review");
+		if (arg0.getSource().equals(tabularpane) && max >= 1) {
+			if (!switched) {
+				Tab tab = pages[current];
+				TabItem[] tabpanels = tab.getPanels();
+				boolean pass = true;
+				for (int i = 0; i < tabpanels.length; i++) {
+					if (!tabpanels[i].check()) {
+						pass = false;
+						if (!switched) {
+							switched = true;
+							tabularpane.setSelectedIndex(current);
+						}
+						break;
+					}
+				} 
+				if (pass) {
+					current = tabularpane.getSelectedIndex();
+					if (current == pages.length - 1) {
+						next.setText("Upload");
+					} else if (current == pages.length - 2) {
+						next.setText("Review");
+					} else {
+						next.setText("Next");
+					}
+					
+					if (current == 0) {
+						prev.setEnabled(false);
+					} else {
+						prev.setEnabled(true);
+					}
+				}
 			} else {
-				next.setText("Next");
-			}
-			
-			if (current == 0) {
-				prev.setEnabled(false);
-			} else {
-				prev.setEnabled(true);
+				switched = false;
 			}
 		}
 	}
