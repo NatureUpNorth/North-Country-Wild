@@ -7,16 +7,18 @@ import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.text.DecimalFormat;
 import java.util.EventListener;
+import java.util.Hashtable;
 
-public class PanelSlider extends TabItem implements ActionListener, ChangeListener {
+public class PanelSlider extends TabItem implements ChangeListener, FocusListener {
 	
 	private JTextField help;
 	private final String DEGREE  = "\u00b0";
 	private JSlider slider;
 	private JTextField textBox;
-	private JButton button = new JButton();
 
     public PanelSlider(JSONObject jsonpanel) {
 
@@ -40,8 +42,7 @@ public class PanelSlider extends TabItem implements ActionListener, ChangeListen
 
         // Add textField to first row
         textBox = new JTextField("0.00");
-//        textBox.addFocusListener(this);
-//        textBox.addChangeListener(this);
+        textBox.addFocusListener(this);
         constraints.gridx = 1;
         constraints.gridy = 0;
         constraints.fill = GridBagConstraints.HORIZONTAL;
@@ -65,13 +66,50 @@ public class PanelSlider extends TabItem implements ActionListener, ChangeListen
 
         // Decide slider parameters
         if (getDesc().equals("Latitude:")) {
-            slider = new JSlider(JSlider.HORIZONTAL, -90, 90, 0);
-            button.setText("Convert to Degrees, Minutes, Seconds");
-            button.addActionListener(this);
+        	slider = new JSlider(JSlider.HORIZONTAL, -9000, 9000, 0);
+    		slider.setPreferredSize(new Dimension(300, 45));
+    		slider.addChangeListener(this);
+    		slider.setMajorTickSpacing(2000);
+    		slider.setMinorTickSpacing(500);
+    		slider.setPaintTicks(true);
+    		slider.setPaintLabels(true);
+    		
+    		//Create the label table
+    		Hashtable latTable = new Hashtable();
+    		latTable.put( new Integer( 9000 ), new JLabel("90") );
+    		latTable.put( new Integer( 7000 ), new JLabel("70") );
+    		latTable.put( new Integer( 5000 ), new JLabel("50") );
+    		latTable.put( new Integer( 3000 ), new JLabel("30") );
+    		latTable.put( new Integer( 1000 ), new JLabel("10") );
+    		latTable.put( new Integer( -7000 ), new JLabel("-70") );
+    		latTable.put( new Integer( -5000 ), new JLabel("-50") );
+    		latTable.put( new Integer( -3000 ), new JLabel("-30") );
+    		latTable.put( new Integer( -1000 ), new JLabel("-10") );
+    		latTable.put( new Integer( -9000 ), new JLabel("-90") );
+    		slider.setLabelTable( latTable );
+    		slider.setPaintLabels(true);
         } else {  // desc = "Longitude:" OR default
-            slider = new JSlider(JSlider.HORIZONTAL, -180, 180, 0);
-            button.setText("Convert to Degrees, Minutes, Seconds");
-            button.addActionListener(this);
+        	slider = new JSlider(JSlider.HORIZONTAL, -18000, 18000, 0);
+    		slider.setPreferredSize(new Dimension(300, 45));
+    		slider.addChangeListener(this);
+    		slider.setMajorTickSpacing(4000);
+    		slider.setMinorTickSpacing(1000);
+    		slider.setPaintTicks(true);
+    		slider.setPaintLabels(true);
+    		
+    		Hashtable lonTable = new Hashtable();
+    		lonTable.put( new Integer( 18000 ), new JLabel("180")); 
+    		lonTable.put( new Integer( 14000 ), new JLabel("140")); 
+    		lonTable.put( new Integer( 10000 ), new JLabel("100")); 
+    		lonTable.put( new Integer( 6000 ), new JLabel("60")); 
+    		lonTable.put( new Integer( 2000 ), new JLabel("20")); 
+    		lonTable.put( new Integer( -14000 ), new JLabel("-140")); 
+    		lonTable.put( new Integer( -10000 ), new JLabel("-100")); 
+    		lonTable.put( new Integer( -6000 ), new JLabel("-60")); 
+    		lonTable.put( new Integer( -2000 ), new JLabel("-20")); 
+    		lonTable.put( new Integer( -18000 ), new JLabel("-180")); 
+    		slider.setLabelTable( lonTable );
+    		slider.setPaintLabels(true);
         }
 //        framesPerSecond.addChangeListener(this);
         slider.addChangeListener(this);
@@ -89,9 +127,6 @@ public class PanelSlider extends TabItem implements ActionListener, ChangeListen
         constraints.fill = GridBagConstraints.HORIZONTAL;
         constraints.insets = new Insets(15, 15, 15, 15);
         panel.add(slider, constraints);
-        constraints.gridx = 0;
-        constraints.gridy = 2;
-        panel.add(button, constraints);
 
     }
     
@@ -110,34 +145,7 @@ public class PanelSlider extends TabItem implements ActionListener, ChangeListen
 		dd = Double.valueOf(df4.format(dd));
 		return dd.toString();
 	}
-		
-	public String DDtoDMS(String dd) {
-		double ddDouble = Double.parseDouble(dd);
-		int deg = (int) ddDouble;
-		double minD = (ddDouble-deg)*60;
-		int min = (int) minD;
-		double secD = (ddDouble - deg - (min/60.0)) * 3600;
-		int sec = (int) secD;
-		String dms = deg+DEGREE+" "+min+"' "+sec+"\"";
-		return dms;
-	}
 
-	@Override
-	public void actionPerformed(ActionEvent arg0) {
-		if (getDesc().equals("Latitude:") || getDesc().equals("Longitude:")) {
-			if (!textBox.getText().isEmpty()) {
-				if(button.getText().equals("Convert to Degrees, Minutes, Seconds")) {
-					String lati = DDtoDMS(textBox.getText());
-					textBox.setText(lati);
-					button.setText("     Convert to Decimal Degrees     ");
-				} else if (button.getText().equals("     Convert to Decimal Degrees     ")) {
-					String lati = DMStoDD(textBox.getText());
-					textBox.setText(lati);
-					button.setText("Convert to Degrees, Minutes, Seconds");
-				}
-			}
-		}
-	}
 	
 	public String getFinalValue() {
 		return textBox.getText();
@@ -147,7 +155,26 @@ public class PanelSlider extends TabItem implements ActionListener, ChangeListen
 	public void stateChanged(ChangeEvent e) {
 		JSlider source = (JSlider) e.getSource();
 		textBox.setText("" + source.getValue());
-		button.setText("Convert to Degrees, Minutes, Seconds");
+	}
+
+	@Override
+	public void focusGained(FocusEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void focusLost(FocusEvent evt) {
+		String value = textBox.getText();
+		if (value.indexOf("'") > -1) {
+			value = DMStoDD(value);
+		}
+		double pos = Double.parseDouble(value);
+		if (pos > 0 && getDesc().equals("Longitude:")) {
+			pos = -pos;
+		}
+		double posUpdated = pos*100;
+		slider.setValue((int)posUpdated);
 	}
 	
 }
