@@ -22,7 +22,7 @@ public class PanelDropdown extends TabItem implements ActionListener {
 	private JComboBox<String> box;
 	private GridBagConstraints constraints;
 	private JTextField textBox;
-	private static final String ACCESS_TOKEN = "ILJ9haPVAAAAAAAAAAAAR7cBhQSEWdj0K4CkmEPrTYii1sCbJsZ1StCB8sO2YT4k";//"ILJ9haPVAAAAAAAAAAAAR7cBhQSEWdj0K4CkmEPrTYii1sCbJsZ1StCB8sO2YT4k"; //"ILJ9haPVAAAAAAAAAAAAR7cBhQSEWdj0K4CkmEPrTYii1sCbJsZ1StCB8sO2YT4k";//access token for info@natureupnorth.org dropbox
+	private static final String ACCESS_TOKEN = "ILJ9haPVAAAAAAAAAAABNzR9TiIIe2XQb_2PWJ-Q3dJRamPN4TEX3xLreLM_j6Us";//"ILJ9haPVAAAAAAAAAAAAR7cBhQSEWdj0K4CkmEPrTYii1sCbJsZ1StCB8sO2YT4k"; //"ILJ9haPVAAAAAAAAAAAAR7cBhQSEWdj0K4CkmEPrTYii1sCbJsZ1StCB8sO2YT4k";//access token for info@natureupnorth.org dropbox
 	ArrayList<String> filesList;
 
     public PanelDropdown (JSONObject jsonpanel) {
@@ -72,8 +72,9 @@ public class PanelDropdown extends TabItem implements ActionListener {
 
         // Add comboBoxes
         //box = new JComboBox<String>(options);
-        String[] folders = filesList.toArray(new String[filesList.size()]); 
-        folders[folders.length - 1] = "+ ADD NEW";
+        int size = filesList.size()+1;
+        String[] folders = filesList.toArray(new String[size]); 
+        folders[folders.length-1] = "+ ADD NEW";
         box = new JComboBox<String>(folders);
         box.addActionListener(this);         
         
