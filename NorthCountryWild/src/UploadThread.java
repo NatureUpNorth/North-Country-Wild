@@ -175,7 +175,7 @@ public class UploadThread extends Thread {
 	public void upload(String filePath, String destinationPath) {
 		// Create Dropbox client
 		DbxRequestConfig config = new DbxRequestConfig("dropbox/java-tutorial", "en_US");
-        DbxClientV2 client = new DbxClientV2(config, ACCESS_TOKEN);
+		DbxClientV2 client = new DbxClientV2(config, ACCESS_TOKEN);
 		File dir = new File(filePath);
 		File[] files = getFiles(dir);
 

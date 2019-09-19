@@ -6,14 +6,16 @@ import javax.swing.JOptionPane;
 public class Main {
 
 	public static void main(String[] args) {
-		SplashScreen splash = new SplashScreen();
-		while(splash.isOpen());
-		splash.close();
+//		SplashScreen splash = new SplashScreen();
+//		while(splash.isOpen());
+//		splash.close();
+//		
+//		LoginWindow login = new LoginWindow();
+//		while (login.isOpen());  // wait for them to submit before closing the window
+//		String name = login.getName();
+//		login.close();
 		
-		LoginWindow login = new LoginWindow();
-		while (login.isOpen());  // wait for them to submit before closing the window
-		String name = login.getName();
-		login.close();
+		String name = "Remi LeBlanc";
 		
 		// a new comment
 		

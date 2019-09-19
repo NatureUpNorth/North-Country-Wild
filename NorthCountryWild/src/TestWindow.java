@@ -24,6 +24,9 @@ import javax.swing.event.ChangeListener;
 
 import org.json.*;
 
+import com.dropbox.core.DbxException;
+import com.dropbox.core.v2.files.ListFolderErrorException;
+
 public class TestWindow extends JPanel implements ActionListener, ChangeListener {
 
 	private static Tab[] pages;
@@ -67,7 +70,16 @@ public class TestWindow extends JPanel implements ActionListener, ChangeListener
 		for (int i = 0; i < tabs.length(); i++) {
 			JSONObject tab = (JSONObject) tabs.get(i);
 			JSONArray panels = tab.getJSONArray("panels");
-			TabItem[] jpanels = makePanels(panels);
+			TabItem[] jpanels = null;
+			try {
+				jpanels = makePanels(panels);
+			} catch (ListFolderErrorException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (DbxException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			String title = tab.getString("title");
 			Tab newTab = new Tab(jpanels, title);
 			pages[i] = newTab;
@@ -127,7 +139,7 @@ public class TestWindow extends JPanel implements ActionListener, ChangeListener
 	}
 	
 	// go through the panels in a tab and make the required displays
-	private TabItem[] makePanels(JSONArray panels) {
+	private TabItem[] makePanels(JSONArray panels) throws ListFolderErrorException, DbxException {
 		TabItem[] jpanels = new TabItem[panels.length()];
 		for (int index = 0; index < panels.length(); index++) {
 			JSONObject panel = (JSONObject) panels.get(index);

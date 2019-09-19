@@ -30,6 +30,7 @@
 		"hint": "Some people engage with North Country Wild through collaborations with school groups or by checking a game camera out from Nature Up North or local library. If you are affiliated with a group, please enter it here.",
 		"values": [
 			"Unaffiliated",
+			"Remi Test",
 			"+ ADD NEW"
 		],
 		"returnValue": "Affiliation",
