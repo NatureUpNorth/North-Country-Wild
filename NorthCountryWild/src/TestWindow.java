@@ -42,8 +42,8 @@ public class TestWindow extends JPanel implements ActionListener, ChangeListener
 	private ArrayList<String> values;
 	static JFrame frame = new JFrame();
 	private boolean switched = false; // for stateChanged, keeps track of if we need to display a dialogue box or not
-	private static int tabularW = 800;
-	private static int tabularH = 550;
+	static int tabularW = 800;
+	static int tabularH = 550;
 	private static int frameW = ((Toolkit.getDefaultToolkit().getScreenSize()).width-tabularW)/2;
 	private static int frameH = ((Toolkit.getDefaultToolkit().getScreenSize()).height-tabularW)/2;
 	

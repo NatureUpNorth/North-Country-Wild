@@ -1,7 +1,10 @@
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.MouseInfo;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+
+import javax.swing.BorderFactory;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -66,13 +69,18 @@ public class TabItem implements MouseListener {
         JTextArea hint = new JTextArea();
 		hint.setText(getHint());
         hint.setLineWrap(true);
+        int x = getHint().length();
+        if(getHint().length()>=TestWindow.tabularW) {
+        	x = TestWindow.tabularW-120;
+        }
+        hint.setSize(x,TestWindow.tabularH);
         hint.setWrapStyleWord(true);
         hint.setEditable(false);
 	    
 		helpPanel = new JPanel();
         helpPanel.setOpaque(false);
         helpPanel.add(hint);
-        helpPanel.setSize(100, 300);
+        helpPanel.setSize(TestWindow.tabularW,TestWindow.tabularH);
         TestWindow.frame.add(helpPanel);
 		helpPanel.setVisible(false);
 	}
@@ -137,15 +145,21 @@ public class TabItem implements MouseListener {
 		///Mouse is over component
         Object source = arg0.getSource();
         if (source == helpTag) {
-        	int x = MouseInfo.getPointerInfo().getLocation().x - TestWindow.getFramePosition().x + 20;
-        	int y = MouseInfo.getPointerInfo().getLocation().y - TestWindow.getFramePosition().y - helpPanel.getHeight() - 20;
-        	if ((x + helpPanel.getWidth()) > TestWindow.getTabularW()) {
-        		x = MouseInfo.getPointerInfo().getLocation().x - TestWindow.getFramePosition().x - helpPanel.getWidth() - 20;
-        	}
-        	if ((y - helpPanel.getHeight()) < TestWindow.getTabularH()) {
-        		y = MouseInfo.getPointerInfo().getLocation().y - TestWindow.getFramePosition().x + 2*helpPanel.getHeight() + 20;
-        	}
+        	//int x = MouseInfo.getPointerInfo().getLocation().x - TestWindow.getFramePosition().x + 20;
+        	//int y = MouseInfo.getPointerInfo().getLocation().y - TestWindow.getFramePosition().y - helpPanel.getHeight() - 20;
+        	int x = 0;//(int) (TestWindow.tabularW - helpPanel.getWidth()*0.6);
+        	int y = 50;
+//        	if ((x + helpPanel.getWidth()) > TestWindow.getTabularW()) {
+//        		x = MouseInfo.getPointerInfo().getLocation().x - TestWindow.getFramePosition().x - helpPanel.getWidth() - 20;
+//        	}
+//        	if ((y - helpPanel.getHeight()) < TestWindow.getTabularH()) {
+//        		y = MouseInfo.getPointerInfo().getLocation().y - TestWindow.getFramePosition().x + 2*helpPanel.getHeight() + 20;
+//        	}
+        	//int x = MouseInfo.getPointerInfo().getLocation().x;
+        	//int y = MouseInfo.getPointerInfo().getLocation().y;
             helpPanel.setLocation(x, y);
+            //helpPanel.setLocation(TestWindow.getFramePosition().x,TestWindow.getFramePosition().y*2);
+        	//helpPanel.setLocation(helpTag.getLocation().x,helpTag.getLocation().y);
             helpPanel.setVisible(true);
         }		
 	}

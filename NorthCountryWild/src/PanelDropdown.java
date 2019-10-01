@@ -22,7 +22,7 @@ public class PanelDropdown extends TabItem implements ActionListener {
 	private JComboBox<String> box;
 	private GridBagConstraints constraints;
 	private JTextField textBox;
-	private static final String ACCESS_TOKEN = "ILJ9haPVAAAAAAAAAAABNzR9TiIIe2XQb_2PWJ-Q3dJRamPN4TEX3xLreLM_j6Us";//"ILJ9haPVAAAAAAAAAAAAR7cBhQSEWdj0K4CkmEPrTYii1sCbJsZ1StCB8sO2YT4k"; //"ILJ9haPVAAAAAAAAAAAAR7cBhQSEWdj0K4CkmEPrTYii1sCbJsZ1StCB8sO2YT4k";//access token for info@natureupnorth.org dropbox
+	private static final String ACCESS_TOKEN = "HIDDEN";
 	ArrayList<String> filesList;
 
     public PanelDropdown (JSONObject jsonpanel) {
