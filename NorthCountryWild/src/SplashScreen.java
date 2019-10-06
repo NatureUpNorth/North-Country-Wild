@@ -31,7 +31,7 @@ public class SplashScreen implements ActionListener{
 		//set up the components
 		frame = new JFrame("North Country Wild");
 		//set window size
-		frame.setSize(920,530);
+		frame.setSize(940,560);
 		frame.setResizable(false);
 		
 		JPanel panel = new JPanel();
@@ -102,7 +102,7 @@ public class SplashScreen implements ActionListener{
         intro.setEditable(false);
 		intro.setText("North Country Wild is a Nature Up North community-based science project that uses game cameras "+
 				"to study wildlife diversity and activity in the region. For more information about the project please visit "+
-				"www.natureupnorth.org/North-Country_Wild");
+				"www.natureupnorth.org/citizen-science");
 		
 		//info.setFont(new Font("Serif", Font.PLAIN, 16));
 		info.setFont(nun);
@@ -130,9 +130,9 @@ public class SplashScreen implements ActionListener{
 		credits.setWrapStyleWord(true);
 		credits.setOpaque(false);
 		credits.setEditable(false);
-		credits.setText("  Program created for Nature Up North by St. Lawrence University computer\nscience interns Aleksei Bingham, Guinevere Gilman, and Remi LeBlanc in 2018.");
+		credits.setText("  Program created for Nature Up North by St. Lawrence University computer\nscience interns Guinevere Gilman, Corinna Pilcher, and Remi LeBlanc in 2019.");
 		creditsPanel.setSize(credits.getSize());
-		creditsPanel.setLocation(frame.getWidth()-475, frame.getHeight()-60);
+		creditsPanel.setLocation(frame.getWidth()-485, frame.getHeight()-80);
 		creditsPanel.add(credits);
 
 		version.setFont(nun);
