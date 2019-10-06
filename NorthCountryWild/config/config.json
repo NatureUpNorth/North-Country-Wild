@@ -13,13 +13,14 @@
 		"subPanels": [
 			{"type": "date",
 			"desc": "For this deployment, on what date was the camera placed in the field?",
-			"hint": "Enter the the start and end dates of deployment for the camera. Click the calendar icon to select date.",
+			"hint": "Enter the start date of deployment for the camera. Click the calendar icon to select date.",
 			"returnValue": "Start Date",
 			"required": "true"
 			},
 		
 			{"type": "date",
 			"desc": "For this deployment, on what date was the camera removed from the field?",
+			"hint": "Enter the end date of deployment for the camera. Click the calendar icon to select date.",
 			"returnValue": "End Date",
 			"required": "true"
 			}
@@ -27,10 +28,9 @@
 
 		{"type": "dropdown",
 		"desc": "Please select the group or organization you are working with on this project, if any:",
-		"hint": "Some people engage with North Country Wild through collaborations with school groups or by checking a game camera out from Nature Up North or local library. If you are affiliated with a group, please enter it here.",
+		"hint": "Some people engage with North Country Wild through collaborations with school groups or by checking a game camera out from Nature Up North or local library. \nIf you are affiliated with a group, please enter it here.",
 		"values": [
-			"Unaffiliated",
-			"+ ADD NEW"
+			"From Dropbox"
 		],
 		"returnValue": "Affiliation",
 		"required": "true"
@@ -83,7 +83,7 @@
 		
 		{"type": "singleChoiceList",
 		"desc": "How urbanized is the location where the camera was placed? (Please check one)",
-		"hint": "Rural: Camera was placed on public or private land in a rural location away from much human influence.\n\n Suburan/moderately urban: Camera was placed near the edge of a town or village where there are more homes and other development than in rural places.\n\nPrimarily urban: Camera was placed inside of a town or village in a location where automobile traffic is prevalent as is the amount of developed space (storefront, parking areas, etc.).",
+		"hint": "Rural: Camera was placed on public or private land in a rural location away from much human influence.\n\n Suburban/moderately urban: Camera was placed near the edge of a town or village where there are more homes and other development than in rural places.\n\nPrimarily urban: Camera was placed inside of a town or village in a location where automobile traffic is prevalent as is the amount of developed space (storefront, parking areas, etc.).",
 		"values": [
 			"Rural",
 			"Suburban/Moderately Urban",
