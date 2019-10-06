@@ -27,7 +27,7 @@ public class LoadingWindow implements ActionListener {
 			JPanel cancelPanel = new JPanel();
 			
 			// set window size
-			frame.setPreferredSize(new Dimension(500, 130));
+			frame.setPreferredSize(new Dimension(500, 150));
 			frame.setResizable(false);
 			
 			// make window appear in middle of screen
