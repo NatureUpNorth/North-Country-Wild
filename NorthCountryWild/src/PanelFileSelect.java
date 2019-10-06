@@ -53,6 +53,7 @@ public class PanelFileSelect extends TabItem implements ActionListener {
         constraints.fill = GridBagConstraints.HORIZONTAL;
         panel.add(browse, constraints);
 
+        // Add help symbol
         if (help()) {
         	constraints.insets = new Insets(0, 15, 15, 15);
             constraints.gridx = 2;
@@ -83,6 +84,7 @@ public class PanelFileSelect extends TabItem implements ActionListener {
 			    	int total = checkDirectory(getFilepath(), loading, 0);
 			    	loading.close();
 			    	if (!count_interrupt) {
+			    		UploadThread.setPath(getFilepath());
 				    	count = total;
 				    	JFrame optionFrame = new JFrame();
 						String[] options = {"Yes", "No"};

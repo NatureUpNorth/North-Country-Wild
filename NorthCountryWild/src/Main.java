@@ -1,3 +1,6 @@
+// Runs the application.
+
+import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 
 import javax.swing.JFrame;
@@ -5,20 +8,24 @@ import javax.swing.JOptionPane;
 
 public class Main {
 
+	/**
+	 * @param args
+	 */
 	public static void main(String[] args) {
-//		SplashScreen splash = new SplashScreen();
-//		while(splash.isOpen());
-//		splash.close();
-//		
-//		LoginWindow login = new LoginWindow();
-//		while (login.isOpen());  // wait for them to submit before closing the window
-//		String name = login.getName();
-//		login.close();
+		SplashScreen splash = new SplashScreen();
+		while(splash.isOpen());
+		splash.close();
 		
-		String name = "Remi LeBlanc";
+		LoginWindow login = new LoginWindow();
+		while (login.isOpen());  // wait for them to submit before closing the window
+		String name = login.getName();
+		login.close();
 		
-		// a new comment
+		run(name);			
 		
+		
+	}
+	private static void run(String name) {
 		TestWindow upload = new TestWindow();
 		while (true) {
 			while (!upload.isUploading() ) {};  // wait for them to hit submit
@@ -43,19 +50,25 @@ public class Main {
 					thread.terminate();
 				}
 			};  // wait for it to be done uploading files
-			//upload.reset();
+
 			upload.setUploading(false);
 			if(!thread.wasInterrupted()) {
-			JOptionPane.showMessageDialog(new JFrame(),
-					"Congratulations! You have successfully uploaded your images to Nature Up North's Dropbox!\nYou may either continue"
-					+ " on the app and submit more photos, or close out of the app if you are done.\n\n"
-					+ "Thank you for your contributions to science!");
+				JOptionPane.showMessageDialog(new JFrame(),
+						"Congratulations! You have successfully uploaded your images to Nature Up North's Dropbox!\nYou may either continue"
+						+ " on the uploader and submit more photos, or close out of the uploader if you are done.\n\n"
+						+ "Thank you for your contributions to science!");
+			
 			} else {
 				JOptionPane.showMessageDialog(new JFrame(),
 						"Your upload has been cancelled.");
 			}
 			upload.enable();
+			upload.clear();
+			upload.refreshPane();
+			run(name);
+			
 		}
+		
 	}
 
 }
