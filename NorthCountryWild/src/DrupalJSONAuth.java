@@ -55,7 +55,7 @@ public class DrupalJSONAuth implements UserAuthentication {
 		// assume username and password are already checked for validity
 		// encode username and password for URL
 		// assume that the username and password already checked the validation test
-		if (username != null && password != null && username.length > 0 && password.length > 0) {
+		if (username != null && password != null && username.length() > 0 && password.length() > 0) {
 			// validate username and password?
 
 			URL accessURL;
