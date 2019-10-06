@@ -26,13 +26,14 @@ public class UploadThread extends Thread {
 	private String destinationPath;
 	private int total_files;
 	private int count;
-	private static final String ACCESS_TOKEN = "HIDDEN";
+	private static final String ACCESS_TOKEN = "ILJ9haPVAAAAAAAAAAABNzR9TiIIe2XQb_2PWJ-Q3dJRamPN4TEX3xLreLM_j6Us";//"ILJ9haPVAAAAAAAAAAAAR7cBhQSEWdj0K4CkmEPrTYii1sCbJsZ1StCB8sO2YT4k"; //"ILJ9haPVAAAAAAAAAAAAR7cBhQSEWdj0K4CkmEPrTYii1sCbJsZ1StCB8sO2YT4k";//access token for info@natureupnorth.org dropbox
 	private volatile boolean uploading;
 	private static ArrayList<Metadata> meta = new ArrayList<Metadata>();
 	private LoadingWindow loading;
 	private TestWindow upload;
 	private volatile boolean running = true;
 	private ArrayList<String> values;
+	private static String path;
 	/*
 	private String habitat;
 	private String urbanized;
@@ -74,7 +75,7 @@ public class UploadThread extends Thread {
     	FileWriter fileWriter = null; 
     	
     	try{
-    		fileWriter = new FileWriter(fileName + "/metadata.csv");
+    		fileWriter = new FileWriter(fileName + File.separator + "metadata.csv");
 
     		for (Directory directory : meta.get(0).getDirectories()) {
 
@@ -102,16 +103,7 @@ public class UploadThread extends Thread {
     					System.err.println("ERROR: " + error);
         			}
     			}
-    			/*
-    			String lat = upload.getLat();
-    			String lon = upload.getLon();
-    			if(lat.contains("\"")) {
-    				lat = DMStoDD(lat);
-    			}
-    			if(lon.contains("\"")) {
-    				lon = DMStoDD(lon);
-    			}
-    			*/
+    			
     			for (int i = 1; i < values.size(); i+=2) {
     				fileWriter.append(values.get(i)+",");
     			}
@@ -136,7 +128,7 @@ public class UploadThread extends Thread {
 	
 	public void run() {
 		count = 0;
-		upload(filePath, destinationPath);
+		upload(path, destinationPath);
 	}
 	
 	public void terminate() {
@@ -207,22 +199,33 @@ public class UploadThread extends Thread {
 			write(meta, "Using ImageMetadataReader", filePath);
 			InputStream in = null;
 			try {
-				in = new FileInputStream(filePath + "/metadata.csv");
+				in = new FileInputStream(filePath + File.separator + "metadata.csv");
 			} catch (FileNotFoundException e1) {
 				e1.printStackTrace();
 			}
 			try {
 				client.files().uploadBuilder("/" + destinationPath + "/metadata.csv").uploadAndFinish(in);
+				in.close();
 			} catch (DbxException | IOException e) {
 			}
+			
 		}
         
         // delete the csv from the user's files
-        try {
-			Files.deleteIfExists(Paths.get(filePath + "/metadata.csv"));
+		String userMetadataPath = path + File.separator + "metadata.csv";
+		File userMetadataFile = new File(userMetadataPath);
+		try(FileWriter fileWriter = new FileWriter(userMetadataFile)) {
+		    String fileContent = "";
+		    fileWriter.write(fileContent);
+		    fileWriter.close();
 		} catch (IOException e) {
+		    // exception handling
 		}
-        if (filePath.equals(this.filePath)) {
+		
+		if (userMetadataFile.exists()) {
+			userMetadataFile.delete();
+		}
+		if (filePath.equals(path)) {
         	uploading = false;
         }
         
@@ -237,6 +240,10 @@ public class UploadThread extends Thread {
 	
 	public boolean isUploading() {
 		return uploading;
+	}
+	
+	public static void setPath(String filepath) {
+		path = filepath;
 	}
 	
 }
