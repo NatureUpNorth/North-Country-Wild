@@ -22,7 +22,7 @@ public class PanelDropdown extends TabItem implements ActionListener {
 	private JComboBox<String> box;
 	private GridBagConstraints constraints;
 	private JTextField textBox;
-	private static final String ACCESS_TOKEN = "ILJ9haPVAAAAAAAAAAABX0gwEKnfMd_y7hYq8EAMDeIMJHU0Xg-x8MU8tIYCh2Pk";
+	private static final String ACCESS_TOKEN = "ILJ9haPVAAAAAAAAAAABYMe269tctQWBh82zGONq59fb0wOXQNBS7jmxBxwwewYr";
 	ArrayList<String> filesList;
 	public static String getAffiliation;
 

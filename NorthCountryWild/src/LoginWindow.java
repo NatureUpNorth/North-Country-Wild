@@ -61,7 +61,9 @@ public class LoginWindow implements ActionListener {
 	
 	public void actionPerformed(ActionEvent evt) {
 		// parse the username/password entered
-		password = passField.getText();
+		//password = passField.getText();
+		password = charToString(passField.getPassword());
+		
 		username = userField.getText();
 		if (password.isEmpty() || username.isEmpty()) {
 			System.out.println("?");
@@ -69,11 +71,15 @@ public class LoginWindow implements ActionListener {
 					"Please sign in using your account information for natureupnorth.org.\nIf you forget your username and/or password, please contact us at info@natureupnorth.org for assistance.\nThank you!\r\n");
 		}
 		else {
+			try {
 			if (verify(username, password)) {
 				open = false;
 			} else {
 				JOptionPane.showMessageDialog(frame, "Incorrect username and/or password.\n" + 
 						"Please sign in using your account information for natureupnorth.org.\nIf you forget your username and/or password, please contact us at info@natureupnorth.org for assistance.\nThank you!\r\n");
+			}
+			}catch(Exception e) {
+				JOptionPane.showMessageDialog(frame, "Network connection failed. Unable to succesffuly log in. \nPlease try again or contact info@natureupnorth.org if problem persists.");
 			}
 		}
 	}
@@ -84,6 +90,14 @@ public class LoginWindow implements ActionListener {
 	
 	public String getName() {
 		return username;
+	}
+
+	private String charToString(char[] charArray) {
+		String str = "";
+		for(int index = 0; index < charArray.length; index++) {
+			str += charArray[index];
+		}
+		return str;
 	}
 
 }
