@@ -12,14 +12,15 @@ public class Main {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		SplashScreen splash = new SplashScreen();
-		while(splash.isOpen());
-		splash.close();
-		
-		LoginWindow login = new LoginWindow();
-		while (login.isOpen());  // wait for them to submit before closing the window
-		String name = login.getName();
-		login.close();
+//		SplashScreen splash = new SplashScreen();
+//		while(splash.isOpen());
+//		splash.close();
+//		
+//		LoginWindow login = new LoginWindow();
+//		while (login.isOpen());  // wait for them to submit before closing the window
+//		String name = login.getName();
+//		login.close();
+		String name = "Remi LeBlanc";
 		
 		run(name);			
 		
@@ -38,7 +39,12 @@ public class Main {
 					filepath = values.get(i + 1);
 				} else if (values.get(i).equals("Affiliation")) {
 					affiliation = values.get(i + 1);
+					
 				}
+			}
+			if(affiliation.equals("Other")) {
+				String s = PanelDropdown.getOther();
+				affiliation = affiliation+"/"+s;
 			}
 			String time = String.valueOf(System.nanoTime());
 			String destination = affiliation + "/" + name + "/" + time;

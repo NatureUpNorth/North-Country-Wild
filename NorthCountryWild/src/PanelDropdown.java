@@ -22,8 +22,9 @@ public class PanelDropdown extends TabItem implements ActionListener {
 	private JComboBox<String> box;
 	private GridBagConstraints constraints;
 	private JTextField textBox;
-	private static final String ACCESS_TOKEN = "HIDDEN";
+	private static final String ACCESS_TOKEN = "ILJ9haPVAAAAAAAAAAABPD4L9Dh7CtKvyUoh1gh--sQzmSL_aaM7bxpU1-QxExrR";
 	ArrayList<String> filesList;
+	public static String getAffiliation;
 
     public PanelDropdown (JSONObject jsonpanel) {
 
@@ -62,19 +63,12 @@ public class PanelDropdown extends TabItem implements ActionListener {
         	}
 			
         }
-        
-//        // Fetch dropdown options and create JComboBox
-//        JSONArray opt = jsonpanel.getJSONArray("values");
-//        options = new String[opt.length()];
-//        for (int i = 0; i < opt.length(); i++) {
-//            options[i] = (String) opt.get(i);
-//        }
+
 
         // Add comboBoxes
         //box = new JComboBox<String>(options);
-        int size = filesList.size()+1;
+        int size = filesList.size();
         String[] folders = filesList.toArray(new String[size]); 
-        folders[folders.length-1] = "+ ADD NEW";
         box = new JComboBox<String>(folders);
         box.addActionListener(this);         
         
@@ -101,7 +95,7 @@ public class PanelDropdown extends TabItem implements ActionListener {
     @Override
 	public void actionPerformed(ActionEvent arg0) {
     	if (arg0.getSource().equals(box)) {
-    		if (box.getSelectedItem().equals("+ ADD NEW")) {
+    		if (box.getSelectedItem().equals("Other")) {
     			textBox.setEditable(true);
        		} else {
     			textBox.setEditable(false);
@@ -115,10 +109,15 @@ public class PanelDropdown extends TabItem implements ActionListener {
     }
     
     public String getFinalValue() {
-    	if (((String)box.getSelectedItem()).equals("+ ADD NEW")) {
-    		return textBox.getText();
+    	if (((String)box.getSelectedItem()).equals("Other")) {
+    		getAffiliation = textBox.getText();
+    		//return textBox.getText();
     	}
     	return (String) box.getSelectedItem();
+    }
+    
+    public static String getOther() {
+    	return getAffiliation;
     }
 
 }
