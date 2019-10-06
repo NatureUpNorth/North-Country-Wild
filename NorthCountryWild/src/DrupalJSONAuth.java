@@ -51,11 +51,11 @@ public class DrupalJSONAuth implements UserAuthentication {
 	 * 
 	 * @returns true if authentication is successful
 	 */
-	public boolean authenticate(String username, String password) throws RuntimeException {
+	public boolean authenticate(String username, char[] password) throws RuntimeException {
 		// assume username and password are already checked for validity
 		// encode username and password for URL
 		// assume that the username and password already checked the validation test
-		if (username != null && password != null && username.length() > 0 && password.length() > 0) {
+		if (username != null && password != null && username.length() > 0 && password.length > 0) {
 			// validate username and password?
 
 			URL accessURL;
