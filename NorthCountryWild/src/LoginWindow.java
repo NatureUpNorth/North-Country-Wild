@@ -79,7 +79,7 @@ public class LoginWindow implements ActionListener {
 						"Please sign in using your account information for natureupnorth.org.\nIf you forget your username and/or password, please contact us at info@natureupnorth.org for assistance.\nThank you!\r\n");
 			}
 			}catch(Exception e) {
-				JOptionPane.showMessageDialog(frame, "Network connection failed. Unable to succesfully log in. \nPlease try again or contact info@natureupnorth.org if problem persists.");
+				JOptionPane.showMessageDialog(frame, "Network connection failed. Unable to successfully log in. \nPlease try again or contact info@natureupnorth.org if problem persists.");
 			}
 		}
 	}
