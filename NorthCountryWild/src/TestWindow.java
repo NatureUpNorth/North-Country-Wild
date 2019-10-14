@@ -8,9 +8,12 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import javax.swing.AbstractButton;
@@ -50,19 +53,33 @@ public class TestWindow extends JPanel implements ActionListener, ChangeListener
 	public TestWindow() {
 		refreshPane();
 		
-		File file = new File("config/config.json"); 
+//		File jsonFile = new File("config/config.json"); 
+//		System.out.println(jsonFile.length());
 		String str = new String();
+
 		try {
-			BufferedReader br = new BufferedReader(new FileReader(file));
+			ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+			InputStream file = classLoader.getResourceAsStream("config.json");
+			BufferedReader br = new BufferedReader(new InputStreamReader(file));
+			//ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+//			InputStream file = new FileInputStream(jsonFile);//"/NorthCountryWild/config/config.json");//new FileInputStream("/NorthCountryWild/config/config.json");//getClass().getResourceAsStream(jsonFile);//new FileInputStream("config/config.json");//classLoader.getResourceAsStream("config/config.json");
+	//		System.out.println(file);
+			
+		//	BufferedReader br = new BufferedReader(new InputStreamReader(file, "UTF-8"));//new FileReader(file));
+		
 			String curr = new String();
 			while ((curr = br.readLine()) != null) {
 				str += curr;
 			}
 			br.close();
+			
 		} catch (FileNotFoundException e) {
+			System.err.println(e);
 		} catch (IOException e) {
+			System.err.println(e);
 		}
 		
+
 		JSONObject obj = new JSONObject(str);
 		JSONArray tabs = obj.getJSONArray("tabs");
 		pages = new Tab[tabs.length() + 1];

@@ -14,7 +14,6 @@
     <fullyQualifiedTypeName name="java.lang.System"/>
     <fullyQualifiedTypeName name="java.awt.event.MouseListener"/>
     <fullyQualifiedTypeName name="java.awt.event.FocusListener"/>
-    <fullyQualifiedTypeName name="java.io.InputStream"/>
     <fullyQualifiedTypeName name="javax.imageio.ImageIO"/>
     <fullyQualifiedTypeName name="javax.swing.ImageIcon"/>
     <fullyQualifiedTypeName name="java.awt.Font"/>
@@ -22,7 +21,6 @@
     <fullyQualifiedTypeName name="javax.swing.JTextArea"/>
     <fullyQualifiedTypeName name="java.awt.GraphicsEnvironment"/>
     <fullyQualifiedTypeName name="java.awt.FontFormatException"/>
-    <fullyQualifiedTypeName name="java.io.FileInputStream"/>
     <fullyQualifiedTypeName name="java.awt.Color"/>
     <fullyQualifiedTypeName name="javax.swing.border.Border"/>
     <fullyQualifiedTypeName name="java.text.DateFormat"/>
@@ -46,4 +44,9 @@
     <fullyQualifiedTypeName name="com.dropbox.core.v2.files.ListFolderResult"/>
     <fullyQualifiedTypeName name="com.dropbox.core.v2.files.Metadata"/>
     <fullyQualifiedTypeName name="com.dropbox.core.v2.files.FolderMetadata"/>
+    <fullyQualifiedTypeName name="java.io.OutputStream"/>
+    <fullyQualifiedTypeName name="java.io.FileOutputStream"/>
+    <fullyQualifiedTypeName name="java.io.InputStream"/>
+    <fullyQualifiedTypeName name="java.io.InputStreamReader"/>
+    <fullyQualifiedTypeName name="java.io.FileInputStream"/>
 </qualifiedTypeNameHistroy>

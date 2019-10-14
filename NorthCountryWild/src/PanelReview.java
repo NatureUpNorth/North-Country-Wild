@@ -58,8 +58,9 @@ public class PanelReview extends TabItem {
         				constraints.gridy = gridy;
         				gridy++;
         				if(data[tabIndex][labelNumber].contains("Comments")) {
-        					data[tabIndex][labelNumber] = data[tabIndex][labelNumber].substring(0,50)+"...";
-        					System.out.println(data[tabIndex][labelNumber]);
+        					if(data[tabIndex][labelNumber].length()>=50) {
+        						data[tabIndex][labelNumber] = data[tabIndex][labelNumber].substring(0,50)+"...";
+        					}
         				}
         				thisTab.add(new JLabel(data[tabIndex][labelNumber]), constraints);
         				

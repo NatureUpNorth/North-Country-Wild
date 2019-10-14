@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <section name="Workbench">
 	<section name="RefactoringWizard.preview">
-		<item value="600" key="width"/>
-		<item value="400" key="height"/>
+		<item key="width" value="600"/>
+		<item key="height" value="400"/>
 	</section>
 	<section name="RefactoringStatusDialog">
-		<item value="800" key="DIALOG_WIDTH"/>
-		<item value="1|.AppleSystemUIFont|11.0|0|COCOA|1|.AppleSystemUIFont" key="DIALOG_FONT_NAME"/>
-		<item value="472" key="DIALOG_HEIGHT"/>
+		<item key="DIALOG_WIDTH" value="800"/>
+		<item key="DIALOG_FONT_NAME" value="1|.AppleSystemUIFont|11.0|0|COCOA|1|.AppleSystemUIFont"/>
+		<item key="DIALOG_HEIGHT" value="472"/>
 	</section>
 </section>
