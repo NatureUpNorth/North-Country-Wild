@@ -29,7 +29,7 @@
 
 		{"type": "dropdown",
 		"desc": "Please select the group or organization you are working with on this project, if any:",
-		"hint": "Some people engage with North Country Wild through collaborations with school groups or \nby checking a game camera out from Nature Up North or local library. \nIf none of the options fit you, please select other and \ntype your group in the text box below.",
+		"hint": "Some people engage with North Country Wild through collaborations with school \ngroups or by checking a game camera out from Nature Up North or local library. \n\nIf none of the options fit you, please select other and type your group in the text \nbox below.",
 		"values": [
 			"From Dropbox"
 		],

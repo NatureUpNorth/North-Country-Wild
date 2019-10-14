@@ -53,19 +53,12 @@ public class TestWindow extends JPanel implements ActionListener, ChangeListener
 	public TestWindow() {
 		refreshPane();
 		
-//		File jsonFile = new File("config/config.json"); 
-//		System.out.println(jsonFile.length());
 		String str = new String();
 
 		try {
 			ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
 			InputStream file = classLoader.getResourceAsStream("config.json");
 			BufferedReader br = new BufferedReader(new InputStreamReader(file));
-			//ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
-//			InputStream file = new FileInputStream(jsonFile);//"/NorthCountryWild/config/config.json");//new FileInputStream("/NorthCountryWild/config/config.json");//getClass().getResourceAsStream(jsonFile);//new FileInputStream("config/config.json");//classLoader.getResourceAsStream("config/config.json");
-	//		System.out.println(file);
-			
-		//	BufferedReader br = new BufferedReader(new InputStreamReader(file, "UTF-8"));//new FileReader(file));
 		
 			String curr = new String();
 			while ((curr = br.readLine()) != null) {
