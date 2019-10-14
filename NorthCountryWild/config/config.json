@@ -29,7 +29,7 @@
 
 		{"type": "dropdown",
 		"desc": "Please select the group or organization you are working with on this project, if any:",
-		"hint": "Some people engage with North Country Wild through collaborations with school groups or by checking a game camera out from Nature Up North or local library. \nIf you are affiliated with a group, please enter it here.",
+		"hint": "Some people engage with North Country Wild through collaborations with school groups or \nby checking a game camera out from Nature Up North or local library. \nIf none of the options fit you, please select other and \ntype your group in the text box below.",
 		"values": [
 			"From Dropbox"
 		],
@@ -49,13 +49,13 @@
 		"subPanels": [
 			{"type": "form",
 			"desc": "Latitude:",
-			"hint": "If you do not know the longitude and latitude of the camera location, you can search for them here: https://mynasadata.larc.nasa.gov/latitudelongitude-finder/",
+			"hint": "If you do not know the latitude of the camera location, you can search for it here: https://mynasadata.larc.nasa.gov/latitudelongitude-finder/",
 			"returnValue": "Latitude"
 			},
 			
 			{"type": "form",
 			"desc": "Longitude:",
-			"hint": "If you do not know the longitude and latitude of the camera location, you can search for them here: https://mynasadata.larc.nasa.gov/latitudelongitude-finder/",
+			"hint": "If you do not know the longitude of the camera location, you can search for it here: https://mynasadata.larc.nasa.gov/latitudelongitude-finder/",
 			"returnValue": "Longitude"
 			}
 		]}
