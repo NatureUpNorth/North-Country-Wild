@@ -1,4 +1,4 @@
-// Runs the application.
+// ATTN: Before running, insert Dropbox access token into PanelDropdown and UploadThread classes.
 
 import java.awt.event.WindowEvent;
 import java.util.ArrayList;

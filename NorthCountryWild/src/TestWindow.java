@@ -74,7 +74,8 @@ public class TestWindow extends JPanel implements ActionListener, ChangeListener
 			br.close();
 			
 		} catch (FileNotFoundException e) {
-			System.err.println(e);
+			System.err.println("Error: config/config.json not found by TestWindow constructor.");
+			e.printStackTrace();
 		} catch (IOException e) {
 			System.err.println(e);
 		}
