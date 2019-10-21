@@ -86,18 +86,26 @@ public class PanelFileSelect extends TabItem implements ActionListener {
 			    	if (!count_interrupt) {
 			    		UploadThread.setPath(getFilepath());
 				    	count = total;
-				    	JFrame optionFrame = new JFrame();
-						String[] options = {"Yes", "No"};
-						int n = JOptionPane.showOptionDialog(
-							    optionFrame, "This folder has approximately " + fileTotal + " files, and "+total+" images to be uploaded in it. Is this correct?",
-							    "Warning", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
-						if (n == 1) {
-							browse.doClick();
-						}
-						if(n == JOptionPane.NO_OPTION) {
-							filePath.setText("");
-						}
-						fileTotal=0;
+				    	
+				    	// Don't allow user to continue if folder contains no images
+				    	if (total == 0) {
+				    		JOptionPane.showMessageDialog(new JFrame(), "Please select a folder containing images.");
+				    		filePath.setText("");
+				    	} else {  // Folder contains images
+				    	
+					    	JFrame optionFrame = new JFrame();
+							String[] options = {"Yes", "No"};
+							int n = JOptionPane.showOptionDialog(
+								    optionFrame, "This folder has approximately " + fileTotal + " files, and "+total+" images to be uploaded in it. Is this correct?",
+								    "Warning", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
+							if (n == 1) {
+								browse.doClick();
+							}
+							if(n == JOptionPane.NO_OPTION) {
+								filePath.setText("");
+							}
+							fileTotal=0;
+				    	}
 			    	}
 			    	browse.setEnabled(true);
 			    }
