@@ -43,7 +43,7 @@ public class TestWindow extends JPanel implements ActionListener, ChangeListener
 	private boolean uploading = false;
 	private String[][] tabText;
 	private ArrayList<String> values;
-	static JFrame frame = new JFrame();
+	static JFrame frame = new JFrame("NoCo Wild Image Uploader");  // Create and name frame
 	private boolean switched = false; // for stateChanged, keeps track of if we need to display a dialogue box or not
 	private static int tabularW = 800;
 	private static int tabularH = 550;
