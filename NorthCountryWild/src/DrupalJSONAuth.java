@@ -37,7 +37,7 @@ public class DrupalJSONAuth implements UserAuthentication {
 	// unsuccessful authentication
 
 	// constants
-	private static final String host = "natureupnorth.org";
+	private static final String host = "www.natureupnorth.org";
 	private static final String authPath = "/user/login";
 	private static final String protocol = "https";
 	private static final String errorMessage = "Please contact the developer. Thank you, and sorry for your inconvenience.";
@@ -68,7 +68,7 @@ public class DrupalJSONAuth implements UserAuthentication {
 				password = URLEncoder.encode(password, "UTF-8");
 				
 				// construct a JSON object containing the username and password
-				String authString = "name="+username+"&pass=" + password + "&form_id=user_login_form&op=Log+in&form_build_id=form-8M07PWXSzLPECu0FUJb1S-u-Yj-crmzokvpBKNVs8C8&";
+				String authString = "name="+username+"&pass=" + password + "&form_id=user_login_form&op=Log+in";
 
 				authBytes = authString.getBytes("UTF-8");
 			} catch (UnsupportedEncodingException esee) {
