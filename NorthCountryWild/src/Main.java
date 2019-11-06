@@ -45,7 +45,8 @@ public class Main {
 				String s = PanelDropdown.getOther();
 				affiliation = affiliation+"/"+s;
 			}
-			String time = String.valueOf(System.nanoTime());
+			long unixTime = System.currentTimeMillis() / 1000L;
+			String time = String.valueOf(unixTime);
 			String destination = affiliation + "/" + name + "/" + time;
 			
 			UploadThread thread = new UploadThread(filepath, destination, upload, upload.getCount(), values);

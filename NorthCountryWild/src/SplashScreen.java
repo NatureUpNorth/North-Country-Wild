@@ -102,7 +102,7 @@ public class SplashScreen implements ActionListener{
         intro.setEditable(false);
 		intro.setText("North Country Wild is a Nature Up North community-based science project that uses game cameras "+
 				"to study wildlife diversity and activity in the region. For more information about the project please visit "+
-				"www.natureupnorth.org/citizen-science");
+				"www.natureupnorth.org/north-country-wild");
 		
 		//info.setFont(new Font("Serif", Font.PLAIN, 16));
 		info.setFont(nun);

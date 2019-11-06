@@ -29,8 +29,9 @@
 		<item key="FatJarPackageWizardPage.ANTSCRIPT_LOCATION" value="/Users/remileblanc/Dropbox/College/Nature Up North/North-Country-Wild-Workspace"/>
 		<item key="FatJarPackageWizardPage.LIBRARY_HANDLING" value="2"/>
 		<item key="FatJarPackageWizardPage.LAUNCH_CONFIGURATION_SELECTION_NAME" value="Main - NorthCountryWild"/>
-		<item key="FatJarPackageWizardPage.DESTINATION_PATH_SELECTION" value="/Users/remileblanc/Desktop/NUN.jar"/>
+		<item key="FatJarPackageWizardPage.DESTINATION_PATH_SELECTION" value="/Users/remileblanc/Desktop/NorthCountryWildPhotoUploader.jar"/>
 		<list key="FatJarPackageWizardPage.DESTINATION_NAMES_ID">
+			<item value="/Users/remileblanc/Desktop/NorthCountryWildPhotoUploader.jar"/>
 			<item value="/Users/remileblanc/Desktop/NUN.jar"/>
 			<item value="/Users/remileblanc/Desktop/Untitled.jar"/>
 		</list>

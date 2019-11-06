@@ -49,13 +49,13 @@
 		"subPanels": [
 			{"type": "form",
 			"desc": "Latitude:",
-			"hint": "If you do not know the latitude of the camera location, you can search for it here: https://mynasadata.larc.nasa.gov/latitudelongitude-finder/",
+			"hint": "If you do not know the latitude of the camera location, you can search for it here: https://www.latlong.net/",
 			"returnValue": "Latitude"
 			},
 			
 			{"type": "form",
 			"desc": "Longitude:",
-			"hint": "If you do not know the longitude of the camera location, you can search for it here: https://mynasadata.larc.nasa.gov/latitudelongitude-finder/",
+			"hint": "If you do not know the longitude of the camera location, you can search for it here: https://www.latlong.net/",
 			"returnValue": "Longitude"
 			}
 		]}

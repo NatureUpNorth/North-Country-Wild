@@ -2,6 +2,7 @@ import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.regex.Pattern;
 
 import javax.swing.*;
 
@@ -21,7 +22,7 @@ public class LoginWindow implements ActionListener {
 		JPanel panel = new JPanel();
 		userField = new JTextField(20);
 		passField = new JPasswordField(20);
-		JLabel userLabel = new JLabel("Username: ");
+		JLabel userLabel = new JLabel("Email: ");
 		JLabel passLabel = new JLabel("Password: ");
 		JButton submit = new JButton("Submit");
 		
@@ -59,16 +60,34 @@ public class LoginWindow implements ActionListener {
 		return open;
 	}
 	
+	public static boolean isValid(String email) { 
+        String emailRegex = "^[a-zA-Z0-9_+&*-]+(?:\\."+ 
+                            "[a-zA-Z0-9_+&*-]+)*@" + 
+                            "(?:[a-zA-Z0-9-]+\\.)+[a-z" + 
+                            "A-Z]{2,7}$"; 
+                              
+        Pattern pat = Pattern.compile(emailRegex); 
+        if (email == null) 
+            return false; 
+        return pat.matcher(email).matches(); 
+    } 
+	
 	public void actionPerformed(ActionEvent evt) {
 		// parse the username/password entered
 		//password = passField.getText();
 		password = charToString(passField.getPassword());
 		
+		
+		
 		username = userField.getText();
+		
 		if (password.isEmpty() || username.isEmpty()) {
 			System.out.println("?");
 			JOptionPane.showMessageDialog(frame, "Incorrect username and/or password.\n" + 
 					"Please sign in using your account information for natureupnorth.org.\nIf you forget your username and/or password, please contact us at info@natureupnorth.org for assistance.\nThank you!\r\n");
+		}
+		else if(!isValid(username)) {
+			JOptionPane.showMessageDialog(frame, "Please enter a valid email address connected with your Nature Up North Account.");
 		}
 		else {
 			try {
