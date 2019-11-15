@@ -22,7 +22,7 @@ public class LoginWindow implements ActionListener {
 		JPanel panel = new JPanel();
 		userField = new JTextField(20);
 		passField = new JPasswordField(20);
-		JLabel userLabel = new JLabel("Email: ");
+		JLabel userLabel = new JLabel("      Email: ");
 		JLabel passLabel = new JLabel("Password: ");
 		JButton submit = new JButton("Submit");
 		
