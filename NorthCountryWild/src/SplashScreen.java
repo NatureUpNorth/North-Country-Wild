@@ -143,7 +143,7 @@ public class SplashScreen implements ActionListener{
 //		version.setWrapStyleWord(true);
 		version.setOpaque(false);
 		version.setEditable(false);
-		version.setText("Version 1.2.1"); //(1st major version).(second meeting presenting).(first github push) ???? or version 1.0.0
+		version.setText("Version 2.0.0"); //(1st major version).(second meeting presenting).(first github push) ???? or version 1.0.0
 		versionPanel.setSize(version.getSize());
 		versionPanel.setLocation(frame.getWidth()-927, frame.getHeight()-45);
 		versionPanel.add(version);
