@@ -1,10 +1,12 @@
 """
 This script requires the Wand and pyexiftool Python packages to be installed.
+You should also make sure the exiftool and ImageMagick command line tools have been installed.
 Install those packages and the dependencies using the following:
 pip install Wand
 pip install git+http://github.com/smarnach/pyexiftool.git
 brew install imagemagick@6
 export MAGICK_HOME=/usr/local/opt/imagemagick@6
+Also see: https://github.com/ImageMagick/ImageMagick/issues/953
 
 Some resources used to help build this script:
 https://stackoverflow.com/questions/45322213/python-set-maximum-file-size-when-converting-pdf-to-jpeg-using-e-g-wand
@@ -87,6 +89,24 @@ def change_file_size_and_copyright(path_to_processed_images: str) -> None:
             )
 
 
+def copy_raw_images_change_file_size_and_copyright(
+    path_to_raw_images: str,
+    path_to_processed_images: str,
+    camera_number_with_leading_zeros: int,
+    sd_card_number_with_leading_zeros: int,
+) -> None:
+    # Copy and rename images from raw_images_path to processed_images_path
+    for filename in os.listdir(path_to_raw_images):
+        raw_filepath = os.path.join(path_to_raw_images, filename)
+        filename_with_prefix = f"C{camera_number_with_leading_zeros}_SD{sd_card_number_with_leading_zeros}_{filename}"
+        processed_filepath = os.path.join(
+            path_to_processed_images, filename_with_prefix
+        )
+        shutil.copy(raw_filepath, processed_filepath)
+
+    change_file_size_and_copyright(path_to_processed_images)
+
+
 def completely_process_images_from_sd_card(
     memory_card_path: str,
     external_drive_path: str,
@@ -129,20 +149,58 @@ def completely_process_images_from_sd_card(
 
 
 def get_args():
-    parser = argparse.ArgumentParser()
+    parser = argparse.ArgumentParser(
+        description="This script takes images from one of three entry points (see subcommands) and performs the specified processing steps (any of: copying, renaming, resizing, changing copyright information)"
+    )
     subparsers = parser.add_subparsers(title="subcommands")
 
     file_size_and_copyright_parser = subparsers.add_parser(
-        "change_file_size_and_copyright"
+        "change_file_size_and_copyright",
+        help="this subcommand takes a path to the processed images which have already been renamed and resizes them and adds copyright information",
     )
     file_size_and_copyright_parser.set_defaults(func=change_file_size_and_copyright)
     file_size_and_copyright_parser.add_argument(
         "--path-to-processed-images",
         type=str,
+        required=True,
+        help="full path to where processed images are held; assumes you want to overwrite files here",
+    )
+
+    copy_raw_image_file_size_and_copyright_parser = subparsers.add_parser(
+        "copy_raw_images_change_file_size_and_copyright",
+        help="this subcommand takes a path to the raw images along with where processed images will be and the camera number and sd number, as three-digit integers, and copies, resizes, and adds copyright information to the images",
+    )
+    copy_raw_image_file_size_and_copyright_parser.set_defaults(
+        func=copy_raw_images_change_file_size_and_copyright
+    )
+    copy_raw_image_file_size_and_copyright_parser.add_argument(
+        "--path-to-raw-images",
+        type=str,
+        required=True,
+        help="full path to raw images, before renaming, resizing, or changing copyright",
+    )
+    copy_raw_image_file_size_and_copyright_parser.add_argument(
+        "--path-to-processed-images",
+        type=str,
+        required=True,
+        help="full path to where processed images will be placed",
+    )
+    copy_raw_image_file_size_and_copyright_parser.add_argument(
+        "--camera-number-with-leading-zeros",
+        type=int,
+        required=True,
+        help="camera number, as an integer with as many leading zeros as necessary to give three digits",
+    )
+    copy_raw_image_file_size_and_copyright_parser.add_argument(
+        "--sd-card-number-with-leading-zeros",
+        type=int,
+        required=True,
+        help="sd card number, as an integer with as many leading zeros as necessary to give three digits",
     )
 
     from_sd_card_parser = subparsers.add_parser(
-        "completely_process_images_from_sd_card"
+        "completely_process_images_from_sd_card",
+        help="this subcommand takes a number of arguments and completely processes images from the sd card to separate directories for the raw and processed images",
     )
     from_sd_card_parser.set_defaults(func=completely_process_images_from_sd_card)
     from_sd_card_parser.add_argument(
