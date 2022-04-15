@@ -92,9 +92,14 @@ def change_file_size_and_copyright(path_to_processed_images: str) -> None:
 def copy_raw_images_change_file_size_and_copyright(
     path_to_raw_images: str,
     path_to_processed_images: str,
-    camera_number_with_leading_zeros: int,
-    sd_card_number_with_leading_zeros: int,
+    camera_number_with_leading_zeros: str,
+    sd_card_number_with_leading_zeros: str,
 ) -> None:
+    # Make sure camera and sd numbers have leading zeros
+    # TO DO: Should add check here that there are no more than three digits
+    camera_number_with_leading_zeros = camera_number_with_leading_zeros.zfill(3)
+    sd_card_number_with_leading_zeros = sd_card_number_with_leading_zeros.zfill(3)
+
     # Copy and rename images from raw_images_path to processed_images_path
     for filename in os.listdir(path_to_raw_images):
         raw_filepath = os.path.join(path_to_raw_images, filename)
@@ -187,13 +192,13 @@ def get_args():
     )
     copy_raw_image_file_size_and_copyright_parser.add_argument(
         "--camera-number-with-leading-zeros",
-        type=int,
+        type=str,
         required=True,
         help="camera number, as an integer with as many leading zeros as necessary to give three digits",
     )
     copy_raw_image_file_size_and_copyright_parser.add_argument(
         "--sd-card-number-with-leading-zeros",
-        type=int,
+        type=str,
         required=True,
         help="sd card number, as an integer with as many leading zeros as necessary to give three digits",
     )
