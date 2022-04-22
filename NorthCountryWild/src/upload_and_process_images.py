@@ -68,25 +68,27 @@ class wimage(Image):
 
 def change_file_size_and_copyright(path_to_processed_images: str) -> None:
     for filename in os.listdir(path_to_processed_images):
-        processed_filepath = os.path.join(path_to_processed_images, filename)
+        # Only process unhidden images
+        if not filename.startswith("."):
+            processed_filepath = os.path.join(path_to_processed_images, filename)
 
-        with wimage(filename=processed_filepath) as img_to_save:
-            img_to_save.transform(resize="2000>")
-            img_to_save.myDefine("jpeg:extent", "900kb")
-            # img_to_save.format = "jpeg"
-            img_to_save.save(filename=processed_filepath)
+            with wimage(filename=processed_filepath) as img_to_save:
+                img_to_save.transform(resize="2000>")
+                img_to_save.myDefine("jpeg:extent", "900kb")
+                # img_to_save.format = "jpeg"
+                img_to_save.save(filename=processed_filepath)
 
-        with exiftool.ExifTool() as et:
-            et.execute(
-                b"-overwrite_original",
-                b"-rights=Copyright",
-                bytes(processed_filepath, encoding="ascii"),
-            )
-            et.execute(
-                b"-overwrite_original",
-                b"-CopyrightNotice=Bart Lab and Nature Up North",
-                bytes(processed_filepath, encoding="ascii"),
-            )
+            with exiftool.ExifTool() as et:
+                et.execute(
+                    b"-overwrite_original",
+                    b"-rights=Copyright",
+                    bytes(processed_filepath, encoding="ascii"),
+                )
+                et.execute(
+                    b"-overwrite_original",
+                    b"-CopyrightNotice=Bart Lab and Nature Up North",
+                    bytes(processed_filepath, encoding="ascii"),
+                )
 
 
 def copy_raw_images_change_file_size_and_copyright(
@@ -102,12 +104,14 @@ def copy_raw_images_change_file_size_and_copyright(
 
     # Copy and rename images from raw_images_path to processed_images_path
     for filename in os.listdir(path_to_raw_images):
-        raw_filepath = os.path.join(path_to_raw_images, filename)
-        filename_with_prefix = f"C{camera_number_with_leading_zeros}_SD{sd_card_number_with_leading_zeros}_{filename}"
-        processed_filepath = os.path.join(
-            path_to_processed_images, filename_with_prefix
-        )
-        shutil.copy(raw_filepath, processed_filepath)
+        # Only process unhidden images
+        if not filename.startswith("."):
+            raw_filepath = os.path.join(path_to_raw_images, filename)
+            filename_with_prefix = f"C{camera_number_with_leading_zeros}_SD{sd_card_number_with_leading_zeros}_{filename}"
+            processed_filepath = os.path.join(
+                path_to_processed_images, filename_with_prefix
+            )
+            shutil.copy(raw_filepath, processed_filepath)
 
     change_file_size_and_copyright(path_to_processed_images)
 
@@ -138,17 +142,23 @@ def completely_process_images_from_sd_card(
 
     # Copy images from memory_card_path to raw_images_path
     for filename in os.listdir(memory_card_path):
-        sd_filepath = os.path.join(memory_card_path, filename)
-        raw_images_filepath = os.path.join(raw_images_path, filename)
-        print(raw_images_filepath)
-        shutil.copy(sd_filepath, raw_images_filepath)
+        # Only process unhidden images
+        if not filename.startswith("."):
+            sd_filepath = os.path.join(memory_card_path, filename)
+            raw_images_filepath = os.path.join(raw_images_path, filename)
+            print(raw_images_filepath)
+            shutil.copy(sd_filepath, raw_images_filepath)
 
     # Copy and rename images from raw_images_path to processed_images_path
     for filename in os.listdir(raw_images_path):
-        raw_filepath = os.path.join(raw_images_path, filename)
-        filename_with_prefix = f"C{camera_number_with_leading_zeros}_SD{sd_card_number_with_leading_zeros}_{filename}"
-        processed_filepath = os.path.join(processed_images_path, filename_with_prefix)
-        shutil.copy(raw_filepath, processed_filepath)
+        # Only process unhidden images
+        if not filename.startswith("."):
+            raw_filepath = os.path.join(raw_images_path, filename)
+            filename_with_prefix = f"C{camera_number_with_leading_zeros}_SD{sd_card_number_with_leading_zeros}_{filename}"
+            processed_filepath = os.path.join(
+                processed_images_path, filename_with_prefix
+            )
+            shutil.copy(raw_filepath, processed_filepath)
 
     change_file_size_and_copyright(processed_images_path)
 
