@@ -20,6 +20,7 @@ import json
 import os
 import shutil
 import subprocess
+from datetime import datetime
 from tkinter import Tk, ttk
 from tkinter.filedialog import askdirectory
 from typing import Union
@@ -67,6 +68,23 @@ class wimage(Image):
     def myDefine(self, key, value):
         """Skip over wand.image.Image.option"""
         return library.MagickSetOption(self.wand, binary(key), binary(value))
+
+
+def get_timestamp_code_for_filename(filename: str) -> str:
+    # Get timestamp as unique identifier for when same camera and sd card are used for multiple
+    # deployments
+    with exiftool.ExifTool() as et:
+        metadata = et.get_metadata(filename)
+    datetime_string = metadata["EXIF:DateTimeOriginal"]
+    datetime_obj = datetime.strptime(datetime_string, "%Y:%m:%d %H:%M:%S")
+    year = str(datetime_obj.year)
+    month = str(datetime_obj.month).zfill(2)
+    day = str(datetime_obj.day).zfill(2)
+    hour = str(datetime_obj.hour).zfill(2)
+    minute = str(datetime_obj.minute).zfill(2)
+    second = str(datetime_obj.second).zfill(2)
+
+    return f"{year}{month}{day}{hour}{minute}{second}"
 
 
 def change_file_size_and_copyright(
@@ -152,7 +170,8 @@ def copy_raw_images_change_file_size_and_copyright(
         # Only process unhidden images
         if not filename.startswith("."):
             raw_filepath = os.path.join(raw_images_dir, filename)
-            filename_with_prefix = f"C{camera_number_with_leading_zeros}_SD{sd_card_number_with_leading_zeros}_{filename}"
+            timestamp_code = get_timestamp_code_for_filename(filename)
+            filename_with_prefix = f"C{camera_number_with_leading_zeros}_SD{sd_card_number_with_leading_zeros}_{timestamp_code}_{filename}"
             processed_filepath = os.path.join(
                 processed_images_dir, filename_with_prefix
             )
@@ -214,7 +233,8 @@ def completely_process_images_from_sd_card(
         # Only process unhidden images
         if not filename.startswith("."):
             raw_filepath = os.path.join(raw_images_dir, filename)
-            filename_with_prefix = f"C{camera_number_with_leading_zeros}_SD{sd_card_number_with_leading_zeros}_{filename}"
+            timestamp_code = get_timestamp_code_for_filename(filename)
+            filename_with_prefix = f"C{camera_number_with_leading_zeros}_SD{sd_card_number_with_leading_zeros}_{timestamp_code}_{filename}"
             processed_filepath = os.path.join(
                 processed_images_dir, filename_with_prefix
             )
