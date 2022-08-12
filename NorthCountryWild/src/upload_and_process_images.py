@@ -109,6 +109,7 @@ def change_file_size_and_copyright(
     for filename in os.listdir(path_to_processed_images):
         # Only process unhidden images
         if not filename.startswith("."):
+            print(f"resizing and changing copyright info for {filename}")
             processed_filepath = os.path.join(path_to_processed_images, filename)
 
             with wimage(filename=processed_filepath) as img_to_save:
@@ -131,13 +132,13 @@ def change_file_size_and_copyright(
 
 
 def copy_raw_images_change_file_size_and_copyright(
-    camera_number_with_leading_zeros: str,
-    sd_card_number_with_leading_zeros: str,
+    camera_number: str,
+    sd_card_number: str,
 ) -> None:
     # Make sure camera and sd numbers have leading zeros
     # TO DO: Should add check here that there are no more than three digits
-    camera_number_with_leading_zeros = camera_number_with_leading_zeros.zfill(3)
-    sd_card_number_with_leading_zeros = sd_card_number_with_leading_zeros.zfill(3)
+    camera_number_with_leading_zeros = camera_number.zfill(3)
+    sd_card_number_with_leading_zeros = sd_card_number.zfill(3)
 
     def get_raw_images_dir():
         global raw_images_dir
@@ -175,6 +176,7 @@ def copy_raw_images_change_file_size_and_copyright(
             processed_filepath = os.path.join(
                 processed_images_dir, filename_with_prefix
             )
+            print(f"copying {raw_filepath} to {processed_filepath}")
             shutil.copy(raw_filepath, processed_filepath)
 
     change_file_size_and_copyright(processed_images_dir)
@@ -225,7 +227,7 @@ def completely_process_images_from_sd_card(
         if not filename.startswith("."):
             sd_filepath = os.path.join(memory_card_path, filename)
             raw_images_filepath = os.path.join(raw_images_dir, filename)
-            print(raw_images_filepath)
+            print(f"copying {sd_filepath} to {raw_images_filepath}")
             shutil.copy(sd_filepath, raw_images_filepath)
 
     # Copy and rename images from raw_images_path to processed_images_path
@@ -238,6 +240,7 @@ def completely_process_images_from_sd_card(
             processed_filepath = os.path.join(
                 processed_images_dir, filename_with_prefix
             )
+            print(f"copying {raw_filepath} to {processed_filepath}")
             shutil.copy(raw_filepath, processed_filepath)
 
     change_file_size_and_copyright(processed_images_dir)
@@ -258,27 +261,28 @@ def get_args():
         "--path-to-processed-images",
         type=str,
         required=False,
-        help="full path to where processed images are held; assumes you want to overwrite files here",
+        help="full path to where processed images are held; assumes you want to overwrite the files at this path",
     )
 
     copy_raw_image_file_size_and_copyright_parser = subparsers.add_parser(
         "copy_raw_images_change_file_size_and_copyright",
-        help="this subcommand takes the camera number and sd number, as three-digit integers, and copies, resizes, and adds copyright information to the images",
+        help="""this subcommand takes the camera number and sd number, as three-digit integers, and copies, resizes, and adds copyright information to the images;\n
+        if a three digit integer is not provided, the script will automatically add leading zeros""",
     )
     copy_raw_image_file_size_and_copyright_parser.set_defaults(
         func=copy_raw_images_change_file_size_and_copyright
     )
     copy_raw_image_file_size_and_copyright_parser.add_argument(
-        "--camera-number-with-leading-zeros",
+        "--camera-number",
         type=str,
         required=True,
-        help="camera number, as an integer with as many leading zeros as necessary to give three digits",
+        help="camera number, as an integer, not exceeding three digits",
     )
     copy_raw_image_file_size_and_copyright_parser.add_argument(
-        "--sd-card-number-with-leading-zeros",
+        "--sd-card-number",
         type=str,
         required=True,
-        help="sd card number, as an integer with as many leading zeros as necessary to give three digits",
+        help="sd card number, as an integer, not exceeding three digits",
     )
 
     from_sd_card_parser = subparsers.add_parser(
@@ -296,13 +300,13 @@ def get_args():
         "--camera-number",
         type=int,
         required=True,
-        help="camera number, as an integer",
+        help="camera number, as an integer, not exceeding three digits",
     )
     from_sd_card_parser.add_argument(
         "--sd-card-number",
         type=int,
         required=True,
-        help="sd card number, as an integer",
+        help="sd card number, as an integer, not exceeding three digits",
     )
 
     namespace_args = parser.parse_args()
