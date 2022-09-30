@@ -5,7 +5,12 @@ Install those packages and the dependencies using the following:
 pip install Wand
 pip install git+http://github.com/smarnach/pyexiftool.git
 brew install imagemagick@6
-export MAGICK_HOME=/usr/local/opt/imagemagick@6
+
+Export the path to where your imagemagick executable is stored.
+This should be in a versioned folder within the imagemagick@6 directory.
+You can view your version by cd into: /opt/homebrew/Cellar/imagemagick@6
+and ls to view the version number:
+export MAGICK_HOME=/opt/homebrew/Cellar/imagemagick@6/6.9.12-63
 Also see: https://github.com/ImageMagick/ImageMagick/issues/953
 
 Some resources used to help build this script:
