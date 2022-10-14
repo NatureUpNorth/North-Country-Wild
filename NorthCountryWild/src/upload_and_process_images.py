@@ -80,8 +80,11 @@ def get_timestamp_code_for_filename(filename: str) -> str:
     # deployments
     with exiftool.ExifTool() as et:
         metadata = et.get_metadata(filename)
-    datetime_string = metadata["EXIF:DateTimeOriginal"]
-    datetime_obj = datetime.strptime(datetime_string, "%Y:%m:%d %H:%M:%S")
+    if "EXIF:DateTimeOriginal" in metadata:
+        datetime_string = metadata["EXIF:DateTimeOriginal"]
+        datetime_obj = datetime.strptime(datetime_string, "%Y:%m:%d %H:%M:%S")
+    else:
+        datetime_obj = datetime.now()
     year = str(datetime_obj.year)
     month = str(datetime_obj.month).zfill(2)
     day = str(datetime_obj.day).zfill(2)
@@ -176,7 +179,7 @@ def copy_raw_images_change_file_size_and_copyright(
         # Only process unhidden images
         if not filename.startswith("."):
             raw_filepath = os.path.join(raw_images_dir, filename)
-            timestamp_code = get_timestamp_code_for_filename(filename)
+            timestamp_code = get_timestamp_code_for_filename(raw_filepath)
             filename_with_prefix = f"C{camera_number_with_leading_zeros}_SD{sd_card_number_with_leading_zeros}_{timestamp_code}_{filename}"
             processed_filepath = os.path.join(
                 processed_images_dir, filename_with_prefix
@@ -240,7 +243,7 @@ def completely_process_images_from_sd_card(
         # Only process unhidden images
         if not filename.startswith("."):
             raw_filepath = os.path.join(raw_images_dir, filename)
-            timestamp_code = get_timestamp_code_for_filename(filename)
+            timestamp_code = get_timestamp_code_for_filename(raw_filepath)
             filename_with_prefix = f"C{camera_number_with_leading_zeros}_SD{sd_card_number_with_leading_zeros}_{timestamp_code}_{filename}"
             processed_filepath = os.path.join(
                 processed_images_dir, filename_with_prefix
