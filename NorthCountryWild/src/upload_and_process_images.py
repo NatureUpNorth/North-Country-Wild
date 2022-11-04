@@ -1,9 +1,21 @@
 """
 This script requires the Wand and pyexiftool Python packages to be installed.
-You should also make sure the exiftool and ImageMagick command line tools have been installed.
-Install those packages and the dependencies using the following:
-pip install Wand
-pip install git+http://github.com/smarnach/pyexiftool.git
+For the pop-up windows to work as intended, you should also make sure you are
+working with Python 3.8 or 3.10+, using Python 3.9 may cause a black window issue.
+To check your python version you can go to the terminal and enter:
+python3 --version
+
+To install the Python 3.10, download installer for your machine here:
+https://www.python.org/downloads/release/python-3100/
+
+Make sure you have the correct Python version before installing the packages below
+or you'll need to reinstall them.
+
+You must also make sure the exiftool and ImageMagick command line tools have been installed.
+Install those packages and the dependencies using the following (replacing pip3 with pip if that's
+the version your machine is using):
+pip3 install Wand
+pip3 install git+http://github.com/smarnach/pyexiftool.git
 brew install imagemagick@6
 
 Export the path to where your imagemagick executable is stored.
@@ -12,6 +24,22 @@ You can view your version by cd into: /opt/homebrew/Cellar/imagemagick@6
 and ls to view the version number:
 export MAGICK_HOME=/opt/homebrew/Cellar/imagemagick@6/6.9.12-63
 Also see: https://github.com/ImageMagick/ImageMagick/issues/953
+**Important Note** This export will only last as long as your bash session.
+If you'd like your bash profile to always search for this directory when
+importing imagemagick, you should include the export in your bash profile.
+To do so, do the following:
+# Change to your home directory
+cd ~
+# List all files and directories, including the hidden ones
+ls -a
+# You should see a hidden file called .zshrc, this is your bash profile
+# Use your favorite bash text editor to edit .zshrc
+nano .zshrc
+# Scroll to the bottom of the file and add the export MAGICK_HOME line you ran above
+# Close out of the file, making sure you save your changes
+# For nano, this is ctrl + x, then you will be asked if you want to save
+# and what name to save the file under. You want to keep the same file name, .zshrc
+# so you overwrite the file
 
 Some resources used to help build this script:
 https://stackoverflow.com/questions/45322213/python-set-maximum-file-size-when-converting-pdf-to-jpeg-using-e-g-wand
@@ -28,7 +56,6 @@ import subprocess
 from datetime import datetime
 from tkinter import Tk, ttk
 from tkinter.filedialog import askdirectory
-from typing import Union
 
 import exiftool
 from wand.api import library
