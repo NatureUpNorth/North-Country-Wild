@@ -54,8 +54,6 @@ import os
 import shutil
 import subprocess
 from datetime import datetime
-from tkinter import Tk, ttk
-from tkinter.filedialog import askdirectory
 
 import exiftool
 from wand.api import library
@@ -125,22 +123,6 @@ def get_timestamp_code_for_filename(filename: str) -> str:
 def change_file_size_and_copyright(
     path_to_processed_images: str,
 ) -> None:
-    def get_processed_images_dir():
-        global processed_images_dir
-        processed_images_dir = askdirectory(title="CHOOSE PROCESSED IMAGES DIR")
-        win.destroy()
-
-    if path_to_processed_images is None:
-        win = Tk()
-        win.title("Process North Country Wild Photos")
-        win.geometry("600x300")
-        b2 = ttk.Button(
-            win, text="CHOOSE PROCESSED IMAGES DIR", command=get_processed_images_dir
-        ).pack(side="top", padx=50, pady=120)
-        win.mainloop()
-        path_to_processed_images = processed_images_dir
-
-    print(path_to_processed_images)
     for filename in os.listdir(path_to_processed_images):
         # Only process unhidden images
         if not filename.startswith("."):
@@ -167,6 +149,8 @@ def change_file_size_and_copyright(
 
 
 def copy_raw_images_change_file_size_and_copyright(
+    path_to_raw_images: str,
+    path_to_processed_images: str,
     camera_number: str,
     sd_card_number: str,
 ) -> None:
@@ -175,50 +159,26 @@ def copy_raw_images_change_file_size_and_copyright(
     camera_number_with_leading_zeros = camera_number.zfill(3)
     sd_card_number_with_leading_zeros = sd_card_number.zfill(3)
 
-    def get_raw_images_dir():
-        global raw_images_dir
-        raw_images_dir = askdirectory(title="CHOOSE RAW IMAGES DIR")
-        win.destroy()
-
-    def get_processed_images_dir():
-        global processed_images_dir
-        processed_images_dir = askdirectory(title="CHOOSE PROCESSED IMAGES DIR")
-        win.destroy()
-
-    win = Tk()
-    win.title("Process North Country Wild Photos")
-    win.geometry("600x300")
-    b1 = ttk.Button(win, text="CHOOSE RAW IMAGES DIR", command=get_raw_images_dir).pack(
-        side="top", padx=50, pady=120
-    )
-    win.mainloop()
-
-    win = Tk()
-    win.title("Process North Country Wild Photos")
-    win.geometry("600x300")
-    b2 = ttk.Button(
-        win, text="CHOOSE PROCESSED IMAGES DIR", command=get_processed_images_dir
-    ).pack(side="top", padx=50, pady=120)
-    win.mainloop()
-
     # Copy and rename images from raw_images_path to processed_images_path
-    for filename in os.listdir(raw_images_dir):
+    for filename in os.listdir(path_to_raw_images):
         # Only process unhidden images
         if not filename.startswith("."):
-            raw_filepath = os.path.join(raw_images_dir, filename)
+            raw_filepath = os.path.join(path_to_raw_images, filename)
             timestamp_code = get_timestamp_code_for_filename(raw_filepath)
             filename_with_prefix = f"C{camera_number_with_leading_zeros}_SD{sd_card_number_with_leading_zeros}_{timestamp_code}_{filename}"
             processed_filepath = os.path.join(
-                processed_images_dir, filename_with_prefix
+                path_to_processed_images, filename_with_prefix
             )
             print(f"copying {raw_filepath} to {processed_filepath}")
             shutil.copy(raw_filepath, processed_filepath)
 
-    change_file_size_and_copyright(processed_images_dir)
+    # change_file_size_and_copyright(path_to_processed_images)
 
 
 def completely_process_images_from_sd_card(
     memory_card_path: str,
+    path_to_raw_images: str,
+    path_to_processed_images: str,
     camera_number: int,
     sd_card_number: int,
 ):
@@ -230,55 +190,29 @@ def completely_process_images_from_sd_card(
     # Should also prevent overwriting where possible
     # https://stackoverflow.com/questions/82831/how-do-i-check-whether-a-file-exists-without-exceptions
 
-    def get_raw_images_dir():
-        global raw_images_dir
-        raw_images_dir = askdirectory(title="CHOOSE RAW IMAGES DIR")
-        win.destroy()
-
-    def get_processed_images_dir():
-        global processed_images_dir
-        processed_images_dir = askdirectory(title="CHOOSE PROCESSED IMAGES DIR")
-        win.destroy()
-
-    win = Tk()
-    win.title("Process North Country Wild Photos")
-    win.geometry("600x300")
-    b1 = ttk.Button(win, text="CHOOSE RAW IMAGES DIR", command=get_raw_images_dir).pack(
-        side="top", padx=50, pady=120
-    )
-    win.mainloop()
-
-    win = Tk()
-    win.title("Process North Country Wild Photos")
-    win.geometry("600x300")
-    b2 = ttk.Button(
-        win, text="CHOOSE PROCESSED IMAGES DIR", command=get_processed_images_dir
-    ).pack(side="top", padx=50, pady=120)
-    win.mainloop()
-
     # Copy images from memory_card_path to raw_images_path
     for filename in os.listdir(memory_card_path):
         # Only process unhidden images
         if not filename.startswith("."):
             sd_filepath = os.path.join(memory_card_path, filename)
-            raw_images_filepath = os.path.join(raw_images_dir, filename)
+            raw_images_filepath = os.path.join(path_to_raw_images, filename)
             print(f"copying {sd_filepath} to {raw_images_filepath}")
             shutil.copy(sd_filepath, raw_images_filepath)
 
     # Copy and rename images from raw_images_path to processed_images_path
-    for filename in os.listdir(raw_images_dir):
+    for filename in os.listdir(path_to_raw_images):
         # Only process unhidden images
         if not filename.startswith("."):
-            raw_filepath = os.path.join(raw_images_dir, filename)
+            raw_filepath = os.path.join(path_to_raw_images, filename)
             timestamp_code = get_timestamp_code_for_filename(raw_filepath)
             filename_with_prefix = f"C{camera_number_with_leading_zeros}_SD{sd_card_number_with_leading_zeros}_{timestamp_code}_{filename}"
             processed_filepath = os.path.join(
-                processed_images_dir, filename_with_prefix
+                path_to_processed_images, filename_with_prefix
             )
             print(f"copying {raw_filepath} to {processed_filepath}")
             shutil.copy(raw_filepath, processed_filepath)
 
-    change_file_size_and_copyright(processed_images_dir)
+    change_file_size_and_copyright(path_to_processed_images)
 
 
 def get_args():
@@ -295,7 +229,7 @@ def get_args():
     file_size_and_copyright_parser.add_argument(
         "--path-to-processed-images",
         type=str,
-        required=False,
+        required=True,
         help="full path to where processed images are held; assumes you want to overwrite the files at this path",
     )
 
@@ -306,6 +240,18 @@ def get_args():
     )
     copy_raw_image_file_size_and_copyright_parser.set_defaults(
         func=copy_raw_images_change_file_size_and_copyright
+    )
+    copy_raw_image_file_size_and_copyright_parser.add_argument(
+        "--path-to-raw-images",
+        type=str,
+        required=True,
+        help="full path to raw images, before renaming, resizing, or changing copyright",
+    )
+    copy_raw_image_file_size_and_copyright_parser.add_argument(
+        "--path-to-processed-images",
+        type=str,
+        required=True,
+        help="full path to where processed images will be placed",
     )
     copy_raw_image_file_size_and_copyright_parser.add_argument(
         "--camera-number",
@@ -330,6 +276,18 @@ def get_args():
         type=str,
         required=True,
         help="full path to memory card holding the images, as a string",
+    )
+    from_sd_card_parser.add_argument(
+        "--path-to-raw-images",
+        type=str,
+        required=True,
+        help="full path to raw images, before renaming, resizing, or changing copyright",
+    )
+    from_sd_card_parser.add_argument(
+        "--path-to-processed-images",
+        type=str,
+        required=True,
+        help="full path to where processed images will be placed",
     )
     from_sd_card_parser.add_argument(
         "--camera-number",
