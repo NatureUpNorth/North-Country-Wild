@@ -172,7 +172,7 @@ def copy_raw_images_change_file_size_and_copyright(
             print(f"copying {raw_filepath} to {processed_filepath}")
             shutil.copy(raw_filepath, processed_filepath)
 
-    # change_file_size_and_copyright(path_to_processed_images)
+    change_file_size_and_copyright(path_to_processed_images)
 
 
 def completely_process_images_from_sd_card(
