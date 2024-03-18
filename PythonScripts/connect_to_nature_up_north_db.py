@@ -23,8 +23,10 @@ from psycopg2.pool import SimpleConnectionPool
 
 _POOL: Dict[str, Any] = {}
 _PID = os.getpid()
-_REGION_NAME = "us-east-1"
-_PARAMETER_NAME = "arn:aws:ssm:us-east-1:502732585705:parameter/nature_up_north_db"
+_REGION_NAME = "us-east-2"
+_PARAMETER_NAME = (
+    "arn:aws:ssm:us-east-2:590184055410:parameter/north-country-wild-credentials"
+)
 
 
 def return_connection(environment: str, connection: connection) -> None:
