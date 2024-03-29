@@ -130,11 +130,8 @@ def _create_upsert_conflict_statement(pkeys: List[str], columns: List[str]) -> s
         ...
     """
     conflict_str = ", ".join(pkeys)
-    on_conflict = f"ON CONFLICT ({conflict_str}) DO UPDATE SET"
-    set_columns = ", ".join(
-        [f"{col} = EXCLUDED.{col}" for col in columns if col not in pkeys]
-    )
-    return f"{on_conflict} {set_columns}"
+    on_conflict = f"ON CONFLICT ({conflict_str}) DO NOTHING"
+    return f"{on_conflict}"
 
 
 def _create_upsert_statement(
@@ -209,9 +206,19 @@ def bulk_insert_with_copy_expert(df, table_name):
 def upload_data_from_csv(
     csv_file: str,
 ) -> None:
-    camera_model_id_and_model_df = pd.read_csv(csv_file)
-    print(camera_model_id_and_model_df)
-    bulk_insert_with_copy_expert(camera_model_id_and_model_df, "cameras")
+    classifications_df = pd.read_csv(csv_file)
+    classifications_df = classifications_df.replace({np.nan: None})
+    print(classifications_df.head())
+    subject_sets_df = classifications_df[
+        ["subject_id", "image_id_1", "image_id_2", "image_id_3"]
+    ]
+    simple_classifications_df = classifications_df[["subject_id", "common_name_code"]]
+    upsert_from_df(subject_sets_df, "subject_sets", pkeys=["subject_id"])
+    upsert_from_df(
+        simple_classifications_df,
+        "classifications",
+        pkeys=["subject_id", "common_name_code"],
+    )
     print("Successfully uploaded data!")
 
 
@@ -261,15 +268,18 @@ def validate_table_name(table_name):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(
         description="""
-        This script takes a test csv with two columns, camera_id and model names,\n
-        and uploads the values to the north-country-wild database
+        This script takes a test csv with at least five columns (potentially more):\n
+        subject_id, image_id_1, image_id_2, and image_id_3, and common_name_code and\n
+        and uploads the data into two separate tables:\n
+        subject_sets and classifications. This is cleaned-up data that you would expect\n
+        to see after concatenating multiple classification IDs into one "true" ID.
         """
     )
-    parser.add_argument("--camera-id-and-model-csv", type=str, required=True)
+    parser.add_argument("--classifications-csv", type=str, required=True)
 
     args = parser.parse_args()
-
-    upload_data_from_csv(args.camera_id_and_model_csv)
+    print("Brett needs to add a check for proper header names in file")
+    upload_data_from_csv(args.classifications_csv)
 
 
 # execute(
