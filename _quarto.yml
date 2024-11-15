@@ -1,0 +1,25 @@
+project:
+  type: book
+  output-dir: documentation/docs
+  
+
+book:
+  title: "North-Country-Wild"
+  author: "Erika Barthelmess"
+  date: "11/15/2024"
+  chapters:
+    - index.qmd
+    - documentation/intro.qmd
+    - documentation/summary.qmd
+    - documentation/references.qmd
+
+bibliography: documentation/references.bib
+
+format:
+  html:
+    theme: cosmo
+  pdf:
+    documentclass: scrreprt
+
+editor: visual
+
