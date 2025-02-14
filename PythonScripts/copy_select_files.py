@@ -1,3 +1,7 @@
+"""
+Copies files from a directory of deployment directories to a new directory based on a csv file that has the deployment id, filename, and species
+"""
+
 import argparse
 import os
 import shutil
