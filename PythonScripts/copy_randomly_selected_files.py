@@ -31,32 +31,20 @@ if __name__ == "__main__":
     all_deployment_dir = args.dir_with_deployment_dirs
     ouput_dir = args.dir_to_copy_files_to
 
-    audio_moth_deployment_ids = [
-        "A001_SD001",
-        "A002_SD013",
-        "A003_SD005",
-        "A004_SD012",
-        "A005_SD002",
-        "A006_SD006",
-        "A007_SD017",
-        "A008_SD007",
-        "A009_SD009",
-        "A010_SD014",
-        "A011_SD018",
-        "A013_SD016",
-        "A014_SD021",
-        "A015_SD010",
-        "A016_SD022",
-        "A017_SD024",
-    ]
     # Retrieve df with deployment and filename
     filename_df = pd.read_csv(filename_csv_path)
-    for deployment in audio_moth_deployment_ids:
+
+    # Confirm that deployment + filepath combinations are all unique
+    assert len(filename_df) == len(filename_df[["deployment_id", "filename"]].drop_duplicates())
+
+    for deployment in filename_df["deployment_id"].unique():
         deployment_filename_df = filename_df[filename_df["deployment_id"] == deployment]
         deployment_dir = os.path.join(all_deployment_dir, deployment)
-        output_deployment_dir = os.path.join(ouput_dir, deployment)
-        Path(output_deployment_dir).mkdir(parents=True, exist_ok=True)
-        for filename in deployment_filename_df["filename"].tolist():
-            full_orig_filepath = os.path.join(deployment_dir, filename)
-            full_dest_filepath = os.path.join(output_deployment_dir, filename)
-            shutil.copy(full_orig_filepath, full_dest_filepath)
+        for species in deployment_filename_df["species"].unique():
+            species_df = deployment_filename_df[deployment_filename_df["species"] == species]
+            output_deployment_dir = os.path.join(ouput_dir, deployment, species)
+            Path(output_deployment_dir).mkdir(parents=True, exist_ok=True)
+            for filename in species_df["filename"].tolist():
+                full_orig_filepath = os.path.join(deployment_dir, filename)
+                full_dest_filepath = os.path.join(output_deployment_dir, filename)
+                shutil.copy(full_orig_filepath, full_dest_filepath)
