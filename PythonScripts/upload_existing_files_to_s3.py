@@ -1,5 +1,6 @@
 import argparse
 import boto3
+import glob
 from pathlib import Path
 import os
 from upload_and_process_images import get_timestamp_code_for_filename
@@ -7,7 +8,7 @@ from upload_and_process_images import get_timestamp_code_for_filename
 
 def upload_files_to_s3(path_to_year_dir: Path | str, bucket_name: str, extra_args: dict[str, str] | None = None) -> None:
     # Create a session using the specified profile
-    session = boto3.Session(profile_name="no_co_wild")
+    session = boto3.Session(profile_name="default")
     s3_client = session.client("s3")
 
     raw_files_dir = f"{path_to_year_dir}/Raw"
@@ -18,7 +19,7 @@ def upload_files_to_s3(path_to_year_dir: Path | str, bucket_name: str, extra_arg
     destination_filenames = []
     for camera_sd_folder in camera_sd_folders:
         camera_sd_path = os.path.join(raw_files_dir, camera_sd_folder)
-        files = Path(camera_sd_path).glob("*.jpg")
+        files = glob.glob(f"{camera_sd_path}/*.JPG")
         camera_code = camera_sd_folder[:4]
         sd_code = camera_sd_folder[5:10]
         for filepath in files:
@@ -27,7 +28,7 @@ def upload_files_to_s3(path_to_year_dir: Path | str, bucket_name: str, extra_arg
             filename = os.path.basename(filepath)
             filename_with_prefix = f"{camera_code}_{sd_code}_{timestamp_code}_{filename}"
             destination_filenames.append(filename_with_prefix)
-        print(f"Added {len(files)} from folder {camera_sd_folder}")
+        print(f"Added {len(list(files))} from folder {camera_sd_folder}")
 
     print(f"Will upload {len(all_files_to_upload)} files to {bucket_name} s3 bucket.")
     print(f"Example uploads:\n{all_files_to_upload[0]} -> {destination_filenames[0]}\n{all_files_to_upload[1]} -> {destination_filenames[1]}\n...etc")
