@@ -74,6 +74,31 @@ def get_timestamp_code_for_filename(filename: str) -> str:
 
     return datetime_obj.strftime("%Y%m%d%H%M%S")
 
+def change_file_size_and_copyright(path_to_processed_images: str) -> None:
+    """Resize images and update copyright metadata."""
+    # Iterate over all files in the directory
+    for filename in os.listdir(path_to_processed_images):
+        if not filename.startswith("."):  # Ignore hidden files
+            print(f"Processing {filename}...") # print each file name
+            # Construct full file path
+            processed_filepath = os.path.join(path_to_processed_images, filename)
+
+            # Open and resize image using Pillow
+            with Image.open(processed_filepath) as img:
+                img.thumbnail((2000, 2000))  # Resize images larger than 2000x2000
+                # save back to same file at good quality
+                img.save(processed_filepath, "JPEG", quality=85)  # Compress image
+
+            # Update EXIF metadata
+            exif_dict = piexif.load(processed_filepath) # load it
+            # add correct copyright information
+            exif_dict["0th"][piexif.ImageIFD.Copyright] = "Bart Lab and Nature Up North"
+            # convert back into exif binary format
+            exif_bytes = piexif.dump(exif_dict)
+            # insert metadata back into the image
+            piexif.insert(exif_bytes, processed_filepath)
+            print(f"Updated metadata for {filename}")
+
 def copy_raw_images_change_file_size_and_copyright(
     path_to_raw_images: str,
     path_to_processed_images: str,
@@ -142,7 +167,6 @@ def completely_process_images_from_sd_card(
             shutil.copy(raw_filepath, processed_filepath)
 
     change_file_size_and_copyright(path_to_processed_images)
-
 
 def get_args():
     parser = argparse.ArgumentParser(
