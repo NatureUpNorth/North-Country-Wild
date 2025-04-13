@@ -57,43 +57,6 @@ from datetime import datetime
 from PIL import Image
 import exifread
 import piexif
-"""
-from wand.api import library
-from wand.compat import binary
-from wand.image import Image
-"""
-
-class ExifTool(object):
-
-    sentinel = "{ready}\n"
-
-    def __init__(self, executable="/usr/bin/exiftool"):
-        self.executable = executable
-
-    def __enter__(self):
-        self.process = subprocess.Popen(
-            [self.executable, "-stay_open", "True", "-@", "-"],
-            stdin=subprocess.PIPE,
-            stdout=subprocess.PIPE,
-        )
-        return self
-
-    def __exit__(self, exc_type, exc_value, traceback):
-        self.process.stdin.write("-stay_open\nFalse\n")
-        self.process.stdin.flush()
-
-    def execute(self, *args):
-        args = args + ("-execute\n",)
-        self.process.stdin.write(str.join("\n", args))
-        self.process.stdin.flush()
-        output = ""
-        fd = self.process.stdout.fileno()
-        while not output.endswith(self.sentinel):
-            output += os.read(fd, 4096)
-        return output[: -len(self.sentinel)]
-
-    def get_metadata(self, *filenames):
-        return json.loads(self.execute("-G", "-j", "-n", *filenames))
 
 def get_timestamp_code_for_filename(filename: str) -> str:
     """Extract timestamp from EXIF metadata, or use current time if unavailable."""
