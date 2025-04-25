@@ -42,7 +42,7 @@ def upload_files_to_s3(path_to_year_dir: Path | str, path_to_uploaded_file:str, 
             destination_filenames.append(filename_with_prefix)
         print(f"Added {len(list(files))} from folder {camera_sd_folder}")
 
-    print(f"{len(number_of_files_already_uploaded)}  files in year directory already uploaded to s3.")
+    print(f"{number_of_files_already_uploaded}  files in year directory already uploaded to s3.")
     print(f"Will upload {len(all_files_to_upload)} files to {bucket_name} s3 bucket.")
     print(f"Example uploads:\n{all_files_to_upload[0]} -> {destination_filenames[0]}\n{all_files_to_upload[1]} -> {destination_filenames[1]}\n...etc")
     response = input(f"Do you want to start upload of {len(all_files_to_upload)} files? (y/n): ").strip().lower()
