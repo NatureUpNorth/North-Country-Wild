@@ -61,7 +61,7 @@ def upload_files_to_s3(path_to_year_dir: Path | str, path_to_uploaded_file:str, 
             s3_client.upload_file(str(file_to_upload), bucket_name, destination_filename, ExtraArgs=extra_args or {})
             print("Upload successful!")
             filename = os.path.basename(file_to_upload)
-            files_uploaded.append()
+            files_uploaded.append(filename)
         except Exception as e:
             print("Error uploading file:", e)
             raise
