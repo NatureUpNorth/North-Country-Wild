@@ -85,9 +85,15 @@ def change_file_size_and_copyright(path_to_processed_images: str) -> None:
 
             # Open and resize image using Pillow
             with Image.open(processed_filepath) as img:
+                img.load()
                 img.thumbnail((2000, 2000))  # Resize images larger than 2000x2000
                 # save back to same file at good quality
-                img.save(processed_filepath, "JPEG", quality=85)  # Compress image
+                # using exif_bytes to keep the original EXIF data
+                exif_bytes = img.info.get("exif")
+                if exif_bytes:
+                    img.save(processed_filepath, "JPEG", quality=85, exif=exif_bytes)
+                else:
+                    img.save(processed_filepath, "JPEG", quality=85)
 
             # Update EXIF metadata
             exif_dict = piexif.load(processed_filepath) # load it
@@ -260,7 +266,10 @@ def get_args():
     return subcommand, {k: v for k, v in vars(namespace_args).items() if k != "func"}
 
 
-# argparse these variables
+ # argparse these variables
 if __name__ == "__main__":
     func, args = get_args()
     func(**args)
+
+
+
