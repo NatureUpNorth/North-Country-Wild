@@ -54,99 +54,56 @@ import os
 import shutil
 import subprocess
 from datetime import datetime
-
-import exiftool
-from wand.api import library
-from wand.compat import binary
-from wand.image import Image
-
-
-class ExifTool(object):
-
-    sentinel = "{ready}\n"
-
-    def __init__(self, executable="/usr/bin/exiftool"):
-        self.executable = executable
-
-    def __enter__(self):
-        self.process = subprocess.Popen(
-            [self.executable, "-stay_open", "True", "-@", "-"],
-            stdin=subprocess.PIPE,
-            stdout=subprocess.PIPE,
-        )
-        return self
-
-    def __exit__(self, exc_type, exc_value, traceback):
-        self.process.stdin.write("-stay_open\nFalse\n")
-        self.process.stdin.flush()
-
-    def execute(self, *args):
-        args = args + ("-execute\n",)
-        self.process.stdin.write(str.join("\n", args))
-        self.process.stdin.flush()
-        output = ""
-        fd = self.process.stdout.fileno()
-        while not output.endswith(self.sentinel):
-            output += os.read(fd, 4096)
-        return output[: -len(self.sentinel)]
-
-    def get_metadata(self, *filenames):
-        return json.loads(self.execute("-G", "-j", "-n", *filenames))
-
-
-class wimage(Image):
-    def myDefine(self, key, value):
-        """Skip over wand.image.Image.option"""
-        return library.MagickSetOption(self.wand, binary(key), binary(value))
-
+from PIL import Image
+import exifread
+import piexif
 
 def get_timestamp_code_for_filename(filename: str) -> str:
-    # Get timestamp as unique identifier for when same camera and sd card are used for multiple
-    # deployments
-    with exiftool.ExifTool() as et:
-        metadata = et.get_metadata(filename)
-    if "EXIF:DateTimeOriginal" in metadata:
-        datetime_string = metadata["EXIF:DateTimeOriginal"]
-        datetime_obj = datetime.strptime(datetime_string, "%Y:%m:%d %H:%M:%S")
+    """Extract timestamp from EXIF metadata, or use current time if unavailable."""
+    # using exifread to extract EXIF metadata
+    with open(filename, "rb") as img_file:
+        tags = exifread.process_file(img_file)
+    # getting timestamp and formatting it in string form same as
+    # commented-out code above
+    datetime_string = tags.get("EXIF DateTimeOriginal") # gets timestamp
+    # convert into datetime object
+    if datetime_string:
+        datetime_obj = datetime.strptime(str(datetime_string), "%Y:%m:%d %H:%M:%S")
     else:
-        datetime_obj = datetime.now()
-    year = str(datetime_obj.year)
-    month = str(datetime_obj.month).zfill(2)
-    day = str(datetime_obj.day).zfill(2)
-    hour = str(datetime_obj.hour).zfill(2)
-    minute = str(datetime_obj.minute).zfill(2)
-    second = str(datetime_obj.second).zfill(2)
+        datetime_obj = datetime.now() # if no timestamp, use current time
 
-    return f"{year}{month}{day}{hour}{minute}{second}"
+    return datetime_obj.strftime("%Y%m%d%H%M%S")
 
-
-def change_file_size_and_copyright(
-    path_to_processed_images: str,
-) -> None:
+def change_file_size_and_copyright(path_to_processed_images: str) -> None:
+    """Resize images and update copyright metadata."""
+    # Iterate over all files in the directory
     for filename in os.listdir(path_to_processed_images):
-        # Only process unhidden images
-        if not filename.startswith("."):
-            print(f"resizing and changing copyright info for {filename}")
+        if not filename.startswith("."):  # Ignore hidden files
+            print(f"Processing {filename}...") # print each file name
+            # Construct full file path
             processed_filepath = os.path.join(path_to_processed_images, filename)
 
-            with wimage(filename=processed_filepath) as img_to_save:
-                img_to_save.transform(resize="2000>")
-                img_to_save.myDefine("jpeg:extent", "900kb")
-                # img_to_save.format = "jpeg"
-                img_to_save.save(filename=processed_filepath)
+            # Open and resize image using Pillow
+            with Image.open(processed_filepath) as img:
+                img.load()
+                img.thumbnail((2000, 2000))  # Resize images larger than 2000x2000
+                # save back to same file at good quality
+                # using exif_bytes to keep the original EXIF data
+                exif_bytes = img.info.get("exif")
+                if exif_bytes:
+                    img.save(processed_filepath, "JPEG", quality=85, exif=exif_bytes)
+                else:
+                    img.save(processed_filepath, "JPEG", quality=85)
 
-            with exiftool.ExifTool() as et:
-                et.execute(
-                    b"-overwrite_original",
-                    b"-rights=Copyright",
-                    bytes(processed_filepath, encoding="ascii"),
-                )
-                et.execute(
-                    b"-overwrite_original",
-                    b"-CopyrightNotice=Bart Lab and Nature Up North",
-                    bytes(processed_filepath, encoding="ascii"),
-                )
-
+            # Update EXIF metadata
+            exif_dict = piexif.load(processed_filepath) # load it
+            # add correct copyright information
+            exif_dict["0th"][piexif.ImageIFD.Copyright] = "Bart Lab and Nature Up North"
+            # convert back into exif binary format
+            exif_bytes = piexif.dump(exif_dict)
+            # insert metadata back into the image
+            piexif.insert(exif_bytes, processed_filepath)
+            print(f"Updated metadata for {filename}")
 
 def copy_raw_images_change_file_size_and_copyright(
     path_to_raw_images: str,
@@ -154,24 +111,27 @@ def copy_raw_images_change_file_size_and_copyright(
     camera_number: str,
     sd_card_number: str,
 ) -> None:
-    # Make sure camera and sd numbers have leading zeros
-    # TO DO: Should add check here that there are no more than three digits
-    camera_number_with_leading_zeros = camera_number.zfill(3)
-    sd_card_number_with_leading_zeros = sd_card_number.zfill(3)
-
-    # Copy and rename images from raw_images_path to processed_images_path
+    """Copy and rename images before resizing and modifying metadata."""
+    # 3 digits for camera and sd card numbers
+    camera_number = camera_number.zfill(3)
+    sd_card_number = sd_card_number.zfill(3)
+    # Iterate through each file in the raw images directory
     for filename in os.listdir(path_to_raw_images):
-        # Only process unhidden images
+        # Ignore hidden files
         if not filename.startswith("."):
+            # Construct full file path
             raw_filepath = os.path.join(path_to_raw_images, filename)
+            # extract timestamp
             timestamp_code = get_timestamp_code_for_filename(raw_filepath)
-            filename_with_prefix = f"C{camera_number_with_leading_zeros}_SD{sd_card_number_with_leading_zeros}_{timestamp_code}_{filename}"
-            processed_filepath = os.path.join(
-                path_to_processed_images, filename_with_prefix
-            )
-            print(f"copying {raw_filepath} to {processed_filepath}")
-            shutil.copy(raw_filepath, processed_filepath)
+            # new filename with camera number, sd number, timestamp, filename
+            new_filename = f"C{camera_number}_SD{sd_card_number}_{timestamp_code}_{filename}"
+            # Construct destination file path
+            processed_filepath = os.path.join(path_to_processed_images, new_filename)
 
+            print(f"Copying {raw_filepath} to {processed_filepath}")
+            # copy to processed images directory
+            shutil.copy(raw_filepath, processed_filepath)
+    # Resize and update metadata for all processed images
     change_file_size_and_copyright(path_to_processed_images)
 
 
@@ -213,7 +173,6 @@ def completely_process_images_from_sd_card(
             shutil.copy(raw_filepath, processed_filepath)
 
     change_file_size_and_copyright(path_to_processed_images)
-
 
 def get_args():
     parser = argparse.ArgumentParser(
@@ -307,7 +266,10 @@ def get_args():
     return subcommand, {k: v for k, v in vars(namespace_args).items() if k != "func"}
 
 
-# argparse these variables
+ # argparse these variables
 if __name__ == "__main__":
     func, args = get_args()
     func(**args)
+
+
+
