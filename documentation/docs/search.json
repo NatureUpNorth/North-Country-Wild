@@ -1,0 +1,42 @@
+[
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "North-Country-Wild Repo Documentation",
+    "section": "",
+    "text": "Preface\nThis book provides documentation for the codebase in this repository associated with the North Country Wild research project based in the research lab of Erika Barthelmess, Professor of Biology at St. Lawrence University in Canton, New York.\nThe North Country Wild Project, also known as “NoCoWild” or “NoCo Wild,” also includes a community science aspect in that community members help to identify wildlife in game camera images through our platform on the Zooniverse. We are aspiring to a stage in which community members can also host borrowed (from us) or their own game cameras on their property and contribute images from those cameras to the project.\nThe community science aspect of the project is supported by the team at Nature Up North. You can find more details about the North Country Wild project on our project landing page on the Nature Up North website.",
+    "crumbs": [
+      "Preface"
+    ]
+  },
+  {
+    "objectID": "documentation/intro.html",
+    "href": "documentation/intro.html",
+    "title": "Introduction",
+    "section": "",
+    "text": "We live in a time of “big data.” Data are everywhere, and the data revolution in ecology allows us to ask new and interesting ecological questions we could never ask before.\nAt the same time, collecting large datasets adds a layer of complexity to any research project, as data curation becomes much more complex. Further, because it is easy to generate large datasets relatively inexpensively through use of devices such as camera traps (game cameras) and acoustic recording devices, many researchers at smaller institutions such as St. Lawrence University, my home institution, are accumulating large datasets, but lack the resources more easily tapped into at larger, R1 institutions (resources including e.g. NSF grants, but, perhaps more importantly, the human resources of an army of well-trained graduate students).\nWe have designed a process for managing camera trap (and, eventually, acoustic data) data that we wish to make public through this github repository, so that our work may benefit others working in “small shops” (or large ones!).\nIf you find this work useful, we’d love to hear from you!\nThis book is a work in progress; check back periodically for updates!",
+    "crumbs": [
+      "Introduction"
+    ]
+  },
+  {
+    "objectID": "documentation/who-we-are.html",
+    "href": "documentation/who-we-are.html",
+    "title": "Who we are",
+    "section": "",
+    "text": "Erika L. Barthelmess\nErika is the Piskor Professor of Biology at St. Lawrence University in Canton, NY. She received her BA in Biology at Earlham College in Richmond, Indiana, her PhD from the Department of Systematics and Ecology (now Ecology and Evolutionary Biology) at the University of Kansas, and she conducted post-doctoral research in the Department of Biological Sciences at Vanderbilt University in Nashville, TN.\nAt St. Lawrence University, Erika runs a research group fondly called the “SLU Mammal Crew” and is the founder and Director of the Nature Up North Program. She teaches General Biology, Mammalogy, Biostatistics, Forest Ecology, & Conservation Biology, and occasionally Behavioral Ecology.\nErika is DELIGHTED to have an amazing collaboration with Brett M. Ford on this project.\n\n\nBrett M. Ford\nBrett graduated from St. Lawrence University in 2014 where he majored in Biology and minored in Mathematics. He spends time outside his full-time job as a bioinformatician helping to automate some of the technical aspects of the North Country Wild project. When not coding, he spends his time eating good food, hiking, and exercising his dog, Otto. Brett is our coding guru and superstar.\n\n\nUndergraduate superstars\nErika is fortunate to frequently work with a diverse group of undergraduate research students as well as student interns with the Nature Up North project. These students assist the project in myriad ways, from deploying game cameras and acoustic recorders, curating data, writing code, and conducting data analyses, and also add their good humor to the team!\n\n\nLab mascot\nErika usually has one or two labrador retrievers who serve the role of “lab mascot”. Currently, the role is filled by Gus, ten-year-old (2025) servant to the team. In addition to copious amounts of fur, Gus brings his good-natured and laid-back attitude to all lab meetings, provides stress relief to the team, and tests all muck holes and swamps for suitability when aiding with fieldwork.\n\n\n\nGus the lab mascot",
+    "crumbs": [
+      "Who we are"
+    ]
+  },
+  {
+    "objectID": "documentation/references.html",
+    "href": "documentation/references.html",
+    "title": "References",
+    "section": "",
+    "text": "Coming soon! ::: {#refs}:::",
+    "crumbs": [
+      "References"
+    ]
+  }
+]
