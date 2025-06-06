@@ -8,3 +8,5 @@ documentation/.quarto/
 /_book/
 */.DS_Store
 *.pdf
+index.log
+index.pdf
