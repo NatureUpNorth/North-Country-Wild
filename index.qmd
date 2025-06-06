@@ -1,9 +1,9 @@
 # Preface {.unnumbered}
 
-This is a Quarto book.
+This book provides documentation for the codebase in this repository associated with the North Country Wild research project based in the research lab of [Erika Barthelmess](https://www.stlawu.edu/people/erika-barthelmess), Professor of Biology at St. Lawrence University in Canton, New York.
 
-To learn more about Quarto books visit <https://quarto.org/docs/books>.
+The North Country Wild Project, also known as "NoCoWild" or "NoCo Wild," also includes a community science aspect in that community members help to identify wildlife in game camera images [through our platform on the Zooniverse](https://www.zooniverse.org/projects/barthelmess/north-country-wild). We are aspiring to a stage in which community members can also host borrowed (from us) or their own game cameras on their property and contribute images from those cameras to the project.
 
-```{r}
-1 + 1
-```
+The community science aspect of the project is supported by the team at [Nature Up North](https://natureupnorth.org). You can find more details about the North Country Wild project on our [project landing page](https://www.natureupnorth.org/north-country-wild) on the Nature Up North website.
+
+![](documentation/images/NoCoWildLogo.jpg)

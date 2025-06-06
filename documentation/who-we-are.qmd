@@ -1,0 +1,23 @@
+# Who we are {.unnumbered}
+
+### Erika L. Barthelmess
+
+Erika is the Piskor Professor of [Biology](https://www.stlawu.edu/offices/biology) at [St. Lawrence University](https://www.stlawu.edu) in Canton, NY. She received her BA in Biology at [Earlham College](https://www.earlham.edu) in Richmond, Indiana, her PhD from the [Department of Systematics and Ecology (now Ecology and Evolutionary Biology)](https://eeb.ku.edu/) at the University of Kansas, and she conducted post-doctoral research in the [Department of Biological Sciences](https://as.vanderbilt.edu/biological-sciences/) at Vanderbilt University in Nashville, TN.
+
+At St. Lawrence University, Erika runs a research group fondly called the "SLU Mammal Crew" and is the founder and Director of the [Nature Up North](https://www.natureupnorth.org) Program. She teaches General Biology, Mammalogy, Biostatistics, Forest Ecology, & Conservation Biology, and occasionally Behavioral Ecology.
+
+Erika is DELIGHTED to have an amazing collaboration with Brett M. Ford on this project.
+
+### Brett M. Ford
+
+Brett graduated from St. Lawrence University in 2014 where he majored in Biology and minored in Mathematics. He spends time outside his full-time job as a bioinformatician helping to automate some of the technical aspects of the North Country Wild project. When not coding, he spends his time eating good food, hiking, and exercising his dog, Otto. Brett is our coding guru and superstar.
+
+### Undergraduate superstars
+
+Erika is fortunate to frequently work with a diverse group of undergraduate research students as well as student interns with the Nature Up North project. These students assist the project in myriad ways, from deploying game cameras and acoustic recorders, curating data, writing code, and conducting data analyses, and also add their good humor to the team!
+
+### Lab mascot
+
+Erika usually has one or two labrador retrievers who serve the role of "lab mascot". Currently, the role is filled by Gus, ten-year-old (2025) servant to the team. In addition to copious amounts of fur, Gus brings his good-natured and laid-back attitude to all lab meetings, provides stress relief to the team, and tests all muck holes and swamps for suitability when aiding with fieldwork.
+
+![Gus the lab mascot](images/gus.jpg){width="200"}
