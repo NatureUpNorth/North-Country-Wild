@@ -4,13 +4,17 @@ project:
   
 
 book:
-  title: "North-Country-Wild"
+  title: "North-Country-Wild Repo Documentation"
   author: "Erika Barthelmess"
-  date: "11/15/2024"
+  page-navigation: true
+  page-footer: 
+    left: "Copyright 2025, Erika L. Barthelmess"
   chapters:
     - index.qmd
     - documentation/intro.qmd
-    - documentation/summary.qmd
+    - documentation/who-we-are.qmd
+    - documentation/Chapter-1.qmd
+    - documentation/Chapter-2.qmd
     - documentation/references.qmd
 
 bibliography: documentation/references.bib

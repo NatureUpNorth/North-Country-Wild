@@ -1,9 +1,11 @@
-# Introduction
+# Introduction {.unnumbered}
 
-This is a book created from markdown and executable code.
+We live in a time of "big data." Data are everywhere, and the data revolution in ecology allows us to ask new and interesting ecological questions we could never ask before.
 
-See @knuth84 for additional discussion of literate programming.
+At the same time, collecting large datasets adds a layer of complexity to any research project, as data curation becomes much more complex. Further, because it is easy to generate large datasets relatively inexpensively through use of devices such as camera traps (game cameras) and acoustic recording devices, many researchers at smaller institutions such as [St. Lawrence University](https://www.stlawu.edu), my home institution, are accumulating large datasets, but lack the resources more easily tapped into at [larger, R1 institutions](https://carnegieclassifications.acenet.edu/institutions/?inst=&research2025%5B%5D=1) (resources including e.g. NSF grants, but, perhaps more importantly, the human resources of an army of well-trained graduate students).
 
-```{r}
-1 + 1
-```
+We have designed a process for managing camera trap (and, eventually, acoustic data) data that we wish to make public through this github repository, so that our work may benefit others working in "small shops" (or large ones!).
+
+If you find this work useful, we'd love to [hear from you](mailto:barthelmess@stlawu.edu "click to send email to erika")!
+
+**This book is a work in progress; check back periodically for updates!**
