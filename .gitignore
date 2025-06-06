@@ -4,3 +4,4 @@
 documentation/.quarto/
 
 /.quarto/
+*.DS_Store
