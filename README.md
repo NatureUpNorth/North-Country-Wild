@@ -1,6 +1,10 @@
 # north-country-wild
 This is the repository that contains python scripts for processing and uploading game camera images to the zooniverse.
 
+
+## Documentation
+You can view more detailed documentation than provided in this readme file [here](https://natureupnorth.github.io/North-Country-Wild/)
+
 ## PythonScripts folder
 There are several scripts in this folder, with different functions. Some are here just so that some of our Nature Up North interns have a place to see the code.
 
