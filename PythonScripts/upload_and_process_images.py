@@ -289,7 +289,7 @@ def completely_process_images_from_sd_card(
 
     if response == 'y':
         # Create a session using the specified profile
-        session = boto3.Session(profile_name="no_co_wild")
+        session = boto3.Session(profile_name="default")
         s3_client = session.client("s3")
 
         uploaded_files = []
