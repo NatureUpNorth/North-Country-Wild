@@ -131,15 +131,20 @@ def resize_and_compress_image(filepath, max_size=2000, max_file_size_kb=900):
 
 
 def get_timestamp_code_for_filename(filename: str) -> str:
-    # Get timestamp as unique identifier for when same camera and sd card are used for multiple
-    # deployments
-    with exiftool.ExifTool() as et:
-        metadata = et.get_metadata(filename)
+    try:
+        with exiftool.ExifTool() as et:
+            metadata = et.get_metadata(filename)
+    except AttributeError:
+        with exiftool.ExifTool() as et:
+            result = et.execute_json(filename)
+            metadata = result[0] if result else {}
+    
     if "EXIF:DateTimeOriginal" in metadata:
         datetime_string = metadata["EXIF:DateTimeOriginal"]
         datetime_obj = datetime.strptime(datetime_string, "%Y:%m:%d %H:%M:%S")
     else:
         datetime_obj = datetime.now()
+    
     year = str(datetime_obj.year)
     month = str(datetime_obj.month).zfill(2)
     day = str(datetime_obj.day).zfill(2)
