@@ -33,6 +33,7 @@ def rename_and_upload_files_to_s3(path_to_raw_directory: Path | str, bucket_name
    
     raw_files_dir = f"{path_to_raw_directory}"
     all_files_to_upload = []
+    destination_filenames = []
     number_of_files_already_uploaded = 0
     for camera_sd_folder in camera_sd_folders:
         camera_sd_path = os.path.join(raw_files_dir, camera_sd_folder)
@@ -71,9 +72,6 @@ def rename_and_upload_files_to_s3(path_to_raw_directory: Path | str, bucket_name
                 os.rename(filepath, new_filepath)
 
         # Upload to s3
-        
-        destination_filenames = []
-        
         # Now let's check if files have been uploaded already
         # We get list of files again, because we might have renamed them or left them the same
         all_files = glob.glob(f"{camera_sd_path}/*.jpg") + glob.glob(f"{camera_sd_path}/*.JPG")
