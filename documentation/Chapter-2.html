@@ -2,12 +2,12 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.6.33">
+<meta name="generator" content="quarto-1.4.551">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>2&nbsp; Description of Chapter 2. – North-Country-Wild Repo Documentation</title>
+<title>North-Country-Wild Documentation - 2&nbsp; Image Processing Python Scripts</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -37,10 +37,10 @@ ul.task-list li input[type="checkbox"] {
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-07ba0ad10f5680c660e360ac31d2f3b6.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-3fbf620316015237a6991a5ebc2a9eb0.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -68,6 +68,14 @@ ul.task-list li input[type="checkbox"] {
     "search-label": "Search"
   }
 }</script>
+<script src="../site_libs/core-js-2.5.3/shim.min.js"></script>
+<script src="../site_libs/react-18.2.0/react.min.js"></script>
+<script src="../site_libs/react-18.2.0/react-dom.min.js"></script>
+<script src="../site_libs/reactwidget-2.0.0/react-tools.js"></script>
+<link href="../site_libs/htmltools-fill-0.5.8.1/fill.css" rel="stylesheet">
+<script src="../site_libs/htmlwidgets-1.6.4/htmlwidgets.js"></script>
+<link href="../site_libs/reactable-0.4.4/reactable.css" rel="stylesheet">
+<script src="../site_libs/reactable-binding-0.4.4/reactable.js"></script>
 
 
 </head>
@@ -78,13 +86,13 @@ ul.task-list li input[type="checkbox"] {
   <header id="quarto-header" class="headroom fixed-top">
   <nav class="quarto-secondary-nav">
     <div class="container-fluid d-flex">
-      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../documentation/Chapter-2.html"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Description of Chapter 2.</span></a></li></ol></nav>
-        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../documentation/Chapter-2.html"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Image Processing Python Scripts</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
-      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+      <button type="button" class="btn quarto-search-button" aria-label="" onclick="window.quartoOpenSearch();">
         <i class="bi bi-search"></i>
       </button>
     </div>
@@ -96,7 +104,7 @@ ul.task-list li input[type="checkbox"] {
   <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
     <div class="pt-lg-2 mt-2 text-left sidebar-header">
     <div class="sidebar-title mb-0 py-0">
-      <a href="../">North-Country-Wild Repo Documentation</a> 
+      <a href="../">North-Country-Wild Documentation</a> 
     </div>
       </div>
         <div class="mt-2 flex-shrink-0 align-items-center">
@@ -133,7 +141,7 @@ ul.task-list li input[type="checkbox"] {
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../documentation/Chapter-2.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Description of Chapter 2.</span></span></a>
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Image Processing Python Scripts</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -147,15 +155,27 @@ ul.task-list li input[type="checkbox"] {
 </nav>
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
-        
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction"><span class="header-section-number">2.1</span> Introduction</a></li>
+  <li><a href="#scripts" id="toc-scripts" class="nav-link" data-scroll-target="#scripts"><span class="header-section-number">2.2</span> Scripts</a></li>
+  <li><a href="#choosing-the-correct-script" id="toc-choosing-the-correct-script" class="nav-link" data-scroll-target="#choosing-the-correct-script"><span class="header-section-number">2.3</span> Choosing the correct script</a>
+  <ul class="collapse">
+  <li><a href="#working-with-new-game-camera-images" id="toc-working-with-new-game-camera-images" class="nav-link" data-scroll-target="#working-with-new-game-camera-images"><span class="header-section-number">2.3.1</span> Working with new game camera images</a></li>
+  <li><a href="#working-with-older-existing-game-camera-images" id="toc-working-with-older-existing-game-camera-images" class="nav-link" data-scroll-target="#working-with-older-existing-game-camera-images"><span class="header-section-number">2.3.2</span> Working with older, existing game camera images</a></li>
+  </ul></li>
+  </ul>
+</nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Description of Chapter 2.</span></h1>
+<h1 class="title"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Image Processing Python Scripts</span></h1>
 </div>
 
 
@@ -172,8 +192,76 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
+<section id="introduction" class="level2" data-number="2.1">
+<h2 data-number="2.1" class="anchored" data-anchor-id="introduction"><span class="header-section-number">2.1</span> Introduction</h2>
+<p>We use several different python scripts in order to process our game camera images. In this chapter, we will take a top-level view of all of the scripts and their capabilities. Later chapters will go over how to use each script</p>
+</section>
+<section id="scripts" class="level2" data-number="2.2">
+<h2 data-number="2.2" class="anchored" data-anchor-id="scripts"><span class="header-section-number">2.2</span> Scripts</h2>
+<p>Our current list of scripts in this repository (<code>North-Country-Wild/PythonScripts</code>) are the following:</p>
+<div class="cell">
+<div id="tbl-1" class="cell quarto-float anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;2.1: Current list of python scripts
+</figcaption>
+<div aria-describedby="tbl-1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="cell-output-display">
+<div class="reactable html-widget html-fill-item" id="htmlwidget-20845ffb70a7b4a7e0b0" style="width:auto;height:auto;"></div>
+<script type="application/json" data-for="htmlwidget-20845ffb70a7b4a7e0b0">{"x":{"tag":{"name":"Reactable","attribs":{"data":{"script_name":["copy_select_files.py","database_helpers.py","google_sheets.py","rename_raw_files_and_upload_to_s3.py","run_config.py","sync_deployments_google_sheet.py","upload_and_process_images.py","upload_existing_files_to_s3.py","upload_from_manifest.py"],"script_purpose":["Audiomoth audio file processing","Relational database","Relational database","Prepare older files for copy to AWS s3","Uploading images to Zooniverse","Relational database","Main image workflows","Prepare older files for copy to AWS s3","Uploading images to Zooniverse"]},"columns":[{"id":"script_name","name":"Script name","type":"character"},{"id":"script_purpose","name":"Script purpose","type":"character"}],"highlight":true,"bordered":true,"striped":true,"dataKey":"3c71bbf928e14906333ed9e08d8b8369"},"children":[]},"class":"reactR_markup"},"evals":[],"jsHooks":[]}</script>
+</div>
+</div>
+</figure>
+</div>
+</div>
+<p>You can see that some of the scripts in the repository are used for working with some of our acoustic data (Audiomoth data) and others are related to a relational database we are building. In this and the next several chapters, we will only cover here those that relate to our game camera image processing.</p>
+<p>The historical process by which we created these scripts reflects different stages of the development of this repository.</p>
+<ul>
+<li><p>First, we wrote scripts to process all new, incoming game camera images to improve our workflow.</p></li>
+<li><p>Next, we wrote scripts to allow backup of images to AWS S3.</p></li>
+<li><p>Our most recent development has been to write scripts that let us go back to already existing folders and images that were created on our hard drive early in our process, before we had certain conventions in place, to allow us to rename and back up those older images.</p></li>
+</ul>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Modify for your use!
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>We are providing access to this repository in case others find our work helpful for their own workflows. Feel free to review, copy, and modify these scripts for your own use. With the advent of powerful AI tools, even someone without much background in python may be able to take these scripts and modify them to fit your own data organization structure.</p>
+</div>
+</div>
+</section>
+<section id="choosing-the-correct-script" class="level2" data-number="2.3">
+<h2 data-number="2.3" class="anchored" data-anchor-id="choosing-the-correct-script"><span class="header-section-number">2.3</span> Choosing the correct script</h2>
+<section id="working-with-new-game-camera-images" class="level3" data-number="2.3.1">
+<h3 data-number="2.3.1" class="anchored" data-anchor-id="working-with-new-game-camera-images"><span class="header-section-number">2.3.1</span> Working with new game camera images</h3>
+<p>Assuming that we deploy a game camera now that we have all of our processes in place, and we bring a SD card back to the lab ready to process, we can completely process all of those images, copy them to S3, and resize them, etc.</p>
+<ul>
+<li><p>The script <code>upload_and_process_images.py</code> is the main script for processing newly collected images.</p></li>
+<li><p>Further explanation on how to use this script will be provided in Chapter 3.</p></li>
+</ul>
+</section>
+<section id="working-with-older-existing-game-camera-images" class="level3" data-number="2.3.2">
+<h3 data-number="2.3.2" class="anchored" data-anchor-id="working-with-older-existing-game-camera-images"><span class="header-section-number">2.3.2</span> Working with older, existing game camera images</h3>
+<p>In our lab, because we started working with game camera images before we shaped all of these steps to our workflow, we have old folders that need to be processed.</p>
+<p>For example, until recently, we did not rename images when the were copied from the SD card to the appropriate folder in the “Raw” directory. As a result, within a folder for any particular deployment, all of the Raw images were named IMG_001.JPG, IMG_002.JPG, etc. As a result, they could be easily confused between camera deployments (since every camera begins numbering on every deployment with IMG_001.JPG…).</p>
+<ul>
+<li>The script called <code>rename_raw_files_and_upload_to_s3.py</code> enables us to go back to old folders in the “Raw” directories and rename those files.</li>
+<li>Further information on how to use this script will be covered in Chapter 4.</li>
+</ul>
+<p>Likewise, our process for pushing copies of our Raw files to AWS S3 is fairly recent. Thus, if we want to go back and move older files to AWS S3, we can do so.</p>
+<ul>
+<li>The script called <code>upload_existing_files_to_s3.py</code> allows us to go back and move images that have not yet been copied up to AWS S3.</li>
+<li>Further information on how to use this script will be covered in Chapter 5.</li>
+</ul>
 
 
+</section>
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
@@ -211,7 +299,18 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     }
     return false;
   }
-  const onCopySuccess = function(e) {
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
     // button target
     const button = e.trigger;
     // don't keep focus
@@ -243,29 +342,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     }, 1000);
     // clear code selection
     e.clearSelection();
-  }
-  const getTextToCopy = function(trigger) {
-      const codeEl = trigger.previousElementSibling.cloneNode(true);
-      for (const childEl of codeEl.children) {
-        if (isCodeAnnotation(childEl)) {
-          childEl.remove();
-        }
-      }
-      return codeEl.innerText;
-  }
-  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
-    text: getTextToCopy
   });
-  clipboard.on('success', onCopySuccess);
-  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
-    // For code content inside modals, clipBoardJS needs to be initialized with a container option
-    // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
-    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
-      text: getTextToCopy,
-      container: window.document.getElementById('quarto-embedded-source-code-modal')
-    });
-    clipboardModal.on('success', onCopySuccess);
-  }
     var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
     var mailtoRegex = new RegExp(/^mailto:/);
       var filterRegex = new RegExp('/' + window.location.host + '/');
@@ -273,7 +350,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
         return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
     }
     // Inspect non-navigation links and adorn them if external
- 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool)');
     for (var i=0; i<links.length; i++) {
       const link = links[i];
       if (!isInternal(link.href)) {
