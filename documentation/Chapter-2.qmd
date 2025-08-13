@@ -1,4 +1,4 @@
-# Image Processing Python Scripts
+# Image Processing Python Scripts {#sec-chapter2}
 
 ## Introduction
 
@@ -43,33 +43,32 @@ The historical process by which we created these scripts reflects different stag
 
 -   Our most recent development has been to write scripts that let us go back to already existing folders and images that were created on our hard drive early in our process, before we had certain conventions in place, to allow us to rename and back up those older images.
 
-
 ::: callout-tip
 ## Modify for your use!
 
 We are providing access to this repository in case others find our work helpful for their own workflows. Feel free to review, copy, and modify these scripts for your own use. With the advent of powerful AI tools, even someone without much background in python may be able to take these scripts and modify them to fit your own data organization structure.
 :::
+
 ## Choosing the correct script
 
 ### Working with new game camera images
 
-Assuming that we deploy a game camera now that we have all of our processes in place, and we bring a SD card back to the lab ready to process, we can completely process all of those images, copy them to S3, and resize them, etc. 
+Assuming that we deploy a game camera now that we have all of our processes in place, and we bring a SD card back to the lab ready to process, we can completely process all of those images, copy them to S3, and resize them, etc.
 
-- The script `upload_and_process_images.py` is the main script for processing newly collected images.
+-   The script `upload_and_process_images.py` is the main script for processing newly collected images.
 
-- Further explanation on how to use this script will be provided in Chapter 3.
-
+-   Further explanation on how to use this script will be provided in @sec-Chapter3
 
 ### Working with older, existing game camera images
-In our lab, because we started working with game camera images before we shaped all of these steps to our workflow, we have old folders that need to be processed. 
 
-For example, until recently, we did not rename images when the were copied from the SD card to the appropriate folder in the "Raw" directory. As a result, within a folder for any particular deployment, all of the Raw images were named IMG_001.JPG, IMG_002.JPG, etc. As a result, they could be easily confused between camera deployments (since every camera begins numbering on every deployment with IMG_001.JPG...). 
+In our lab, because we started working with game camera images before we shaped all of these steps to our workflow, we have old folders that need to be processed.
 
-- The script called `rename_raw_files_and_upload_to_s3.py` enables us to go back to old folders in the "Raw" directories and rename those files.
-- Further information on how to use this script will be covered in Chapter 4.
+For example, until recently, we did not rename images when the were copied from the SD card to the appropriate folder in the "Raw" directory. As a result, within a folder for any particular deployment, all of the Raw images were named IMG_001.JPG, IMG_002.JPG, etc. As a result, they could be easily confused between camera deployments (since every camera begins numbering on every deployment with IMG_001.JPG...).
+
+-   The script called `rename_raw_files_and_upload_to_s3.py` enables us to go back to old folders in the "Raw" directories and rename those files.
+-   Further information on how to use this script will be covered in @sec-Chapter4.
 
 Likewise, our process for pushing copies of our Raw files to AWS S3 is fairly recent. Thus, if we want to go back and move older files to AWS S3, we can do so.
 
-- The script called `upload_existing_files_to_s3.py` allows us to go back and move images that have not yet been copied up to AWS S3.
-- Further information on how to use this script will be covered in Chapter 5.
-
+-   The script called `upload_existing_files_to_s3.py` allows us to go back and move images that have not yet been copied up to AWS S3.
+-   Further information on how to use this script will be covered in @sec-Chapter5.

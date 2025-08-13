@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>North-Country-Wild Documentation - 1&nbsp; Process Overview</title>
+<title>North-Country-Wild Documentation - 3&nbsp; Upload and process images</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -30,8 +30,8 @@ ul.task-list li input[type="checkbox"] {
 <script src="../site_libs/quarto-search/fuse.min.js"></script>
 <script src="../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../">
-<link href="../documentation/Chapter-2.html" rel="next">
-<link href="../documentation/who-we-are.html" rel="prev">
+<link href="../documentation/Chapter-4.html" rel="next">
+<link href="../documentation/Chapter-2.html" rel="prev">
 <script src="../site_libs/quarto-html/quarto.js"></script>
 <script src="../site_libs/quarto-html/popper.min.js"></script>
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
@@ -81,7 +81,7 @@ ul.task-list li input[type="checkbox"] {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../documentation/Chapter-1.html"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Process Overview</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../documentation/Chapter-3.html"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Upload and process images</span></a></li></ol></nav>
         <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="" onclick="window.quartoOpenSearch();">
@@ -126,7 +126,7 @@ ul.task-list li input[type="checkbox"] {
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../documentation/Chapter-1.html" class="sidebar-item-text sidebar-link active">
+  <a href="../documentation/Chapter-1.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Process Overview</span></span></a>
   </div>
 </li>
@@ -138,7 +138,7 @@ ul.task-list li input[type="checkbox"] {
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../documentation/Chapter-3.html" class="sidebar-item-text sidebar-link">
+  <a href="../documentation/Chapter-3.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Upload and process images</span></span></a>
   </div>
 </li>
@@ -170,17 +170,7 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction"><span class="header-section-number">1.1</span> Introduction</a>
-  <ul class="collapse">
-  <li><a href="#considerations" id="toc-considerations" class="nav-link" data-scroll-target="#considerations"><span class="header-section-number">1.1.1</span> Considerations</a></li>
-  </ul></li>
-  <li><a href="#our-workflow" id="toc-our-workflow" class="nav-link" data-scroll-target="#our-workflow"><span class="header-section-number">1.2</span> Our workflow</a></li>
-  <li><a href="#hard-drive-organization" id="toc-hard-drive-organization" class="nav-link" data-scroll-target="#hard-drive-organization"><span class="header-section-number">1.3</span> Hard Drive Organization</a>
-  <ul class="collapse">
-  <li><a href="#year-by-year-directories" id="toc-year-by-year-directories" class="nav-link" data-scroll-target="#year-by-year-directories"><span class="header-section-number">1.3.1</span> Year-by-year directories</a></li>
-  <li><a href="#raw-and-processed-subdirectories" id="toc-raw-and-processed-subdirectories" class="nav-link" data-scroll-target="#raw-and-processed-subdirectories"><span class="header-section-number">1.3.2</span> Raw and Processed Subdirectories</a></li>
-  </ul></li>
-  <li><a href="#amazon-s3-cloud-organization" id="toc-amazon-s3-cloud-organization" class="nav-link" data-scroll-target="#amazon-s3-cloud-organization"><span class="header-section-number">1.4</span> Amazon S3 Cloud Organization</a></li>
+  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction"><span class="header-section-number">3.1</span> Introduction</a></li>
   </ul>
 </nav>
     </div>
@@ -189,7 +179,7 @@ ul.task-list li input[type="checkbox"] {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title"><span id="sec-chapter1" class="quarto-section-identifier"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Process Overview</span></span></h1>
+<h1 class="title"><span id="sec-Chapter3" class="quarto-section-identifier"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Upload and process images</span></span></h1>
 </div>
 
 
@@ -206,100 +196,8 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<section id="introduction" class="level2" data-number="1.1">
-<h2 data-number="1.1" class="anchored" data-anchor-id="introduction"><span class="header-section-number">1.1</span> Introduction</h2>
-<p>So, you go out into the field and deploy a bunch of game cameras. Maybe you deploy passive acoustic recorders at the same time. Then what?! You will have a lot of data to manage.</p>
-<p>Consider this. A single game camera on a single deployment can collect thousands of images. If you deploy several cameras, you will very quickly start to amass tens to hundreds of thousands of images, or more!</p>
-<section id="considerations" class="level3" data-number="1.1.1">
-<h3 data-number="1.1.1" class="anchored" data-anchor-id="considerations"><span class="header-section-number">1.1.1</span> Considerations</h3>
-<p>You will need to consider many questions, such as:</p>
-<ol type="1">
-<li><p>Where will you store all of these image files?</p></li>
-<li><p>Will you back them up? Where? How?</p></li>
-<li><p>How will you organize all the images to that you can:</p></li>
-</ol>
-<ul>
-<li>easily find images from any particular deployment?</li>
-<li>avoid confusing images between deployments?</li>
-<li>prepare images for classification?</li>
-</ul>
-<ol start="4" type="1">
-<li>How will you classify the images? What steps need to happen to prepare images for classification?</li>
-</ol>
-<p>Try to answer these questions early in your project development - doing so will save you headaches further down the road!</p>
-<div class="callout callout-style-default callout-tip callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Plan ahead of time!
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>Plan for how you will manage all of your game camera images early in the development of your project to save yourself work and headaches later on.</p>
-</div>
-</div>
-</section>
-</section>
-<section id="our-workflow" class="level2" data-number="1.2">
-<h2 data-number="1.2" class="anchored" data-anchor-id="our-workflow"><span class="header-section-number">1.2</span> Our workflow</h2>
-<p>The general workflow we have developed for processing and logging image data from game cameras is depicted in <a href="#fig-1" class="quarto-xref">Figure&nbsp;<span>1.1</span></a>.</p>
-<div id="fig-1" class="quarto-figure quarto-figure-center quarto-float anchored" alt="Image processing workflow" data-fig-align="center">
-<figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="images/north-country-wild-camera-workflow.png" class="img-fluid quarto-figure quarto-figure-center figure-img" alt="Image processing workflow">
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;1.1: General workflow for processing and logging game camera images
-</figcaption>
-</figure>
-</div>
-<p>We use an external hard drive attached to a computer in the lab as the location where we copy all images from our game camera SD cards. We copy raw images from the SD cards, renaming the files as they are copied so that each image file name informs us of the camera and SD card the image is associated with as well as the timestamp for the image.</p>
-<p>To back up our images (in case of hard drive failure - it happens!), we also copy the renamed, raw images to Amazon Web Services S3 cloud storage.</p>
-<p>Our current workflow (Fall 2025) involves using the Zooniverse platform for image classification by volunteers (rather than using machine learning to ID animals in images). As a result, we also have to process all of our images by downsizing them for upload to the Zooniverse. As we downsize them, we also add copyright information the image EXIF data and copy the images to a “Processed” folder with the same directory structure as the “Raw” folder.</p>
-</section>
-<section id="hard-drive-organization" class="level2" data-number="1.3">
-<h2 data-number="1.3" class="anchored" data-anchor-id="hard-drive-organization"><span class="header-section-number">1.3</span> Hard Drive Organization</h2>
-<section id="year-by-year-directories" class="level3" data-number="1.3.1">
-<h3 data-number="1.3.1" class="anchored" data-anchor-id="year-by-year-directories"><span class="header-section-number">1.3.1</span> Year-by-year directories</h3>
-<p>Our external hard drive is organized so that there is a subdirectory on the hard drive for each year in which game cameras were deployed. Our “year” more-or-less follows the academic calendar, and images are saved in folders based on the deployment date for the camera. We do the majority of our deployments from August through December each year.</p>
-<p>Our practice is to include images from deployments conducted during the summer (outside of our normal academic year) with the academic year that precedes the summer. So, for example, if we deploy cameras in July 2025, they will be located in the folder <code>2024_Game_Camera_Photos</code> since they are associated with the 2024-2025 academic year and come before the start of the 2025-2026 academic year.</p>
-</section>
-<section id="raw-and-processed-subdirectories" class="level3" data-number="1.3.2">
-<h3 data-number="1.3.2" class="anchored" data-anchor-id="raw-and-processed-subdirectories"><span class="header-section-number">1.3.2</span> Raw and Processed Subdirectories</h3>
-<p>Within each year’s subdirectory, we include two subdirectories. One is called “Raw” and the other is called “Processed” (<a href="#fig-2" class="quarto-xref">Figure&nbsp;<span>1.2</span></a>).</p>
-<p>Nested within each of these directories is a unique directory for each camera deployment. Each of those subfolders is named with a combination of the Camera number and SD card number that was used for each deployment. The overall organization therefore looks something like what is shown in <a href="#fig-2" class="quarto-xref">Figure&nbsp;<span>1.2</span></a>.</p>
-<div id="fig-2" class="quarto-figure quarto-figure-center quarto-float anchored" alt="Hard drive organization" data-fig-align="center">
-<figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="images/hard-drive-folder-structure.png" class="img-fluid quarto-figure quarto-figure-center figure-img" alt="Hard drive organization">
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;1.2: Schematic of external hard drive organization
-</figcaption>
-</figure>
-</div>
-<p>Notice in <a href="#fig-2" class="quarto-xref">Figure&nbsp;<span>1.2</span></a> that the “Raw” and “Processed” directories follow the same folder structure. Within each, there is a single folder for each camera deployment. We name these folders by the combination of camera number and SD card number associated with the deployment. For example, the deployment of Camera 23 that used SD card 45 is assigned the folder name <code>C023_SD045</code>.</p>
-<div class="callout callout-style-default callout-tip callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Consider ahead of time!
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>Our shop started using game cameras in 2019 and we didn’t think as much as we should have about how we would organize files at that time. We were just starting out, and assumed that each camera + sd card combination would be unique. It didn’t take long before we had a repeat instance of the same camera + sd card. That’s why we started adding the timestamp as well as the camera and sd card number to each image file name. If you are just starting, give some serious thought to how you want to organize all this data!</p>
-</div>
-</div>
-</section>
-</section>
-<section id="amazon-s3-cloud-organization" class="level2" data-number="1.4">
-<h2 data-number="1.4" class="anchored" data-anchor-id="amazon-s3-cloud-organization"><span class="header-section-number">1.4</span> Amazon S3 Cloud Organization</h2>
-<p>On the Amazon Web Service S3 cloud storage (henceforth “AWS S3”), we don’t go to the trouble of organizing images into subfolders. Because all images are named uniquely with a combination of camera, sd card, and timestamp, we can put all of the images into the same “bucket” (in AWS lingo) without fear of confusing images with one another.</p>
-<p>We store our images in the “glacier” storage, which means that we pay less to back up the images, but we cannot access them immediately (within seconds or minutes) but may have to wait for hours or a few days for access. Thus, keeping the images on our local hard drive organized by deployment, rather than in one giant bucket, makes it easy to quickly locate the images associated with a particular camera deployment.</p>
+<section id="introduction" class="level2" data-number="3.1">
+<h2 data-number="3.1" class="anchored" data-anchor-id="introduction"><span class="header-section-number">3.1</span> Introduction</h2>
 
 
 </section>
@@ -716,13 +614,13 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="../documentation/who-we-are.html" class="pagination-link" aria-label="Who we are">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Who we are</span>
+      <a href="../documentation/Chapter-2.html" class="pagination-link" aria-label="Image Processing Python Scripts">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Image Processing Python Scripts</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="../documentation/Chapter-2.html" class="pagination-link" aria-label="Image Processing Python Scripts">
-        <span class="nav-page-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Image Processing Python Scripts</span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="../documentation/Chapter-4.html" class="pagination-link" aria-label="Rename raw files and upload to AWS S3">
+        <span class="nav-page-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Rename raw files and upload to AWS S3</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

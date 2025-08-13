@@ -104,7 +104,7 @@
     "href": "documentation/Chapter-2.html#choosing-the-correct-script",
     "title": "2  Image Processing Python Scripts",
     "section": "2.3 Choosing the correct script",
-    "text": "2.3 Choosing the correct script\n\n2.3.1 Working with new game camera images\nAssuming that we deploy a game camera now that we have all of our processes in place, and we bring a SD card back to the lab ready to process, we can completely process all of those images, copy them to S3, and resize them, etc.\n\nThe script upload_and_process_images.py is the main script for processing newly collected images.\nFurther explanation on how to use this script will be provided in Chapter 3.\n\n\n\n2.3.2 Working with older, existing game camera images\nIn our lab, because we started working with game camera images before we shaped all of these steps to our workflow, we have old folders that need to be processed.\nFor example, until recently, we did not rename images when the were copied from the SD card to the appropriate folder in the “Raw” directory. As a result, within a folder for any particular deployment, all of the Raw images were named IMG_001.JPG, IMG_002.JPG, etc. As a result, they could be easily confused between camera deployments (since every camera begins numbering on every deployment with IMG_001.JPG…).\n\nThe script called rename_raw_files_and_upload_to_s3.py enables us to go back to old folders in the “Raw” directories and rename those files.\nFurther information on how to use this script will be covered in Chapter 4.\n\nLikewise, our process for pushing copies of our Raw files to AWS S3 is fairly recent. Thus, if we want to go back and move older files to AWS S3, we can do so.\n\nThe script called upload_existing_files_to_s3.py allows us to go back and move images that have not yet been copied up to AWS S3.\nFurther information on how to use this script will be covered in Chapter 5.",
+    "text": "2.3 Choosing the correct script\n\n2.3.1 Working with new game camera images\nAssuming that we deploy a game camera now that we have all of our processes in place, and we bring a SD card back to the lab ready to process, we can completely process all of those images, copy them to S3, and resize them, etc.\n\nThe script upload_and_process_images.py is the main script for processing newly collected images.\nFurther explanation on how to use this script will be provided in Chapter 3\n\n\n\n2.3.2 Working with older, existing game camera images\nIn our lab, because we started working with game camera images before we shaped all of these steps to our workflow, we have old folders that need to be processed.\nFor example, until recently, we did not rename images when the were copied from the SD card to the appropriate folder in the “Raw” directory. As a result, within a folder for any particular deployment, all of the Raw images were named IMG_001.JPG, IMG_002.JPG, etc. As a result, they could be easily confused between camera deployments (since every camera begins numbering on every deployment with IMG_001.JPG…).\n\nThe script called rename_raw_files_and_upload_to_s3.py enables us to go back to old folders in the “Raw” directories and rename those files.\nFurther information on how to use this script will be covered in Chapter 4.\n\nLikewise, our process for pushing copies of our Raw files to AWS S3 is fairly recent. Thus, if we want to go back and move older files to AWS S3, we can do so.\n\nThe script called upload_existing_files_to_s3.py allows us to go back and move images that have not yet been copied up to AWS S3.\nFurther information on how to use this script will be covered in Chapter 5.",
     "crumbs": [
       "<span class='chapter-number'>2</span>  <span class='chapter-title'>Image Processing Python Scripts</span>"
     ]
@@ -117,6 +117,36 @@
     "text": "Coming soon!",
     "crumbs": [
       "References"
+    ]
+  },
+  {
+    "objectID": "documentation/Chapter-5.html",
+    "href": "documentation/Chapter-5.html",
+    "title": "5  Upload existing files to AWS S3",
+    "section": "",
+    "text": "5.1 Introduction",
+    "crumbs": [
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Upload existing files to AWS S3</span>"
+    ]
+  },
+  {
+    "objectID": "documentation/Chapter-3.html",
+    "href": "documentation/Chapter-3.html",
+    "title": "3  Upload and process images",
+    "section": "",
+    "text": "3.1 Introduction",
+    "crumbs": [
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Upload and process images</span>"
+    ]
+  },
+  {
+    "objectID": "documentation/Chapter-4.html",
+    "href": "documentation/Chapter-4.html",
+    "title": "4  Rename raw files and upload to AWS S3",
+    "section": "",
+    "text": "4.1 Introduction",
+    "crumbs": [
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Rename raw files and upload to AWS S3</span>"
     ]
   }
 ]
