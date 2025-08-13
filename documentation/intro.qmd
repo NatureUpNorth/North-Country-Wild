@@ -6,6 +6,8 @@ At the same time, collecting large datasets adds a layer of complexity to any re
 
 We have designed a process for managing camera trap (and, eventually, acoustic data) data that we wish to make public through this github repository, so that our work may benefit others working in "small shops" (or large ones!).
 
+This documentation is focused on describing how we use the various scripts found in this repository and does not cover our entire workflow in detail.
+
 If you find this work useful, we'd love to [hear from you](mailto:barthelmess@stlawu.edu "click to send email to erika")!
 
 **This book is a work in progress; check back periodically for updates!**
