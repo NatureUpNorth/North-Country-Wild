@@ -1,0 +1,10 @@
+script_name,script_purpose
+copy_select_files.py,Audiomoth audio file processing
+database_helpers.py,Relational database
+google_sheets.py,Relational database
+rename_raw_files_and_upload_to_s3.py,Prepare older files for copy to AWS s3
+run_config.py,Uploading images to Zooniverse
+sync_deployments_google_sheet.py,Relational database
+upload_and_process_images.py,Main image workflows
+upload_existing_files_to_s3.py,Prepare older files for copy to AWS s3
+upload_from_manifest.py,Uploading images to Zooniverse
