@@ -3,3 +3,7 @@ title: "Chapter-3"
 format: html
 ---
 
+# Upload and process images {#sec-Chapter3}
+
+## Introduction
+

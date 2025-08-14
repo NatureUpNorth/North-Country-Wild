@@ -15,6 +15,9 @@ book:
     - documentation/who-we-are.qmd
     - documentation/Chapter-1.qmd
     - documentation/Chapter-2.qmd
+    - documentation/Chapter-3.qmd
+    - documentation/Chapter-4.qmd
+    - documentation/Chapter-5.qmd
     - documentation/references.qmd
 
 bibliography: documentation/references.bib
