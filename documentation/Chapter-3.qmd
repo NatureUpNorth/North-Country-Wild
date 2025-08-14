@@ -46,7 +46,7 @@ Under normal circumstances, when we have an SD card that we are ready to work wi
 4.  We use the `upload_and_process_images.py` script under normal conditions, coupled with the `completely_process_images_from_sd_card` subcommand. The arguments you will need to provide are shown in @tbl-2.
 
 | argument | explanation |
-|----|----|
+|------------------------------------|------------------------------------|
 | `--memory-card-path` | provide (drag to terminal) the path to the SD card directory of images |
 | `--path-to-raw-images` | provide(drag to terminal) the path to the empty directory you created in Step 1 above. |
 | `--path-to-processed-images` | provide(drag to terminal) the path to the empty directory you created in Step 2 above. |
@@ -57,4 +57,10 @@ Under normal circumstances, when we have an SD card that we are ready to work wi
 
 : Arguments required by completely_process_images_from_sd_card subcommand {#tbl-2}
 
-5.  next
+5.  For us to keep track of the files we are pushing up to s3, we begin this process by creating and switching to a new branch in the project directory. Generally, we use a branch name such as DD-MON-YYYY-AWS-upload to make clear what we are doing. For example:
+
+`git checkout -b 14-Aug-2025-AWS-upload`
+
+6.  Run the code in the terminal by stringing together the following lines code, all as one continuous command in the terminal, but replace each case of FILEPATH with the requested path:
+
+`python3 upload_and_process_images.py completely_process_images_from_sd_card --memory-card-path PATH-TO-MEMORY-CARD —path-to-raw-images FILEPATH —path-to-processed-images FILEPATH —camera-number CAMERA-NUMBER —sd-card-number SD-CARD-NUMBER —path-to-uploaded-file FILEPATH —bucket-name BUCKET-NAME`
