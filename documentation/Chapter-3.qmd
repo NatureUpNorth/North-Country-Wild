@@ -1,3 +1,34 @@
 # Upload and process images {#sec-Chapter3}
 
 ## Introduction
+
+This chapter describes the workflow we use when coming back to the lab with SD cards from a recent game camera deployment. The script we use for processing these files is `upload_and_process_images.py` found in the PythonScripts directory of this repository. The script includes some subcommands that can do only select pieces of the workflow. Typically, however, you would use the subcommand `completely_process_images_from_sd_card` if you are trying to complete the whole workflow in one pass.
+
+## The script and its subcommands
+
+The script `upload_and_process_images.py` has the following possible subcommands:
+
+```{r}
+#| label: tbl-1
+#| tbl-cap: upload_and_process_images.py subcommands
+#| echo: false
+#| warning: false
+
+library(tidyverse)
+library(here)
+library(reactable)
+library(reactablefmtr)
+
+df <- read_csv(here("documentation/data/upload_and_process_subcommands.csv")) #read in table of subcommands
+
+table_1 <- reactable(
+  df[,2:3],
+  columns = list(
+    subcommand_name = colDef(name = "Subcommand name"), #assign first col name
+    subcommand_purpose = colDef(name = "Subcommand purpose")), #assign second col name
+  bordered = TRUE,
+  striped = TRUE,
+  highlight = TRUE
+  ) #create table 1
+table_1
+```
