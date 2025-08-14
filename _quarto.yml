@@ -1,6 +1,6 @@
 project:
   type: book
-  output-dir: documentation/docs
+  output-dir: docs
   
 
 book:
