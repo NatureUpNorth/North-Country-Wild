@@ -1,8 +1,3 @@
----
-title: "Chapter-3"
-format: html
----
-
 # Upload and process images {#sec-Chapter3}
 
 ## Introduction
@@ -37,3 +32,29 @@ table_1 <- reactable(
   ) #create table 1
 table_1
 ```
+
+## Normal Workflow
+
+Under normal circumstances, when we have an SD card that we are ready to work with, we follow these steps:
+
+1.  Create an empty directory in the appropriate `Raw` folder to receive the raw images. This folder will be named CXXX_SDXXX where XXX is the 3-digit camera number and SD card number, respectively, including leading zeroes.
+
+2.  Create an empty directory in the appropriate `Processed` folder to receive the processed images. This folder will be named CXXX_SDXXX where XXX is the 3-digit camera number and SD card number, respectively, including leading zeroes. You can simply copy the empty folder from the `Raw` directory and paste it in the `Processed` directory since both are empty.
+
+3.  Open a terminal window. CD into the PythonScripts folder of this repository.
+
+4.  We use the `upload_and_process_images.py` script under normal conditions, coupled with the `completely_process_images_from_sd_card` subcommand. The arguments you will need to provide are shown in @tbl-2.
+
+| argument | explanation |
+|----|----|
+| `--memory-card-path` | provide (drag to terminal) the path to the SD card directory of images |
+| `--path-to-raw-images` | provide(drag to terminal) the path to the empty directory you created in Step 1 above. |
+| `--path-to-processed-images` | provide(drag to terminal) the path to the empty directory you created in Step 2 above. |
+| `--camera-number` | provide the camera number. If you fail to give the 3-digit number, the script will add it. |
+| `--sd-card-number` | provide the sd card number. If you fail to give the 3-digit number, the script will add it. |
+| `--path-to-uploaded-file` | provide the path to a file called `files_uploaded_to_s3.txt`, which is located in the `misc_files` directory one level up from the `PythonScripts` directory in this repository. |
+| `--bucket-name` | provide the name for the s3 "bucket" on AWS to which the images will be uploaded. Generally, this argument should be `north-country-wild-images` |
+
+: Arguments required by completely_process_images_from_sd_card subcommand {#tbl-2}
+
+5.  next

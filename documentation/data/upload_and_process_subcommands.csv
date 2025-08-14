@@ -1,4 +1,4 @@
-script_name,subcommand_name,subcommand_purpose,subcommand_arguments
-upload_and_process_images.py,change_file_size_and_copyright,"This subcommand takes a path to the processed images, which have already been renamed, and resizes them and adds copyright information",
-upload_and_process_images.py,copy_raw_images_change_file_size_and_copyright,"This subcommand takes the camera number and sd card number, as three-digit integers, and copies, resizes, and adds copyright information to the images; if a 3-digit integer is not provided, the script will automatically add leading zeros. This subcommand also allows you to upload files to s3.",
-upload_and_process_images.py,completely_process_images_from_sd_card,This subcommand takes a number of arguments and completely processes images from the sd card to separate directories for the raw and processed images.,
+script_name,subcommand_name,subcommand_purpose
+upload_and_process_images.py,change_file_size_and_copyright,"This subcommand takes a path to the processed images, which have already been renamed, and resizes them and adds copyright information"
+upload_and_process_images.py,copy_raw_images_change_file_size_and_copyright,"This subcommand takes the camera number and sd card number, as three-digit integers, and copies, resizes, and adds copyright information to the images; if a 3-digit integer is not provided, the script will automatically add leading zeros. This subcommand also allows you to upload files to s3."
+upload_and_process_images.py,completely_process_images_from_sd_card,This subcommand takes a number of arguments and completely processes images from the sd card to separate directories for the raw and processed images.

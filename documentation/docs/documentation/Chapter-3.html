@@ -68,6 +68,14 @@ ul.task-list li input[type="checkbox"] {
     "search-label": "Search"
   }
 }</script>
+<script src="../site_libs/core-js-2.5.3/shim.min.js"></script>
+<script src="../site_libs/react-18.2.0/react.min.js"></script>
+<script src="../site_libs/react-18.2.0/react-dom.min.js"></script>
+<script src="../site_libs/reactwidget-2.0.0/react-tools.js"></script>
+<link href="../site_libs/htmltools-fill-0.5.8.1/fill.css" rel="stylesheet">
+<script src="../site_libs/htmlwidgets-1.6.4/htmlwidgets.js"></script>
+<link href="../site_libs/reactable-0.4.4/reactable.css" rel="stylesheet">
+<script src="../site_libs/reactable-binding-0.4.4/reactable.js"></script>
 
 
 </head>
@@ -145,13 +153,13 @@ ul.task-list li input[type="checkbox"] {
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../documentation/Chapter-4.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Rename raw files and upload to AWS S3</span></span></a>
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Chapter-4</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../documentation/Chapter-5.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Upload existing files to AWS S3</span></span></a>
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Chapter-5</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -171,6 +179,8 @@ ul.task-list li input[type="checkbox"] {
    
   <ul>
   <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction"><span class="header-section-number">3.1</span> Introduction</a></li>
+  <li><a href="#the-script-and-its-subcommands" id="toc-the-script-and-its-subcommands" class="nav-link" data-scroll-target="#the-script-and-its-subcommands"><span class="header-section-number">3.2</span> The script and its subcommands</a></li>
+  <li><a href="#normal-workflow" id="toc-normal-workflow" class="nav-link" data-scroll-target="#normal-workflow"><span class="header-section-number">3.3</span> Normal Workflow</a></li>
   </ul>
 </nav>
     </div>
@@ -198,6 +208,90 @@ ul.task-list li input[type="checkbox"] {
 
 <section id="introduction" class="level2" data-number="3.1">
 <h2 data-number="3.1" class="anchored" data-anchor-id="introduction"><span class="header-section-number">3.1</span> Introduction</h2>
+<p>This chapter describes the workflow we use when coming back to the lab with SD cards from a recent game camera deployment. The script we use for processing these files is <code>upload_and_process_images.py</code> found in the PythonScripts directory of this repository. The script includes some subcommands that can do only select pieces of the workflow. Typically, however, you would use the subcommand <code>completely_process_images_from_sd_card</code> if you are trying to complete the whole workflow in one pass.</p>
+</section>
+<section id="the-script-and-its-subcommands" class="level2" data-number="3.2">
+<h2 data-number="3.2" class="anchored" data-anchor-id="the-script-and-its-subcommands"><span class="header-section-number">3.2</span> The script and its subcommands</h2>
+<p>The script <code>upload_and_process_images.py</code> has the following possible subcommands:</p>
+<div class="cell">
+<div id="tbl-1" class="cell quarto-float anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;3.1: upload_and_process_images.py subcommands
+</figcaption>
+<div aria-describedby="tbl-1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="cell-output-display">
+<div class="reactable html-widget html-fill-item" id="htmlwidget-b01740d22287559f692d" style="width:auto;height:auto;"></div>
+<script type="application/json" data-for="htmlwidget-b01740d22287559f692d">{"x":{"tag":{"name":"Reactable","attribs":{"data":{"subcommand_name":["change_file_size_and_copyright","copy_raw_images_change_file_size_and_copyright","completely_process_images_from_sd_card"],"subcommand_purpose":["This subcommand takes a path to the processed images, which have already been renamed, and resizes them and adds copyright information","This subcommand takes the camera number and sd card number, as three-digit integers, and copies, resizes, and adds copyright information to the images; if a 3-digit integer is not provided, the script will automatically add leading zeros. This subcommand also allows you to upload files to s3.","This subcommand takes a number of arguments and completely processes images from the sd card to separate directories for the raw and processed images."]},"columns":[{"id":"subcommand_name","name":"Subcommand name","type":"character"},{"id":"subcommand_purpose","name":"Subcommand purpose","type":"character"}],"highlight":true,"bordered":true,"striped":true,"dataKey":"bf066578823993d0cd432e9278ef7d48"},"children":[]},"class":"reactR_markup"},"evals":[],"jsHooks":[]}</script>
+</div>
+</div>
+</figure>
+</div>
+</div>
+</section>
+<section id="normal-workflow" class="level2" data-number="3.3">
+<h2 data-number="3.3" class="anchored" data-anchor-id="normal-workflow"><span class="header-section-number">3.3</span> Normal Workflow</h2>
+<p>Under normal circumstances, when we have an SD card that we are ready to work with, we follow these steps:</p>
+<ol type="1">
+<li><p>Create an empty directory in the appropriate <code>Raw</code> folder to receive the raw images. This folder will be named CXXX_SDXXX where XXX is the 3-digit camera number and SD card number, respectively, including leading zeroes.</p></li>
+<li><p>Create an empty directory in the appropriate <code>Processed</code> folder to receive the processed images. This folder will be named CXXX_SDXXX where XXX is the 3-digit camera number and SD card number, respectively, including leading zeroes. You can simply copy the empty folder from the <code>Raw</code> directory and paste it in the <code>Processed</code> directory since both are empty.</p></li>
+<li><p>Open a terminal window. CD into the PythonScripts folder of this repository.</p></li>
+<li><p>We use the <code>upload_and_process_images.py</code> script under normal conditions, coupled with the <code>completely_process_images_from_sd_card</code> subcommand. The arguments you will need to provide are shown in <a href="#tbl-2" class="quarto-xref">Table&nbsp;<span>3.2</span></a>.</p></li>
+</ol>
+<div id="tbl-2" class="quarto-float anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;3.2: Arguments required by completely_process_images_from_sd_card subcommand
+</figcaption>
+<div aria-describedby="tbl-2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table class="table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>argument</th>
+<th>explanation</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>--memory-card-path</code></td>
+<td>provide (drag to terminal) the path to the SD card directory of images</td>
+</tr>
+<tr class="even">
+<td><code>--path-to-raw-images</code></td>
+<td>provide(drag to terminal) the path to the empty directory you created in Step 1 above.</td>
+</tr>
+<tr class="odd">
+<td><code>--path-to-processed-images</code></td>
+<td>provide(drag to terminal) the path to the empty directory you created in Step 2 above.</td>
+</tr>
+<tr class="even">
+<td><code>--camera-number</code></td>
+<td>provide the camera number. If you fail to give the 3-digit number, the script will add it.</td>
+</tr>
+<tr class="odd">
+<td><code>--sd-card-number</code></td>
+<td>provide the sd card number. If you fail to give the 3-digit number, the script will add it.</td>
+</tr>
+<tr class="even">
+<td><code>--path-to-uploaded-file</code></td>
+<td>provide the path to a file called <code>files_uploaded_to_s3.txt</code>, which is located in the <code>misc_files</code> directory one level up from the <code>PythonScripts</code> directory in this repository.</td>
+</tr>
+<tr class="odd">
+<td><code>--bucket-name</code></td>
+<td>provide the name for the s3 “bucket” on AWS to which the images will be uploaded. Generally, this argument should be <code>north-country-wild-images</code></td>
+</tr>
+</tbody>
+</table>
+</div>
+</figure>
+</div>
+<ol start="5" type="1">
+<li>next</li>
+</ol>
 
 
 </section>
@@ -619,8 +713,8 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="../documentation/Chapter-4.html" class="pagination-link" aria-label="Rename raw files and upload to AWS S3">
-        <span class="nav-page-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Rename raw files and upload to AWS S3</span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="../documentation/Chapter-4.html" class="pagination-link" aria-label="Chapter-4">
+        <span class="nav-page-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Chapter-4</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>
