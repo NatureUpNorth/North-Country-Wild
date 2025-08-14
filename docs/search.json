@@ -1,0 +1,182 @@
+[
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "North-Country-Wild Documentation",
+    "section": "",
+    "text": "Preface\nThis book provides documentation for the codebase in this repository associated with the North Country Wild research project based in the research lab of Erika Barthelmess, Professor of Biology at St. Lawrence University in Canton, New York.\nThe North Country Wild Project, also known as “NoCoWild” or “NoCo Wild,” also includes a community science aspect in that community members help to identify wildlife in game camera images through our platform on the Zooniverse. We are aspiring to a stage in which community members can also host borrowed (from us) or their own game cameras on their property and contribute images from those cameras to the project.\nThe community science aspect of the project is supported by the team at Nature Up North. You can find more details about the North Country Wild project on our project landing page on the Nature Up North website.",
+    "crumbs": [
+      "Preface"
+    ]
+  },
+  {
+    "objectID": "documentation/intro.html",
+    "href": "documentation/intro.html",
+    "title": "Introduction",
+    "section": "",
+    "text": "We live in a time of “big data.” Data are everywhere, and the data revolution in ecology allows us to ask new and interesting ecological questions we could never ask before.\nAt the same time, collecting large datasets adds a layer of complexity to any research project, as data curation becomes much more complex. Further, because it is easy to generate large datasets relatively inexpensively through use of devices such as camera traps (game cameras) and acoustic recording devices, many researchers at smaller institutions such as St. Lawrence University, my home institution, are accumulating large datasets, but lack the resources more easily tapped into at larger, R1 institutions (resources including e.g. NSF grants, but, perhaps more importantly, the human resources of an army of well-trained graduate students).\nWe have designed a process for managing camera trap (and, eventually, acoustic data) data that we wish to make public through this github repository, so that our work may benefit others working in “small shops” (or large ones!).\nThis documentation is focused on describing how we use the various scripts found in this repository and does not cover our entire workflow in detail.\nIf you find this work useful, we’d love to hear from you!\nThis book is a work in progress; check back periodically for updates!",
+    "crumbs": [
+      "Introduction"
+    ]
+  },
+  {
+    "objectID": "documentation/who-we-are.html",
+    "href": "documentation/who-we-are.html",
+    "title": "Who we are",
+    "section": "",
+    "text": "Erika L. Barthelmess\nErika is the Piskor Professor of Biology at St. Lawrence University in Canton, NY. She received her BA in Biology at Earlham College in Richmond, Indiana, her PhD from the Department of Systematics and Ecology (now Ecology and Evolutionary Biology) at the University of Kansas, and she conducted post-doctoral research in the Department of Biological Sciences at Vanderbilt University in Nashville, TN.\nAt St. Lawrence University, Erika runs a research group fondly called the “SLU Mammal Crew” and is the founder and Director of the Nature Up North Program. She teaches General Biology, Mammalogy, Biostatistics, Forest Ecology, & Conservation Biology, and occasionally Behavioral Ecology.\nErika is DELIGHTED to have an amazing collaboration with Brett M. Ford on this project.\n\n\nBrett M. Ford\nBrett graduated from St. Lawrence University in 2014 where he majored in Biology and minored in Mathematics. He spends time outside his full-time job as a bioinformatician helping to automate some of the technical aspects of the North Country Wild project. When not coding, he spends his time eating good food, hiking, and exercising his dog, Otto. Brett is our coding guru and superstar.\n\n\nUndergraduate superstars\nAt the heart of our team is a diverse group of undergraduate research students as well as student interns with the Nature Up North project. These students assist the project in myriad ways, from deploying game cameras and acoustic recorders, curating data, writing code, and conducting data analyses, and also add their good humor to the team!\n\n\nLab mascot\nErika usually has one or two labrador retrievers who serve the role of “lab mascot”. Currently, the role is filled by Gus, ten-year-old (2025) servant to the team. In addition to copious amounts of fur, Gus brings his good-natured and laid-back attitude to all lab meetings, provides stress relief to the team, and tests all muck holes and swamps for suitability when aiding with fieldwork.\n\n\n\nGus the lab mascot",
+    "crumbs": [
+      "Who we are"
+    ]
+  },
+  {
+    "objectID": "documentation/Chapter-1.html",
+    "href": "documentation/Chapter-1.html",
+    "title": "1  Process Overview",
+    "section": "",
+    "text": "1.1 Introduction\nSo, you go out into the field and deploy a bunch of game cameras. Maybe you deploy passive acoustic recorders at the same time. Then what?! You will have a lot of data to manage.\nConsider this. A single game camera on a single deployment can collect thousands of images. If you deploy several cameras, you will very quickly start to amass tens to hundreds of thousands of images, or more!",
+    "crumbs": [
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Process Overview</span>"
+    ]
+  },
+  {
+    "objectID": "documentation/Chapter-1.html#introduction",
+    "href": "documentation/Chapter-1.html#introduction",
+    "title": "1  Process Overview",
+    "section": "",
+    "text": "1.1.1 Considerations\nYou will need to consider many questions, such as:\n\nWhere will you store all of these image files?\nWill you back them up? Where? How?\nHow will you organize all the images to that you can:\n\n\neasily find images from any particular deployment?\navoid confusing images between deployments?\nprepare images for classification?\n\n\nHow will you classify the images? What steps need to happen to prepare images for classification?\n\nTry to answer these questions early in your project development - doing so will save you headaches further down the road!\n\n\n\n\n\n\nPlan ahead of time!\n\n\n\nPlan for how you will manage all of your game camera images early in the development of your project to save yourself work and headaches later on.",
+    "crumbs": [
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Process Overview</span>"
+    ]
+  },
+  {
+    "objectID": "documentation/Chapter-1.html#our-workflow",
+    "href": "documentation/Chapter-1.html#our-workflow",
+    "title": "1  Process Overview",
+    "section": "1.2 Our workflow",
+    "text": "1.2 Our workflow\nThe general workflow we have developed for processing and logging image data from game cameras is depicted in Figure 1.1.\n\n\n\n\n\n\nFigure 1.1: General workflow for processing and logging game camera images\n\n\n\nWe use an external hard drive attached to a computer in the lab as the location where we copy all images from our game camera SD cards. We copy raw images from the SD cards, renaming the files as they are copied so that each image file name informs us of the camera and SD card the image is associated with as well as the timestamp for the image.\nTo back up our images (in case of hard drive failure - it happens!), we also copy the renamed, raw images to Amazon Web Services S3 cloud storage.\nOur current workflow (Fall 2025) involves using the Zooniverse platform for image classification by volunteers (rather than using machine learning to ID animals in images). As a result, we also have to process all of our images by downsizing them for upload to the Zooniverse. As we downsize them, we also add copyright information the image EXIF data and copy the images to a “Processed” folder with the same directory structure as the “Raw” folder.",
+    "crumbs": [
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Process Overview</span>"
+    ]
+  },
+  {
+    "objectID": "documentation/Chapter-1.html#hard-drive-organization",
+    "href": "documentation/Chapter-1.html#hard-drive-organization",
+    "title": "1  Process Overview",
+    "section": "1.3 Hard Drive Organization",
+    "text": "1.3 Hard Drive Organization\n\n1.3.1 Year-by-year directories\nOur external hard drive is organized so that there is a subdirectory on the hard drive for each year in which game cameras were deployed. Our “year” more-or-less follows the academic calendar, and images are saved in folders based on the deployment date for the camera. We do the majority of our deployments from August through December each year.\nOur practice is to include images from deployments conducted during the summer (outside of our normal academic year) with the academic year that precedes the summer. So, for example, if we deploy cameras in July 2025, they will be located in the folder 2024_Game_Camera_Photos since they are associated with the 2024-2025 academic year and come before the start of the 2025-2026 academic year.\n\n\n1.3.2 Raw and Processed Subdirectories\nWithin each year’s subdirectory, we include two subdirectories. One is called “Raw” and the other is called “Processed” (Figure 1.2).\nNested within each of these directories is a unique directory for each camera deployment. Each of those subfolders is named with a combination of the Camera number and SD card number that was used for each deployment. The overall organization therefore looks something like what is shown in Figure 1.2.\n\n\n\n\n\n\nFigure 1.2: Schematic of external hard drive organization\n\n\n\nNotice in Figure 1.2 that the “Raw” and “Processed” directories follow the same folder structure. Within each, there is a single folder for each camera deployment. We name these folders by the combination of camera number and SD card number associated with the deployment. For example, the deployment of Camera 23 that used SD card 45 is assigned the folder name C023_SD045.\n\n\n\n\n\n\nConsider ahead of time!\n\n\n\nOur shop started using game cameras in 2019 and we didn’t think as much as we should have about how we would organize files at that time. We were just starting out, and assumed that each camera + sd card combination would be unique. It didn’t take long before we had a repeat instance of the same camera + sd card. That’s why we started adding the timestamp as well as the camera and sd card number to each image file name. If you are just starting, give some serious thought to how you want to organize all this data!",
+    "crumbs": [
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Process Overview</span>"
+    ]
+  },
+  {
+    "objectID": "documentation/Chapter-1.html#amazon-s3-cloud-organization",
+    "href": "documentation/Chapter-1.html#amazon-s3-cloud-organization",
+    "title": "1  Process Overview",
+    "section": "1.4 Amazon S3 Cloud Organization",
+    "text": "1.4 Amazon S3 Cloud Organization\nOn the Amazon Web Service S3 cloud storage (henceforth “AWS S3”), we don’t go to the trouble of organizing images into subfolders. Because all images are named uniquely with a combination of camera, sd card, and timestamp, we can put all of the images into the same “bucket” (in AWS lingo) without fear of confusing images with one another.\nWe store our images in the “glacier” storage, which means that we pay less to back up the images, but we cannot access them immediately (within seconds or minutes) but may have to wait for hours or a few days for access. Thus, keeping the images on our local hard drive organized by deployment, rather than in one giant bucket, makes it easy to quickly locate the images associated with a particular camera deployment.",
+    "crumbs": [
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Process Overview</span>"
+    ]
+  },
+  {
+    "objectID": "documentation/Chapter-2.html",
+    "href": "documentation/Chapter-2.html",
+    "title": "2  Image Processing With Python Scripts",
+    "section": "",
+    "text": "2.1 Introduction\nWe use several different python scripts in order to process our game camera images. In this chapter, we will take a top-level view of all of the scripts and their capabilities. Later chapters will go over how to use each script",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Image Processing With Python Scripts</span>"
+    ]
+  },
+  {
+    "objectID": "documentation/Chapter-2.html#scripts",
+    "href": "documentation/Chapter-2.html#scripts",
+    "title": "2  Image Processing With Python Scripts",
+    "section": "2.2 Scripts",
+    "text": "2.2 Scripts\nOur current list of scripts in this repository (North-Country-Wild/PythonScripts) are the following:\n\n\n\n\nTable 2.1: Current list of python scripts\n\n\n\n\n\n\n\n\n\n\nYou can see that some of the scripts in the repository are used for working with some of our acoustic data (Audiomoth data) and others are related to a relational database we are building. In this and the next several chapters, we will only cover here those that relate to our game camera image processing.\nThe historical process by which we created these scripts reflects different stages of the development of this repository.\n\nFirst, we wrote scripts to process all new, incoming game camera images to improve our workflow.\nNext, we wrote scripts to allow backup of images to AWS S3.\nOur most recent development has been to write scripts that let us go back to already existing folders and images that were created on our hard drive early in our process, before we had certain conventions in place, to allow us to rename and back up those older images.\n\n\n\n\n\n\n\nModify for your use!\n\n\n\nWe are providing access to this repository in case others find our work helpful for their own workflows. Feel free to review, copy, and modify these scripts for your own use. With the advent of powerful AI tools, even someone without much background in python may be able to take these scripts and modify them to fit your own data organization structure.",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Image Processing With Python Scripts</span>"
+    ]
+  },
+  {
+    "objectID": "documentation/Chapter-2.html#choosing-the-correct-script",
+    "href": "documentation/Chapter-2.html#choosing-the-correct-script",
+    "title": "2  Image Processing With Python Scripts",
+    "section": "2.3 Choosing the correct script",
+    "text": "2.3 Choosing the correct script\n\n2.3.1 Working with new game camera images\nAssuming that we deploy a game camera now that we have all of our processes in place, and we bring a SD card back to the lab ready to process, we can completely process all of those images, copy them to S3, and resize them, etc.\n\nThe script upload_and_process_images.py is the main script for processing newly collected images.\nFurther explanation on how to use this script will be provided in Chapter 3.\n\n\n\n2.3.2 Working with older, existing game camera images\nIn our lab, because we started working with game camera images before we shaped all of these steps to our workflow, we have old folders that need to be processed.\nFor example, until recently, we did not rename images when the were copied from the SD card to the appropriate folder in the “Raw” directory. As a result, within a folder for any particular deployment, all of the Raw images were named IMG_001.JPG, IMG_002.JPG, etc. As a result, they could be easily confused between camera deployments (since every camera begins numbering on every deployment with IMG_001.JPG…).\n\nThe script called rename_raw_files_and_upload_to_s3.py enables us to go back to old folders in the “Raw” directories and rename those files.\nFurther information on how to use this script will be covered in Chapter 4.\n\nLikewise, our process for pushing copies of our Raw files to AWS S3 is fairly recent. Thus, if we want to go back and move older files to AWS S3, we can do so.\n\nThe script called upload_existing_files_to_s3.py allows us to go back and move images that have not yet been copied up to AWS S3.\nFurther information on how to use this script will be covered in Chapter 5.",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Image Processing With Python Scripts</span>"
+    ]
+  },
+  {
+    "objectID": "documentation/Chapter-3.html",
+    "href": "documentation/Chapter-3.html",
+    "title": "3  Upload and process images",
+    "section": "",
+    "text": "3.1 Introduction\nThis chapter describes the workflow we use when coming back to the lab with SD cards from a recent game camera deployment. The script we use for processing these files is upload_and_process_images.py found in the PythonScripts directory of this repository. The script includes some subcommands that can do only select pieces of the workflow. Typically, however, you would use the subcommand completely_process_images_from_sd_card if you are trying to complete the whole workflow in one pass.",
+    "crumbs": [
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Upload and process images</span>"
+    ]
+  },
+  {
+    "objectID": "documentation/Chapter-3.html#the-script-and-its-subcommands",
+    "href": "documentation/Chapter-3.html#the-script-and-its-subcommands",
+    "title": "3  Upload and process images",
+    "section": "3.2 The script and its subcommands",
+    "text": "3.2 The script and its subcommands\nThe script upload_and_process_images.py has the following possible subcommands:\n\n\n\n\nTable 3.1: upload_and_process_images.py subcommands",
+    "crumbs": [
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Upload and process images</span>"
+    ]
+  },
+  {
+    "objectID": "documentation/Chapter-3.html#normal-workflow",
+    "href": "documentation/Chapter-3.html#normal-workflow",
+    "title": "3  Upload and process images",
+    "section": "3.3 Normal Workflow",
+    "text": "3.3 Normal Workflow\nUnder normal circumstances, when we have an SD card that we are ready to work with, we follow these steps:\n\nCreate an empty directory in the appropriate Raw folder to receive the raw images. This folder will be named CXXX_SDXXX where XXX is the 3-digit camera number and SD card number, respectively, including leading zeroes.\nCreate an empty directory in the appropriate Processed folder to receive the processed images. This folder will be named CXXX_SDXXX where XXX is the 3-digit camera number and SD card number, respectively, including leading zeroes. You can simply copy the empty folder from the Raw directory and paste it in the Processed directory since both are empty.\nOpen a terminal window. CD into the PythonScripts folder of this repository.\nWe use the upload_and_process_images.py script under normal conditions, coupled with the completely_process_images_from_sd_card subcommand. The arguments you will need to provide are shown in Table 3.2.\n\n\n\n\nTable 3.2: Arguments required by completely_process_images_from_sd_card subcommand\n\n\n\n\n\n\n\n\n\nargument\nexplanation\n\n\n\n\n--memory-card-path\nprovide (drag to terminal) the path to the SD card directory of images\n\n\n--path-to-raw-images\nprovide(drag to terminal) the path to the empty directory you created in Step 1 above.\n\n\n--path-to-processed-images\nprovide(drag to terminal) the path to the empty directory you created in Step 2 above.\n\n\n--camera-number\nprovide the camera number. If you fail to give the 3-digit number, the script will add it.\n\n\n--sd-card-number\nprovide the sd card number. If you fail to give the 3-digit number, the script will add it.\n\n\n--path-to-uploaded-file\nprovide the path to a file called files_uploaded_to_s3.txt, which is located in the misc_files directory one level up from the PythonScripts directory in this repository.\n\n\n--bucket-name\nprovide the name for the s3 “bucket” on AWS to which the images will be uploaded. Generally, this argument should be north-country-wild-images\n\n\n\n\n\n\n\nFor us to keep track of the files we are pushing up to s3, we begin this process by creating and switching to a new branch in the project directory. Generally, we use a branch name such as DD-MON-YYYY-AWS-upload to make clear what we are doing. For example:\n\ngit checkout -b 14-Aug-2025-AWS-upload\n\nRun the code in the terminal by stringing together the following lines code, all as one continuous command in the terminal, but replace each case of FILEPATH, CAMERA-NUMBER, SD-CARD-NUMBER or BUCKET-NAME with either the requested file path or the correct argument.\n\npython3 upload_and_process_images.py completely_process_images_from_sd_card --memory-card-path PATH-TO-MEMORY-CARD —path-to-raw-images FILEPATH —path-to-processed-images FILEPATH —camera-number CAMERA-NUMBER —sd-card-number SD-CARD-NUMBER —path-to-uploaded-file FILEPATH —bucket-name BUCKET-NAME\n\nAs the script processes:\n\nit will begin by copying files from the SD card to the appropriate folder in Raw. There will be a line-by-line output in the terminal for each file that is copied.\nNext, it will ask you if you want to upload the files to s3. If you choose y, it will begin uploading the files, and will again give line-by-line feedback as it works and will let you know that each upload was successful. It is copying the files to the appropriate folder in Processed at the same time.\nNext it will ask Do you want to overwrite uploaded files file? (y/n) If not, writes to uploaded_files.txt:\nIf you choose y, the file you provided as an argument, /North-Country-Wild/misc_files/files_uploaded_to_s3.txt will be modified to add all of the files that were just uploaded.\nIf you choose n, the file /North-Country-Wild/PythonScripts/uploaded_files.txt will be modified so that you still have a list of the files that you have just processed, even if they are not uploaded to s3.\nOnce the files are uploaded to s3 and copied to the correct Processed folder, the script next begins to resize and change the copyright information for all of the files in the appropriate Processed subfolder.\nAnd that’s it!\n\nOnce the script has processed, you need to create a pull request from the branch you are working on in the terminal:\n\nuse git add . to stage any files that were changed (which should just be /North-Country-Wild/misc_files/files_uploaded_to_s3.txt if everything went smoothly)\nuse git commit -m \"commit message here\" to commit your changes\nAssuming that the branch you just created does not exist on github, then to push the changes to a new branch on git hub for making a pull request, use git push --set-upstream origin name-of-branch-you-are-working-from\nif you read along in the terminal output, you will see a link to github where you can make the pull request.\nIf you are finished uploading for that session, go ahead and make the pull request on github. Once it is complete, you can merge your branch into main locally and then delete the branch.\nIf you have more SD cards to process in this session, continue to process them, using the script in the way we have described, and when you are completely finished, then follow the instructions here in step 8.",
+    "crumbs": [
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Upload and process images</span>"
+    ]
+  },
+  {
+    "objectID": "documentation/Chapter-3.html#atypical-workflows",
+    "href": "documentation/Chapter-3.html#atypical-workflows",
+    "title": "3  Upload and process images",
+    "section": "3.4 Atypical Workflows",
+    "text": "3.4 Atypical Workflows\nMore coming soon!",
+    "crumbs": [
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Upload and process images</span>"
+    ]
+  },
+  {
+    "objectID": "documentation/Chapter-4.html",
+    "href": "documentation/Chapter-4.html",
+    "title": "4  Renaming raw files and uploading to AWS S3",
+    "section": "",
+    "text": "4.1 Introduction",
+    "crumbs": [
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Renaming raw files and uploading to AWS S3</span>"
+    ]
+  },
+  {
+    "objectID": "documentation/Chapter-5.html",
+    "href": "documentation/Chapter-5.html",
+    "title": "5  Uploading existing files to AWS S3",
+    "section": "",
+    "text": "5.1 Introduction",
+    "crumbs": [
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Uploading existing files to AWS S3</span>"
+    ]
+  },
+  {
+    "objectID": "documentation/references.html",
+    "href": "documentation/references.html",
+    "title": "References",
+    "section": "",
+    "text": "Coming soon!",
+    "crumbs": [
+      "References"
+    ]
+  }
+]
