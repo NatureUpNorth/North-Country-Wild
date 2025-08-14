@@ -141,7 +141,7 @@ ul.task-list li input[type="checkbox"] {
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../documentation/Chapter-2.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Image Processing Python Scripts</span></span></a>
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Image Processing With Python Scripts</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -153,13 +153,13 @@ ul.task-list li input[type="checkbox"] {
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../documentation/Chapter-4.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Chapter-4</span></span></a>
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Renaming raw files and uploading to AWS S3</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../documentation/Chapter-5.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Chapter-5</span></span></a>
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Uploading existing files to AWS S3</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -181,6 +181,7 @@ ul.task-list li input[type="checkbox"] {
   <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction"><span class="header-section-number">3.1</span> Introduction</a></li>
   <li><a href="#the-script-and-its-subcommands" id="toc-the-script-and-its-subcommands" class="nav-link" data-scroll-target="#the-script-and-its-subcommands"><span class="header-section-number">3.2</span> The script and its subcommands</a></li>
   <li><a href="#normal-workflow" id="toc-normal-workflow" class="nav-link" data-scroll-target="#normal-workflow"><span class="header-section-number">3.3</span> Normal Workflow</a></li>
+  <li><a href="#atypical-workflows" id="toc-atypical-workflows" class="nav-link" data-scroll-target="#atypical-workflows"><span class="header-section-number">3.4</span> Atypical Workflows</a></li>
   </ul>
 </nav>
     </div>
@@ -221,8 +222,8 @@ Table&nbsp;3.1: upload_and_process_images.py subcommands
 </figcaption>
 <div aria-describedby="tbl-1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="cell-output-display">
-<div class="reactable html-widget html-fill-item" id="htmlwidget-b01740d22287559f692d" style="width:auto;height:auto;"></div>
-<script type="application/json" data-for="htmlwidget-b01740d22287559f692d">{"x":{"tag":{"name":"Reactable","attribs":{"data":{"subcommand_name":["change_file_size_and_copyright","copy_raw_images_change_file_size_and_copyright","completely_process_images_from_sd_card"],"subcommand_purpose":["This subcommand takes a path to the processed images, which have already been renamed, and resizes them and adds copyright information","This subcommand takes the camera number and sd card number, as three-digit integers, and copies, resizes, and adds copyright information to the images; if a 3-digit integer is not provided, the script will automatically add leading zeros. This subcommand also allows you to upload files to s3.","This subcommand takes a number of arguments and completely processes images from the sd card to separate directories for the raw and processed images."]},"columns":[{"id":"subcommand_name","name":"Subcommand name","type":"character"},{"id":"subcommand_purpose","name":"Subcommand purpose","type":"character"}],"highlight":true,"bordered":true,"striped":true,"dataKey":"bf066578823993d0cd432e9278ef7d48"},"children":[]},"class":"reactR_markup"},"evals":[],"jsHooks":[]}</script>
+<div class="reactable html-widget html-fill-item" id="htmlwidget-34a23d227d88673a7735" style="width:auto;height:auto;"></div>
+<script type="application/json" data-for="htmlwidget-34a23d227d88673a7735">{"x":{"tag":{"name":"Reactable","attribs":{"data":{"subcommand_name":["change_file_size_and_copyright","copy_raw_images_change_file_size_and_copyright","completely_process_images_from_sd_card"],"subcommand_purpose":["This subcommand takes a path to the processed images, which have already been renamed, and resizes them and adds copyright information","This subcommand takes the camera number and sd card number, as three-digit integers, and copies, resizes, and adds copyright information to the images; if a 3-digit integer is not provided, the script will automatically add leading zeros. This subcommand also allows you to upload files to s3.","This subcommand takes a number of arguments and completely processes images from the sd card to separate directories for the raw and processed images."]},"columns":[{"id":"subcommand_name","name":"Subcommand name","type":"character"},{"id":"subcommand_purpose","name":"Subcommand purpose","type":"character"}],"highlight":true,"bordered":true,"striped":true,"dataKey":"bf066578823993d0cd432e9278ef7d48"},"children":[]},"class":"reactR_markup"},"evals":[],"jsHooks":[]}</script>
 </div>
 </div>
 </figure>
@@ -290,8 +291,38 @@ Table&nbsp;3.2: Arguments required by completely_process_images_from_sd_card sub
 </figure>
 </div>
 <ol start="5" type="1">
-<li>next</li>
+<li>For us to keep track of the files we are pushing up to s3, we begin this process by creating and switching to a new branch in the project directory. Generally, we use a branch name such as DD-MON-YYYY-AWS-upload to make clear what we are doing. For example:</li>
 </ol>
+<p><code>git checkout -b 14-Aug-2025-AWS-upload</code></p>
+<ol start="6" type="1">
+<li>Run the code in the terminal by stringing together the following lines code, all as one continuous command in the terminal, but replace each case of FILEPATH, CAMERA-NUMBER, SD-CARD-NUMBER or BUCKET-NAME with either the requested file path or the correct argument.</li>
+</ol>
+<p><code>python3 upload_and_process_images.py completely_process_images_from_sd_card --memory-card-path PATH-TO-MEMORY-CARD —path-to-raw-images FILEPATH —path-to-processed-images FILEPATH —camera-number CAMERA-NUMBER —sd-card-number SD-CARD-NUMBER —path-to-uploaded-file FILEPATH —bucket-name BUCKET-NAME</code></p>
+<ol start="7" type="1">
+<li><p>As the script processes:</p>
+<ul>
+<li>it will begin by copying files from the SD card to the appropriate folder in <code>Raw</code>. There will be a line-by-line output in the terminal for each file that is copied.</li>
+<li>Next, it will ask you if you want to upload the files to s3. If you choose <code>y</code>, it will begin uploading the files, and will again give line-by-line feedback as it works and will let you know that each upload was successful. It is copying the files to the appropriate folder in <code>Processed</code> at the same time.</li>
+<li>Next it will ask <code>Do you want to overwrite uploaded files file? (y/n) If not, writes to uploaded_files.txt:</code></li>
+<li>If you choose <code>y</code>, the file you provided as an argument, <code>/North-Country-Wild/misc_files/files_uploaded_to_s3.txt</code> will be modified to add all of the files that were just uploaded.</li>
+<li>If you choose <code>n</code>, the file <code>/North-Country-Wild/PythonScripts/uploaded_files.txt</code> will be modified so that you still have a list of the files that you have just processed, even if they are not uploaded to s3.</li>
+<li>Once the files are uploaded to s3 and copied to the correct <code>Processed</code> folder, the script next begins to resize and change the copyright information for all of the files in the appropriate <code>Processed</code> subfolder.</li>
+<li>And that’s it!</li>
+</ul></li>
+<li><p>Once the script has processed, you need to create a pull request from the branch you are working on in the terminal:</p>
+<ul>
+<li>use <code>git add .</code> to stage any files that were changed (which should just be <code>/North-Country-Wild/misc_files/files_uploaded_to_s3.txt</code> if everything went smoothly)</li>
+<li>use <code>git commit -m "commit message here"</code> to commit your changes</li>
+<li>Assuming that the branch you just created does not exist on github, then to push the changes to a new branch on git hub for making a pull request, use <code>git push --set-upstream origin name-of-branch-you-are-working-from</code></li>
+<li>if you read along in the terminal output, you will see a link to github where you can make the pull request.</li>
+<li>If you are finished uploading for that session, go ahead and make the pull request on github. Once it is complete, you can merge your branch into main locally and then delete the branch.</li>
+<li>If you have more SD cards to process in this session, continue to process them, using the script in the way we have described, and when you are completely finished, then follow the instructions here in step 8.</li>
+</ul></li>
+</ol>
+</section>
+<section id="atypical-workflows" class="level2" data-number="3.4">
+<h2 data-number="3.4" class="anchored" data-anchor-id="atypical-workflows"><span class="header-section-number">3.4</span> Atypical Workflows</h2>
+<p>More coming soon!</p>
 
 
 </section>
@@ -708,13 +739,13 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="../documentation/Chapter-2.html" class="pagination-link" aria-label="Image Processing Python Scripts">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Image Processing Python Scripts</span></span>
+      <a href="../documentation/Chapter-2.html" class="pagination-link" aria-label="Image Processing With Python Scripts">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Image Processing With Python Scripts</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="../documentation/Chapter-4.html" class="pagination-link" aria-label="Chapter-4">
-        <span class="nav-page-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Chapter-4</span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="../documentation/Chapter-4.html" class="pagination-link" aria-label="Renaming raw files and uploading to AWS S3">
+        <span class="nav-page-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Renaming raw files and uploading to AWS S3</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

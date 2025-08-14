@@ -1,9 +1,3 @@
----
-title: "Chapter-5"
-format: html
----
-
-# Upload existing files to AWS S3 {#sec-Chapter5}
+# Uploading existing files to AWS S3 {#sec-Chapter5}
 
 ## Introduction
-
