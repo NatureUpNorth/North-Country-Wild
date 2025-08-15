@@ -46,7 +46,7 @@ Under normal circumstances, when we have an SD card that we are ready to work wi
 4.  We use the `upload_and_process_images.py` script under normal conditions, coupled with the `completely_process_images_from_sd_card` subcommand. The arguments you will need to provide are shown in @tbl-2.
 
 | argument | explanation |
-|------------------------------------|------------------------------------|
+|----|----|
 | `--memory-card-path` | provide (drag to terminal) the path to the SD card directory of images |
 | `--path-to-raw-images` | provide(drag to terminal) the path to the empty directory you created in Step 1 above. |
 | `--path-to-processed-images` | provide(drag to terminal) the path to the empty directory you created in Step 2 above. |
@@ -70,18 +70,20 @@ Under normal circumstances, when we have an SD card that we are ready to work wi
     -   it will begin by copying files from the SD card to the appropriate folder in `Raw`. There will be a line-by-line output in the terminal for each file that is copied.
     -   Next, it will ask you if you want to upload the files to s3. If you choose `y`, it will begin uploading the files, and will again give line-by-line feedback as it works and will let you know that each upload was successful. It is copying the files to the appropriate folder in `Processed` at the same time.
     -   Next it will ask `Do you want to overwrite uploaded files file? (y/n) If not, writes to uploaded_files.txt:`
-      -   If you choose `y`, the file you provided as an argument, `/North-Country-Wild/misc_files/files_uploaded_to_s3.txt` will be modified to add all of the files that were just uploaded.
-     -   If you choose `n`, the file `/North-Country-Wild/PythonScripts/uploaded_files.txt` will be modified so that you still have a list of the files that you have just processed, even if they are not uploaded to s3.
+    -   If you choose `y`, the file you provided as an argument, `/North-Country-Wild/misc_files/files_uploaded_to_s3.txt` will be modified to add all of the files that were just uploaded.
+    -   If you choose `n`, the file `/North-Country-Wild/PythonScripts/uploaded_files.txt` will be modified so that you still have a list of the files that you have just processed, even if they are not uploaded to s3.
     -   Once the files are uploaded to s3 and copied to the correct `Processed` folder, the script next begins to resize and change the copyright information for all of the files in the appropriate `Processed` subfolder.
     -   And that's it!
 
 8.  Once the script has processed, you need to create a pull request from the branch you are working on in the terminal:
+
     -   use `git add .` to stage any files that were changed (which should just be `/North-Country-Wild/misc_files/files_uploaded_to_s3.txt` if everything went smoothly)
     -   use `git commit -m "commit message here"` to commit your changes
     -   Assuming that the branch you just created does not exist on github, then to push the changes to a new branch on git hub for making a pull request, use `git push --set-upstream origin name-of-branch-you-are-working-from`
     -   if you read along in the terminal output, you will see a link to github where you can make the pull request.
     -   If you are finished uploading for that session, go ahead and make the pull request on github. Once it is complete, you can merge your branch into main locally and then delete the branch.
     -   If you have more SD cards to process in this session, continue to process them, using the script in the way we have described, and when you are completely finished, then follow the instructions here in step 8.
-    
+
 ## Atypical Workflows
+
 More coming soon!
