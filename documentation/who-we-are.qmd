@@ -20,4 +20,4 @@ At the heart of our team is a diverse group of undergraduate research students a
 
 Erika usually has one or two labrador retrievers who serve the role of "lab mascot". Currently, the role is filled by Gus, ten-year-old (2025) servant to the team. In addition to copious amounts of fur, Gus brings his good-natured and laid-back attitude to all lab meetings, provides stress relief to the team, and tests all muck holes and swamps for suitability when aiding with fieldwork.
 
-![Gus the lab mascot](images/gus.jpg){width="200"}
+![Gus the lab mascot](images/gus.jpg){#fig-1 fig-alt="Gus, loyal lab assistant" fig-align="center" width="200"}

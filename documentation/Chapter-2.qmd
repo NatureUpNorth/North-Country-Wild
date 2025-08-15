@@ -9,7 +9,7 @@ We use several different python scripts in order to process our game camera imag
 Our current list of scripts in this repository (`North-Country-Wild/PythonScripts`) are the following:
 
 ```{r}
-#| label: tbl-1
+#| label: tbl-2.1
 #| tbl-cap: Current list of python scripts
 #| echo: false
 #| warning: false

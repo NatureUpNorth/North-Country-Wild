@@ -171,6 +171,8 @@ ul.task-list li input[type="checkbox"] {
    
   <ul>
   <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction"><span class="header-section-number">4.1</span> Introduction</a></li>
+  <li><a href="#the-script-and-its-arguments" id="toc-the-script-and-its-arguments" class="nav-link" data-scroll-target="#the-script-and-its-arguments"><span class="header-section-number">4.2</span> The script and its arguments</a></li>
+  <li><a href="#workflow" id="toc-workflow" class="nav-link" data-scroll-target="#workflow"><span class="header-section-number">4.3</span> Workflow</a></li>
   </ul>
 </nav>
     </div>
@@ -198,6 +200,84 @@ ul.task-list li input[type="checkbox"] {
 
 <section id="introduction" class="level2" data-number="4.1">
 <h2 data-number="4.1" class="anchored" data-anchor-id="introduction"><span class="header-section-number">4.1</span> Introduction</h2>
+<p>In an earlier workflow, we did not change the name of raw files when they were copied from the game camera SD card. Thus, for every camera deployment, there was a deployment folder in the appropriate <code>Raw</code> directory, within which all of the images had the original names assigned by the game camera, generally beginning with IMG_0001.JPG and increasing.</p>
+<p>However, because we are uploading the full-size, raw files to AWS, it is important that each file have a unique name. It is also theoretically possible that images could become confused on the hard drive when they lack unique file names.</p>
+<p>For these reasons, we need the ability to retroactively go back to the various deployment folders in the various year <code>Raw</code> directories and rename the images. We also want the option, at the same time, to upload the images to s3.</p>
+<p>Our python script <code>rename_raw_files_and_upload_to_s3.py</code> takes care of these steps.</p>
+</section>
+<section id="the-script-and-its-arguments" class="level2" data-number="4.2">
+<h2 data-number="4.2" class="anchored" data-anchor-id="the-script-and-its-arguments"><span class="header-section-number">4.2</span> The script and its arguments</h2>
+<p>The script <code>rename_raw_files_and_upload_to_s3.py</code> does not have any subcommands. It has several arguments, as follows:</p>
+<div id="tbl-4.1" class="quarto-float anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-4.1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;4.1: Arguments required by rename_raw_files_and_upload_to_s3 script
+</figcaption>
+<div aria-describedby="tbl-4.1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table class="table">
+<colgroup>
+<col style="width: 38%">
+<col style="width: 23%">
+<col style="width: 38%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>argument</th>
+<th>status</th>
+<th>explanation</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>--path-to-raw-directory</code></td>
+<td>Required</td>
+<td>Full path to folder with raw files with old naming convention (e.g., IMG_0001.JPG)</td>
+</tr>
+<tr class="even">
+<td><code>--camera-number</code></td>
+<td>Optional</td>
+<td>Camera number, as an integer, not exceeding 3 digits. If not specified, script reads through Raw directory and gets list of subdirectories.</td>
+</tr>
+<tr class="odd">
+<td><code>--sd-card-number</code></td>
+<td>Optional</td>
+<td>SD card number, as an integer, not exceeding 3 digits. If not specified, script reads through Raw directory and gets list of subdirectories.</td>
+</tr>
+<tr class="even">
+<td><code>--path-to-uploaded-files-file</code></td>
+<td>Required</td>
+<td>Provide the path to a file called <code>files_uploaded_to_s3.txt</code>, which is located in the <code>misc_files</code> directory one level up from the <code>PythonScripts</code> directory in this repository and which keeps the list of files that have been uploaded to s3</td>
+</tr>
+<tr class="odd">
+<td><code>--bucket-name</code></td>
+<td>Required</td>
+<td>provide the name for the s3 “bucket” on AWS to which the images will be uploaded. Generally, this argument should be <code>north-country-wild-images</code></td>
+</tr>
+</tbody>
+</table>
+</div>
+</figure>
+</div>
+<p>A few things need attention here with regard to working this script.</p>
+<ul>
+<li><p>The script is recursive. In other words, if you point <code>--path-to-raw-directory</code> to a directory that contains correctly-named subdirectories for a subset of camera deployments (i.e., no subdirectories that vary from the CXXX_SDXXX naming format), the script should work iteratively through each subdirectory in turn.</p>
+<ul>
+<li><p>If there are subdirectories in <code>Raw</code> that identify, for example, project phases or sites rather than camera deployments, each then with subdirectories of camera deployments, you can point <code>--path-to-raw-directory</code> to one of those improperly named directories and work through all the subdirectories with it at a time.</p></li>
+<li><p>In other words, the “raw directory” does not have to be called <code>Raw</code></p></li>
+</ul></li>
+<li><p>If you are working with a single camera deployment, you can specify the <code>--camera-number</code> and <code>--sd-card-number</code> arguments. If, however, you are wishing to iterate across a number of deployments, you can omit these arguments and the script will read the list of subdirectories in the designated <code>Raw</code> directory.</p></li>
+</ul>
+</section>
+<section id="workflow" class="level2" data-number="4.3">
+<h2 data-number="4.3" class="anchored" data-anchor-id="workflow"><span class="header-section-number">4.3</span> Workflow</h2>
+<ol type="1">
+<li><p>Open a terminal window. CD into the PythonScripts folder of this repository.</p></li>
+<li><p>For us to keep track of the files we are pushing up to s3, we begin this process by creating and switching to a new branch in the project directory. Generally, we use a branch name such as DD-MON-YYYY-AWS-upload to make clear what we are doing. For example:</p></li>
+</ol>
+<p><code>git checkout -b 15-Aug-2025-AWS-rename-upload</code></p>
+<ol start="3" type="1">
+<li>You will use the <code>rename_raw_files_and_upload_to_s3.py</code> script, with arguments as specified in <a href="#tbl-4.1" class="quarto-xref">Table&nbsp;<span>4.1</span></a> above.</li>
+</ol>
 
 
 </section>

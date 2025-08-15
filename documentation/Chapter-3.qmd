@@ -9,7 +9,7 @@ This chapter describes the workflow we use when coming back to the lab with SD c
 The script `upload_and_process_images.py` has the following possible subcommands:
 
 ```{r}
-#| label: tbl-1
+#| label: tbl-3.1
 #| tbl-cap: upload_and_process_images.py subcommands
 #| echo: false
 #| warning: false
@@ -43,7 +43,11 @@ Under normal circumstances, when we have an SD card that we are ready to work wi
 
 3.  Open a terminal window. CD into the PythonScripts folder of this repository.
 
-4.  We use the `upload_and_process_images.py` script under normal conditions, coupled with the `completely_process_images_from_sd_card` subcommand. The arguments you will need to provide are shown in @tbl-2.
+4.  For us to keep track of the files we are pushing up to s3, we begin this process by creating and switching to a new branch in the project directory. Generally, we use a branch name such as DD-MON-YYYY-AWS-upload to make clear what we are doing. For example:
+
+`git checkout -b 14-Aug-2025-AWS-upload`
+
+5.  We use the `upload_and_process_images.py` script under normal conditions, coupled with the `completely_process_images_from_sd_card` subcommand. The arguments you will need to provide are shown in @tbl-3.2
 
 | argument | explanation |
 |----|----|
@@ -55,11 +59,7 @@ Under normal circumstances, when we have an SD card that we are ready to work wi
 | `--path-to-uploaded-file` | provide the path to a file called `files_uploaded_to_s3.txt`, which is located in the `misc_files` directory one level up from the `PythonScripts` directory in this repository. |
 | `--bucket-name` | provide the name for the s3 "bucket" on AWS to which the images will be uploaded. Generally, this argument should be `north-country-wild-images` |
 
-: Arguments required by completely_process_images_from_sd_card subcommand {#tbl-2}
-
-5.  For us to keep track of the files we are pushing up to s3, we begin this process by creating and switching to a new branch in the project directory. Generally, we use a branch name such as DD-MON-YYYY-AWS-upload to make clear what we are doing. For example:
-
-`git checkout -b 14-Aug-2025-AWS-upload`
+: Arguments required by completely_process_images_from_sd_card subcommand {#tbl-3.2}
 
 6.  Run the code in the terminal by stringing together the following lines code, all as one continuous command in the terminal, but replace each case of FILEPATH, CAMERA-NUMBER, SD-CARD-NUMBER or BUCKET-NAME with either the requested file path or the correct argument.
 

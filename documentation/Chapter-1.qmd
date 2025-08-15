@@ -32,9 +32,9 @@ Plan for how you will manage all of your game camera images early in the develop
 
 ## Our workflow
 
-The general workflow we have developed for processing and logging image data from game cameras is depicted in @fig-1.
+The general workflow we have developed for processing and logging image data from game cameras is depicted in @fig-1.1.
 
-![General workflow for processing and logging game camera images](images/north-country-wild-camera-workflow.png){#fig-1 fig-alt="Image processing workflow" fig-align="center"}
+![General workflow for processing and logging game camera images](images/north-country-wild-camera-workflow.png){#fig-1.1 fig-alt="Image processing workflow" fig-align="center"}
 
 We use an external hard drive attached to a computer in the lab as the location where we copy all images from our game camera SD cards. We copy raw images from the SD cards, renaming the files as they are copied so that each image file name informs us of the camera and SD card the image is associated with as well as the timestamp for the image.
 
@@ -52,13 +52,13 @@ Our practice is to include images from deployments conducted during the summer (
 
 ### Raw and Processed Subdirectories
 
-Within each year's subdirectory, we include two subdirectories. One is called "Raw" and the other is called "Processed" (@fig-2).
+Within each year's subdirectory, we include two subdirectories. One is called "Raw" and the other is called "Processed" (@fig-1.2).
 
 Nested within each of these directories is a unique directory for each camera deployment. Each of those subfolders is named with a combination of the Camera number and SD card number that was used for each deployment. The overall organization therefore looks something like what is shown in @fig-2.
 
-![Schematic of external hard drive organization](images/hard-drive-folder-structure.png){#fig-2 fig-alt="Hard drive organization" fig-align="center"}
+![Schematic of external hard drive organization](images/hard-drive-folder-structure.png){#fig-1.2 fig-alt="Hard drive organization" fig-align="center"}
 
-Notice in @fig-2 that the "Raw" and "Processed" directories follow the same folder structure. Within each, there is a single folder for each camera deployment. We name these folders by the combination of camera number and SD card number associated with the deployment. For example, the deployment of Camera 23 that used SD card 45 is assigned the folder name `C023_SD045`.
+Notice in @fig-1.2 that the "Raw" and "Processed" directories follow the same folder structure. Within each, there is a single folder for each camera deployment. We name these folders by the combination of camera number and SD card number associated with the deployment. For example, the deployment of Camera 23 that used SD card 45 is assigned the folder name `C023_SD045`.
 
 ::: callout-tip
 ## Consider ahead of time!

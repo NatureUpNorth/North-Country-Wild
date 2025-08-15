@@ -154,7 +154,7 @@
     "href": "documentation/Chapter-4.html",
     "title": "4  Renaming raw files and uploading to AWS S3",
     "section": "",
-    "text": "4.1 Introduction",
+    "text": "4.1 Introduction\nIn an earlier workflow, we did not change the name of raw files when they were copied from the game camera SD card. Thus, for every camera deployment, there was a deployment folder in the appropriate Raw directory, within which all of the images had the original names assigned by the game camera, generally beginning with IMG_0001.JPG and increasing.\nHowever, because we are uploading the full-size, raw files to AWS, it is important that each file have a unique name. It is also theoretically possible that images could become confused on the hard drive when they lack unique file names.\nFor these reasons, we need the ability to retroactively go back to the various deployment folders in the various year Raw directories and rename the images. We also want the option, at the same time, to upload the images to s3.\nOur python script rename_raw_files_and_upload_to_s3.py takes care of these steps.",
     "crumbs": [
       "<span class='chapter-number'>4</span>  <span class='chapter-title'>Renaming raw files and uploading to AWS S3</span>"
     ]
@@ -177,6 +177,26 @@
     "text": "Coming soon!",
     "crumbs": [
       "References"
+    ]
+  },
+  {
+    "objectID": "documentation/Chapter-4.html#the-script-and-its-arguments",
+    "href": "documentation/Chapter-4.html#the-script-and-its-arguments",
+    "title": "4  Renaming raw files and uploading to AWS S3",
+    "section": "4.2 The script and its arguments",
+    "text": "4.2 The script and its arguments\nThe script rename_raw_files_and_upload_to_s3.py does not have any subcommands. It has several arguments, as follows:\n\n\n\nTable 4.1: Arguments required by rename_raw_files_and_upload_to_s3 script\n\n\n\n\n\n\n\n\n\n\nargument\nstatus\nexplanation\n\n\n\n\n--path-to-raw-directory\nRequired\nFull path to folder with raw files with old naming convention (e.g., IMG_0001.JPG)\n\n\n--camera-number\nOptional\nCamera number, as an integer, not exceeding 3 digits. If not specified, script reads through Raw directory and gets list of subdirectories.\n\n\n--sd-card-number\nOptional\nSD card number, as an integer, not exceeding 3 digits. If not specified, script reads through Raw directory and gets list of subdirectories.\n\n\n--path-to-uploaded-files-file\nRequired\nProvide the path to a file called files_uploaded_to_s3.txt, which is located in the misc_files directory one level up from the PythonScripts directory in this repository and which keeps the list of files that have been uploaded to s3\n\n\n--bucket-name\nRequired\nprovide the name for the s3 “bucket” on AWS to which the images will be uploaded. Generally, this argument should be north-country-wild-images\n\n\n\n\n\n\nA few things need attention here with regard to working this script.\n\nThe script is recursive. In other words, if you point --path-to-raw-directory to a directory that contains correctly-named subdirectories for a subset of camera deployments (i.e., no subdirectories that vary from the CXXX_SDXXX naming format), the script should work iteratively through each subdirectory in turn.\n\nIf there are subdirectories in Raw that identify, for example, project phases or sites rather than camera deployments, each then with subdirectories of camera deployments, you can point --path-to-raw-directory to one of those improperly named directories and work through all the subdirectories with it at a time.\nIn other words, the “raw directory” does not have to be called Raw\n\nIf you are working with a single camera deployment, you can specify the --camera-number and --sd-card-number arguments. If, however, you are wishing to iterate across a number of deployments, you can omit these arguments and the script will read the list of subdirectories in the designated Raw directory.",
+    "crumbs": [
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Renaming raw files and uploading to AWS S3</span>"
+    ]
+  },
+  {
+    "objectID": "documentation/Chapter-4.html#workflow",
+    "href": "documentation/Chapter-4.html#workflow",
+    "title": "4  Renaming raw files and uploading to AWS S3",
+    "section": "4.3 Workflow",
+    "text": "4.3 Workflow\n\nOpen a terminal window. CD into the PythonScripts folder of this repository.\nFor us to keep track of the files we are pushing up to s3, we begin this process by creating and switching to a new branch in the project directory. Generally, we use a branch name such as DD-MON-YYYY-AWS-upload to make clear what we are doing. For example:\n\ngit checkout -b 15-Aug-2025-AWS-rename-upload\n\nYou will use the rename_raw_files_and_upload_to_s3.py script, with arguments as specified in Table tbl-4.1 above.",
+    "crumbs": [
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Renaming raw files and uploading to AWS S3</span>"
     ]
   }
 ]
