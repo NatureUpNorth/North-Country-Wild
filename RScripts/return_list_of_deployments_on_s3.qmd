@@ -1,0 +1,29 @@
+---
+title: "return_list_of_deployments_on_s3"
+format: html
+---
+
+```{r}
+library(tidyverse)
+library(here)
+library(reactable)
+library(reactablefmtr)
+```
+
+Pull in data
+
+```{r}
+uploaded <- read_csv(here("misc_files/files_uploaded_to_s3.txt"), col_names = F)
+colnames(uploaded) <- "File_name"
+```
+Now extract column with Cam_SD, Year, Month of deployment
+
+```{r}
+uploaded <- uploaded |> mutate(
+  Cam_SD = str_sub(File_name, 1, 10), 
+)
+decompose <- uploaded |> 
+  str_split(File_name, "_")
+  str_match(uploaded, File_name)
+```
+

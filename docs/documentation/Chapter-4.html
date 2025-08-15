@@ -172,7 +172,8 @@ ul.task-list li input[type="checkbox"] {
   <ul>
   <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction"><span class="header-section-number">4.1</span> Introduction</a></li>
   <li><a href="#the-script-and-its-arguments" id="toc-the-script-and-its-arguments" class="nav-link" data-scroll-target="#the-script-and-its-arguments"><span class="header-section-number">4.2</span> The script and its arguments</a></li>
-  <li><a href="#workflow" id="toc-workflow" class="nav-link" data-scroll-target="#workflow"><span class="header-section-number">4.3</span> Workflow</a></li>
+  <li><a href="#normal-workflow" id="toc-normal-workflow" class="nav-link" data-scroll-target="#normal-workflow"><span class="header-section-number">4.3</span> Normal Workflow</a></li>
+  <li><a href="#atypical-workflows" id="toc-atypical-workflows" class="nav-link" data-scroll-target="#atypical-workflows"><span class="header-section-number">4.4</span> Atypical Workflows</a></li>
   </ul>
 </nav>
     </div>
@@ -216,9 +217,9 @@ Table&nbsp;4.1: Arguments required by rename_raw_files_and_upload_to_s3 script
 <div aria-describedby="tbl-4.1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <table class="table">
 <colgroup>
-<col style="width: 38%">
-<col style="width: 23%">
-<col style="width: 38%">
+<col style="width: 36%">
+<col style="width: 26%">
+<col style="width: 36%">
 </colgroup>
 <thead>
 <tr class="header">
@@ -268,16 +269,63 @@ Table&nbsp;4.1: Arguments required by rename_raw_files_and_upload_to_s3 script
 <li><p>If you are working with a single camera deployment, you can specify the <code>--camera-number</code> and <code>--sd-card-number</code> arguments. If, however, you are wishing to iterate across a number of deployments, you can omit these arguments and the script will read the list of subdirectories in the designated <code>Raw</code> directory.</p></li>
 </ul>
 </section>
-<section id="workflow" class="level2" data-number="4.3">
-<h2 data-number="4.3" class="anchored" data-anchor-id="workflow"><span class="header-section-number">4.3</span> Workflow</h2>
+<section id="normal-workflow" class="level2" data-number="4.3">
+<h2 data-number="4.3" class="anchored" data-anchor-id="normal-workflow"><span class="header-section-number">4.3</span> Normal Workflow</h2>
 <ol type="1">
 <li><p>Open a terminal window. CD into the PythonScripts folder of this repository.</p></li>
 <li><p>For us to keep track of the files we are pushing up to s3, we begin this process by creating and switching to a new branch in the project directory. Generally, we use a branch name such as DD-MON-YYYY-AWS-upload to make clear what we are doing. For example:</p></li>
 </ol>
 <p><code>git checkout -b 15-Aug-2025-AWS-rename-upload</code></p>
 <ol start="3" type="1">
-<li>You will use the <code>rename_raw_files_and_upload_to_s3.py</code> script, with arguments as specified in <a href="#tbl-4.1" class="quarto-xref">Table&nbsp;<span>4.1</span></a> above.</li>
+<li><p>You will use the <code>rename_raw_files_and_upload_to_s3.py</code> script, with arguments as specified in <a href="#tbl-4.1" class="quarto-xref">Table&nbsp;<span>4.1</span></a> above.</p>
+<ul>
+<li>Again, note that <code>--camera-number</code> and <code>--sd-card-number</code> are optional.</li>
+</ul></li>
+<li><p>Run the code in the terminal by stringing together the following lines code, all as one continuous command in the terminal, but replace each case of FILEPATH, CAMERA-NUMBER, SD-CARD-NUMBER or BUCKET-NAME with either the requested file path or the correct argument.</p></li>
 </ol>
+<p><code>python3 rename_raw_files_and_upload_to_s3.py --path-to-raw-directory FILEPATH --camera-number CAMERA-NUMBER --sd-card-number SD-CARD-NUMBER —-path-to-uploaded-files-file FILEPATH —-bucket-name BUCKET-NAME</code></p>
+<ol start="5" type="1">
+<li><p>As the script processes:</p>
+<ul>
+<li><p>If you do not provide <code>--camera-number</code> or <code>--sd-card-number</code> the script will output <code>No camera or sd card number provided. Will check for all folders in raw directory.</code></p></li>
+<li><p>For the first subdirectory of images that the script encounters, it will tell you the number of files in the directory, the directory name, and will give several examples of old file names and new file names as output in the terminal:</p>
+<p><code>Found XXX files in /START-OF-PATH/CXXX_SDXXX</code></p>
+<p><code>Example old file names:</code></p>
+<p><code>['/START-OF-PATH/CXXX_SDXXX/IMG_0017.JPG',``'/START-OF-PATH/CXXX_SDXXX/IMG_0003.JPG', '/START-OF-PATH/CXXX_SDXXX/IMG_0005.JPG'``]</code></p>
+<p><code>Example new file names:</code></p>
+<p><code>['/START-OF-PATH/CXXX_SDXXX/CXXX_SDXXX_20250628143219_IMG_0017.JPG', '/START-OF-PATH/CXXX_SDXXX/CXXX_SDXXX_20250628142637_IMG_0003.JPG', '/START-OF-PATH/CXXX_SDXXX/CXXX_SDXXX_20250628142640_IMG_0005.JPG']</code></p></li>
+<li><p>Next <strong>the script will ask if you wish to go ahead and rename the raw files:</strong></p>
+<p><code>Rename raw files to new renaming convention? (y/n)</code></p></li>
+<li><p>Select <code>y</code> to continue.</p></li>
+<li><p>The script will rename the images in the first subdirectory and let you know by printing <code>Added XXX from folder CXXX_SDXXX</code></p></li>
+<li><p>If there is more than one folder to be processed, the script will then move on to the next folder and will again tell you the number of files in the directory, the directory name, and will give several examples of old file names and new file names as output in the terminal. <strong>It will again ask if you would like to continue renaming the raw files to the new naming convention and wait for your input.</strong></p></li>
+<li><p>When the script is finished renaming files, it will then check to see if any of these files have already been uploaded to s3, and will print the result. Then it will tell you the total number of files it is planning to upload to s3 (equal to the sum of images in each of the subdirectories it has processed), and will give you a few examples of the uploads it is planning to undertake. <strong>Then it will ask if you wish to continue with the upload:</strong></p>
+<p><code>0 files in year directory already uploaded to s3</code></p>
+<p><code>Will upload XXX files to BUCKET-NAME s3 bucket</code></p>
+<p><code>Example uploads:</code></p>
+<p><code>/START-OF-PATH/CXXX_SDXXX/CXXX_SDXXX_20250628143219_IMG_0017.JPG -&gt; CXXX_SDXXX_20250628143219_IMG_0017</code></p>
+<p><code>/START-OF-PATH/CXXX_SDXXX/CXXX_SDXXX_20250628142640_IMG_0005.JPG -&gt; CXXX_SDXXX_20250628142640_IMG_0005.JPG</code></p>
+<p><code>...etc</code></p>
+<p><code>Do you want to start upload of XXX files? (y/n)</code></p></li>
+<li><p>When you select <code>y</code>, the script will report its progress to the terminal, recording <code>Upload successful!</code> each time it uploads a file.</p></li>
+<li><p>Finally, the script will ask if you wish to overwrite the uploaded files file. If you choose <code>y</code>, it will add the names of the files that it just uploaded to <code>/North-Country-Wild/misc_files/files_uploaded_to_s3.txt</code>. If you choose <code>n</code>, it will add the names of the files that it did NOT upload to <code>/North-Country-Wild/PythonScripts/uploaded_files.txt</code></p></li>
+<li><p>And that’s it!</p></li>
+</ul></li>
+<li><p>Once the script has processed, you need to create a pull request from the branch you are working on in the terminal:</p>
+<ul>
+<li>use <code>git add .</code> to stage any files that were changed (which should just be <code>/North-Country-Wild/misc_files/files_uploaded_to_s3.txt</code> if everything went smoothly)</li>
+<li>use <code>git commit -m "commit message here"</code> to commit your changes</li>
+<li>Assuming that the branch you just created does not exist on github, then to push the changes to a new branch on git hub for making a pull request, use <code>git push --set-upstream origin name-of-branch-you-are-working-from</code></li>
+<li>if you read along in the terminal output, you will see a link to github where you can make the pull request.</li>
+<li>If you are finished uploading for that session, go ahead and make the pull request on github. Once it is complete, you can merge your branch into main locally and then delete the branch.</li>
+<li>If you have more <code>Raw</code> image files to rename and upload, continue to process them, using the script in the way we have described, and when you are completely finished, then follow the instructions here in step 6.</li>
+</ul></li>
+<li><p>If you are going back and retroactively renaming files and uploading them to s3, be sure to make a note that you did so for each deployment on the <a href="https://docs.google.com/spreadsheets/d/1BOhUKaEgA_SBqcY5-1pQn0K4DWbebujMcA5R0G-3m6k/edit?gid=0#gid=0">master spreadsheet for tracking game camera deployments</a> (privacy protected - link may not work).</p></li>
+</ol>
+</section>
+<section id="atypical-workflows" class="level2" data-number="4.4">
+<h2 data-number="4.4" class="anchored" data-anchor-id="atypical-workflows"><span class="header-section-number">4.4</span> Atypical Workflows</h2>
+<p>Coming soon!</p>
 
 
 </section>

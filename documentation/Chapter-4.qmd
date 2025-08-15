@@ -107,6 +107,8 @@ A few things need attention here with regard to working this script.
     -   If you are finished uploading for that session, go ahead and make the pull request on github. Once it is complete, you can merge your branch into main locally and then delete the branch.
     -   If you have more `Raw` image files to rename and upload, continue to process them, using the script in the way we have described, and when you are completely finished, then follow the instructions here in step 6.
 
+7.  If you are going back and retroactively renaming files and uploading them to s3, be sure to make a note that you did so for each deployment on the [master spreadsheet for tracking game camera deployments](https://docs.google.com/spreadsheets/d/1BOhUKaEgA_SBqcY5-1pQn0K4DWbebujMcA5R0G-3m6k/edit?gid=0#gid=0) (privacy protected - link may not work).
+
 ## Atypical Workflows
 
 Coming soon!
