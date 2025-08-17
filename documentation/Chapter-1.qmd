@@ -54,7 +54,7 @@ Our practice is to include images from deployments conducted during the summer (
 
 Within each year's subdirectory, we include two subdirectories. One is called "Raw" and the other is called "Processed" (@fig-1.2).
 
-Nested within each of these directories is a unique directory for each camera deployment. Each of those subfolders is named with a combination of the Camera number and SD card number that was used for each deployment. The overall organization therefore looks something like what is shown in @fig-2.
+Nested within each of these directories is a unique directory for each camera deployment. Each of those subfolders is named with a combination of the Camera number and SD card number that was used for each deployment. The overall organization therefore looks something like what is shown in @fig-1.2.
 
 ![Schematic of external hard drive organization](images/hard-drive-folder-structure.png){#fig-1.2 fig-alt="Hard drive organization" fig-align="center"}
 

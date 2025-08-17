@@ -15,7 +15,7 @@ Our python script `rename_raw_files_and_upload_to_s3.py` takes care of these ste
 The script `rename_raw_files_and_upload_to_s3.py` does not have any subcommands. It has several arguments, as follows:
 
 | argument | status | explanation |
-|----|----|----|
+|------------------------|------------------------|------------------------|
 | `--path-to-raw-directory` | Required | Full path to folder with raw files with old naming convention (e.g., IMG_0001.JPG) |
 | `--camera-number` | Optional | Camera number, as an integer, not exceeding 3 digits. If not specified, script reads through Raw directory and gets list of subdirectories. |
 | `--sd-card-number` | Optional | SD card number, as an integer, not exceeding 3 digits. If not specified, script reads through Raw directory and gets list of subdirectories. |
@@ -41,7 +41,7 @@ A few things need attention here with regard to working this script.
 ::: callout-important
 ## Make sure script is set for files to go to deep archive
 
-Approximately line 156 of the `rename_raw_files_and_upload_to_s3.py` reads `extra_args = {"StorageClass": "DEEP_ARCHIVE"}`. If this line is commented out (i.e. `#extra_args = {"StorageClass": "DEEP_ARCHIVE"}`, the files will be pushed to the more expensive but quickly accessible region of s3. We want to be able to use the more expensive storage as an option for testing, but in general the line of code should **Not** be commented out in practice.
+Approximately line 156 of the `rename_raw_files_and_upload_to_s3.py` reads `extra_args = {"StorageClass": "DEEP_ARCHIVE"}`. If this line is commented out (i.e. `#extra_args = {"StorageClass": "DEEP_ARCHIVE"}` and line 157 is active (`extra_args = NONE`) the files will be pushed to the more expensive but quickly accessible region of s3. We want to be able to use the more expensive storage as an option for testing, but in general the line of code should **Not** be commented out in practice and instead line 157 should be commented out.
 :::
 
 2.  For us to keep track of the files we are pushing up to s3, we begin this process by creating and switching to a new branch in the project directory. Generally, we use a branch name such as DD-MON-YYYY-AWS-upload to make clear what we are doing. For example:

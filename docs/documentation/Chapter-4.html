@@ -290,7 +290,7 @@ Make sure script is set for files to go to deep archive
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Approximately line 156 of the <code>rename_raw_files_and_upload_to_s3.py</code> reads <code>extra_args = {"StorageClass": "DEEP_ARCHIVE"}</code>. If this line is commented out (i.e.&nbsp;<code>#extra_args = {"StorageClass": "DEEP_ARCHIVE"}</code>, the files will be pushed to the more expensive but quickly accessible region of s3. We want to be able to use the more expensive storage as an option for testing, but in general the line of code should <strong>Not</strong> be commented out in practice.</p>
+<p>Approximately line 156 of the <code>rename_raw_files_and_upload_to_s3.py</code> reads <code>extra_args = {"StorageClass": "DEEP_ARCHIVE"}</code>. If this line is commented out (i.e.&nbsp;<code>#extra_args = {"StorageClass": "DEEP_ARCHIVE"}</code> and line 157 is active (<code>extra_args = NONE</code>) the files will be pushed to the more expensive but quickly accessible region of s3. We want to be able to use the more expensive storage as an option for testing, but in general the line of code should <strong>Not</strong> be commented out in practice and instead line 157 should be commented out.</p>
 </div>
 </div>
 <ol start="2" type="1">
