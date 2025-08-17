@@ -153,8 +153,8 @@ if __name__ == "__main__":
         "--bucket-name",
         help="name of s3 bucket where file will be uploaded to",
     )
-    #extra_args = {"StorageClass": "DEEP_ARCHIVE"}
-    extra_args = None
+    extra_args = {"StorageClass": "DEEP_ARCHIVE"}
+    #extra_args = None
     args = parser.parse_args()
     rename_and_upload_files_to_s3(
         path_to_raw_directory=args.path_to_raw_directory,
