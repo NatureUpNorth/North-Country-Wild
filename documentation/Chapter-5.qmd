@@ -1,3 +1,57 @@
-# Uploading existing files to AWS S3 {#sec-Chapter5}
+# Checking which camera deployments are on s3 {#sec-Chapter5}
 
 ## Introduction
+
+It is possible that you may not be sure of which/what files have been uploaded to s3. Because we store the files in "glacier" - the long-term storage arm of s3, it is not possible to quickly get a list of uploaded files (glacier costs less because you have to wait a few days to access files). However, there are a few things you can do to check.
+
+## Inspecting buckets on s3
+
+One option you have is to log on to s3 where you can search a bucket or view its metrics.
+
+### Searching a bucket for files
+
+Perhaps you want to check and see if a particular deployment has been uploaded to s3. As long as you know the camera and SD card information or date information for the deployment, you can search s3 to see if those files have been uploaded. You would do this by logging on to s3.
+
+::: callout-tip
+The information below will not work unless you have an account with AWS that you can log into. It is provided as documentation for the Barthelmess lab and to provide others with a general overview of our workflow that you may wish to adapt for your purposes.
+:::
+
+1.  When you log on to s3, you will see an overview window that provides a link to each bucket (@fig-5.1).
+
+![Initial log in view on s3](images/AWS-logon-view.png){#fig-5.1 fig-alt="Initial view of s3 buckets" fig-align="center" width="800"}
+
+2.  If you click the link for the bucket name, you will see a view with information about the bucket, and showing some of its contents (@fig-5.2)
+
+![Main view of s3 bucket](images/AWS-bucket-view.png){#fig-5.2 fig-alt="Main window for a bucket" fig-align="center" width="800"}
+
+3.  You can search the bucket contents in the search bar. Note that if there are more than 999 entries that meet the search match, you will not be able to see all of the results. For example, if we searched this bucket for files from camera 66 (`C066`) we would get the following result (@fig-5.3)
+
+![Using the search function](images/AWS-bucket-search.png){#fig-5.3 fig-alt="Searching a bucket on s3" fig-align="center" width="800"}
+
+### Checking s3 against our file log
+
+You saw in Chapters 3 and 4 that when we upload files to s3, our scripts record the names of the files that have been uploaded to a `.txt` file in our repository called `/misc_files/files_uploaded_to_s3.txt`. Another option to assess what we have stored on s3 is to use that file.
+
+#### Determine number of files in s3 bucket
+
+A first step might be to use the bucket metrics on s3 to determine how many files are stored in the bucket. With that knowledge, you can then check that the `files_uploaded_to_s3.txt` file is up to date (the number of files should match in both places).
+
+On s3, within a bucket view, if you choose the metrics tab, you will see a plot showing the number of files stored in the bucket (Figure 4).
+
+![Viewing bucket metrics](images/AWS-bucket-metrics-view.png){#fig-5.4 fig-alt="Examining bucket metrics" fig-align="center" width="800"}
+
+If you click the right-most point on the "Total number of objects" graph, it will tell you the count of objects in the bucket.
+
+#### Determine if file log is up to date
+
+It is possible that, if someone left out any of the steps involved in uploading files to s3, the log file (`/misc_files/files_uploaded_to_s3.txt`) may not be up to date.
+
+To check, first determine the number of files in the bucket on s3 following the steps above.
+
+Next, open the `files_uploaded_to_s3.txt` and note the number of rows in the file. The number of rows in the file should match the number of files in the bucket on s3. If so, the log file is up to date.
+
+## Summarize information in the log file
+
+Assuming that the log file is up-to-date, it is possilbe to use some R code to quickly generate summary information about the deployments that are stored on s3.
+
+To do so, navigate in this repository to `/RScripts/` and open the file called `return_list_of_deployments_on_s3.qmd`. Run the code in that file, which calls the RScript `summarize_s3_content.R` to get a summary of all of the deployments that have been stored on s3.

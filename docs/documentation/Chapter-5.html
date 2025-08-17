@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>North-Country-Wild Documentation - 5&nbsp; Uploading existing files to AWS S3</title>
+<title>North-Country-Wild Documentation - 5&nbsp; Checking which camera deployments are on s3</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -30,7 +30,7 @@ ul.task-list li input[type="checkbox"] {
 <script src="../site_libs/quarto-search/fuse.min.js"></script>
 <script src="../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../">
-<link href="../documentation/references.html" rel="next">
+<link href="../documentation/Chapter-6.html" rel="next">
 <link href="../documentation/Chapter-4.html" rel="prev">
 <script src="../site_libs/quarto-html/quarto.js"></script>
 <script src="../site_libs/quarto-html/popper.min.js"></script>
@@ -81,7 +81,7 @@ ul.task-list li input[type="checkbox"] {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../documentation/Chapter-5.html"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Uploading existing files to AWS S3</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../documentation/Chapter-5.html"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Checking which camera deployments are on s3</span></a></li></ol></nav>
         <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="" onclick="window.quartoOpenSearch();">
@@ -151,7 +151,13 @@ ul.task-list li input[type="checkbox"] {
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../documentation/Chapter-5.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Uploading existing files to AWS S3</span></span></a>
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Checking which camera deployments are on s3</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../documentation/Chapter-6.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Uploading existing files to AWS S3</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -171,6 +177,12 @@ ul.task-list li input[type="checkbox"] {
    
   <ul>
   <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction"><span class="header-section-number">5.1</span> Introduction</a></li>
+  <li><a href="#inspecting-buckets-on-s3" id="toc-inspecting-buckets-on-s3" class="nav-link" data-scroll-target="#inspecting-buckets-on-s3"><span class="header-section-number">5.2</span> Inspecting buckets on s3</a>
+  <ul class="collapse">
+  <li><a href="#searching-a-bucket-for-files" id="toc-searching-a-bucket-for-files" class="nav-link" data-scroll-target="#searching-a-bucket-for-files"><span class="header-section-number">5.2.1</span> Searching a bucket for files</a></li>
+  <li><a href="#checking-s3-against-our-file-log" id="toc-checking-s3-against-our-file-log" class="nav-link" data-scroll-target="#checking-s3-against-our-file-log"><span class="header-section-number">5.2.2</span> Checking s3 against our file log</a></li>
+  </ul></li>
+  <li><a href="#summarize-information-in-the-log-file" id="toc-summarize-information-in-the-log-file" class="nav-link" data-scroll-target="#summarize-information-in-the-log-file"><span class="header-section-number">5.3</span> Summarize information in the log file</a></li>
   </ul>
 </nav>
     </div>
@@ -179,7 +191,7 @@ ul.task-list li input[type="checkbox"] {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title"><span id="sec-Chapter5" class="quarto-section-identifier"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Uploading existing files to AWS S3</span></span></h1>
+<h1 class="title"><span id="sec-Chapter5" class="quarto-section-identifier"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Checking which camera deployments are on s3</span></span></h1>
 </div>
 
 
@@ -198,6 +210,98 @@ ul.task-list li input[type="checkbox"] {
 
 <section id="introduction" class="level2" data-number="5.1">
 <h2 data-number="5.1" class="anchored" data-anchor-id="introduction"><span class="header-section-number">5.1</span> Introduction</h2>
+<p>It is possible that you may not be sure of which/what files have been uploaded to s3. Because we store the files in “glacier” - the long-term storage arm of s3, it is not possible to quickly get a list of uploaded files (glacier costs less because you have to wait a few days to access files). However, there are a few things you can do to check.</p>
+</section>
+<section id="inspecting-buckets-on-s3" class="level2" data-number="5.2">
+<h2 data-number="5.2" class="anchored" data-anchor-id="inspecting-buckets-on-s3"><span class="header-section-number">5.2</span> Inspecting buckets on s3</h2>
+<p>One option you have is to log on to s3 where you can search a bucket or view its metrics.</p>
+<section id="searching-a-bucket-for-files" class="level3" data-number="5.2.1">
+<h3 data-number="5.2.1" class="anchored" data-anchor-id="searching-a-bucket-for-files"><span class="header-section-number">5.2.1</span> Searching a bucket for files</h3>
+<p>Perhaps you want to check and see if a particular deployment has been uploaded to s3. As long as you know the camera and SD card information or date information for the deployment, you can search s3 to see if those files have been uploaded. You would do this by logging on to s3.</p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Tip
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The information below will not work unless you have an account with AWS that you can log into. It is provided as documentation for the Barthelmess lab and to provide others with a general overview of our workflow that you may wish to adapt for your purposes.</p>
+</div>
+</div>
+<ol type="1">
+<li>When you log on to s3, you will see an overview window that provides a link to each bucket (<a href="#fig-5.1" class="quarto-xref">Figure&nbsp;<span>5.1</span></a>).</li>
+</ol>
+<div id="fig-5.1" class="quarto-figure quarto-figure-center quarto-float anchored" alt="Initial view of s3 buckets" data-fig-align="center">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-5.1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="images/AWS-logon-view.png" class="img-fluid quarto-figure quarto-figure-center figure-img" alt="Initial view of s3 buckets" width="800">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-5.1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;5.1: Initial log in view on s3
+</figcaption>
+</figure>
+</div>
+<ol start="2" type="1">
+<li>If you click the link for the bucket name, you will see a view with information about the bucket, and showing some of its contents (<a href="#fig-5.2" class="quarto-xref">Figure&nbsp;<span>5.2</span></a>)</li>
+</ol>
+<div id="fig-5.2" class="quarto-figure quarto-figure-center quarto-float anchored" alt="Main window for a bucket" data-fig-align="center">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-5.2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="images/AWS-bucket-view.png" class="img-fluid quarto-figure quarto-figure-center figure-img" alt="Main window for a bucket" width="800">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-5.2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;5.2: Main view of s3 bucket
+</figcaption>
+</figure>
+</div>
+<ol start="3" type="1">
+<li>You can search the bucket contents in the search bar. Note that if there are more than 999 entries that meet the search match, you will not be able to see all of the results. For example, if we searched this bucket for files from camera 66 (<code>C066</code>) we would get the following result (<a href="#fig-5.3" class="quarto-xref">Figure&nbsp;<span>5.3</span></a>)</li>
+</ol>
+<div id="fig-5.3" class="quarto-figure quarto-figure-center quarto-float anchored" alt="Searching a bucket on s3" data-fig-align="center">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-5.3-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="images/AWS-bucket-search.png" class="img-fluid quarto-figure quarto-figure-center figure-img" alt="Searching a bucket on s3" width="800">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-5.3-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;5.3: Using the search function
+</figcaption>
+</figure>
+</div>
+</section>
+<section id="checking-s3-against-our-file-log" class="level3" data-number="5.2.2">
+<h3 data-number="5.2.2" class="anchored" data-anchor-id="checking-s3-against-our-file-log"><span class="header-section-number">5.2.2</span> Checking s3 against our file log</h3>
+<p>You saw in Chapters 3 and 4 that when we upload files to s3, our scripts record the names of the files that have been uploaded to a <code>.txt</code> file in our repository called <code>/misc_files/files_uploaded_to_s3.txt</code>. Another option to assess what we have stored on s3 is to use that file.</p>
+<section id="determine-number-of-files-in-s3-bucket" class="level4" data-number="5.2.2.1">
+<h4 data-number="5.2.2.1" class="anchored" data-anchor-id="determine-number-of-files-in-s3-bucket"><span class="header-section-number">5.2.2.1</span> Determine number of files in s3 bucket</h4>
+<p>A first step might be to use the bucket metrics on s3 to determine how many files are stored in the bucket. With that knowledge, you can then check that the <code>files_uploaded_to_s3.txt</code> file is up to date (the number of files should match in both places).</p>
+<p>On s3, within a bucket view, if you choose the metrics tab, you will see a plot showing the number of files stored in the bucket (Figure 4).</p>
+<div id="fig-5.4" class="quarto-figure quarto-figure-center quarto-float anchored" alt="Examining bucket metrics" data-fig-align="center">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-5.4-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="images/AWS-bucket-metrics-view.png" class="img-fluid quarto-figure quarto-figure-center figure-img" alt="Examining bucket metrics" width="800">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-5.4-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;5.4: Viewing bucket metrics
+</figcaption>
+</figure>
+</div>
+<p>If you click the right-most point on the “Total number of objects” graph, it will tell you the count of objects in the bucket.</p>
+</section>
+<section id="determine-if-file-log-is-up-to-date" class="level4" data-number="5.2.2.2">
+<h4 data-number="5.2.2.2" class="anchored" data-anchor-id="determine-if-file-log-is-up-to-date"><span class="header-section-number">5.2.2.2</span> Determine if file log is up to date</h4>
+<p>It is possible that, if someone left out any of the steps involved in uploading files to s3, the log file (<code>/misc_files/files_uploaded_to_s3.txt</code>) may not be up to date.</p>
+<p>To check, first determine the number of files in the bucket on s3 following the steps above.</p>
+<p>Next, open the <code>files_uploaded_to_s3.txt</code> and note the number of rows in the file. The number of rows in the file should match the number of files in the bucket on s3. If so, the log file is up to date.</p>
+</section>
+</section>
+</section>
+<section id="summarize-information-in-the-log-file" class="level2" data-number="5.3">
+<h2 data-number="5.3" class="anchored" data-anchor-id="summarize-information-in-the-log-file"><span class="header-section-number">5.3</span> Summarize information in the log file</h2>
+<p>Assuming that the log file is up-to-date, it is possilbe to use some R code to quickly generate summary information about the deployments that are stored on s3.</p>
+<p>To do so, navigate in this repository to <code>/RScripts/</code> and open the file called <code>return_list_of_deployments_on_s3.qmd</code>. Run the code in that file, which calls the RScript <code>summarize_s3_content.R</code> to get a summary of all of the deployments that have been stored on s3.</p>
 
 
 </section>
@@ -619,8 +723,8 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="../documentation/references.html" class="pagination-link" aria-label="References">
-        <span class="nav-page-text">References</span> <i class="bi bi-arrow-right-short"></i>
+      <a href="../documentation/Chapter-6.html" class="pagination-link" aria-label="Uploading existing files to AWS S3">
+        <span class="nav-page-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Uploading existing files to AWS S3</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

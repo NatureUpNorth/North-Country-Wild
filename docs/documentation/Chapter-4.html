@@ -151,7 +151,13 @@ ul.task-list li input[type="checkbox"] {
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../documentation/Chapter-5.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Uploading existing files to AWS S3</span></span></a>
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Checking which camera deployments are on s3</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../documentation/Chapter-6.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Uploading existing files to AWS S3</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -217,9 +223,9 @@ Table&nbsp;4.1: Arguments required by rename_raw_files_and_upload_to_s3 script
 <div aria-describedby="tbl-4.1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <table class="table">
 <colgroup>
-<col style="width: 36%">
-<col style="width: 26%">
-<col style="width: 36%">
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
 </colgroup>
 <thead>
 <tr class="header">
@@ -272,8 +278,23 @@ Table&nbsp;4.1: Arguments required by rename_raw_files_and_upload_to_s3 script
 <section id="normal-workflow" class="level2" data-number="4.3">
 <h2 data-number="4.3" class="anchored" data-anchor-id="normal-workflow"><span class="header-section-number">4.3</span> Normal Workflow</h2>
 <ol type="1">
-<li><p>Open a terminal window. CD into the PythonScripts folder of this repository.</p></li>
-<li><p>For us to keep track of the files we are pushing up to s3, we begin this process by creating and switching to a new branch in the project directory. Generally, we use a branch name such as DD-MON-YYYY-AWS-upload to make clear what we are doing. For example:</p></li>
+<li>Open a terminal window. CD into the PythonScripts folder of this repository.</li>
+</ol>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Make sure script is set for files to go to deep archive
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Approximately line 156 of the <code>rename_raw_files_and_upload_to_s3.py</code> reads <code>extra_args = {"StorageClass": "DEEP_ARCHIVE"}</code>. If this line is commented out (i.e.&nbsp;<code>#extra_args = {"StorageClass": "DEEP_ARCHIVE"}</code>, the files will be pushed to the more expensive but quickly accessible region of s3. We want to be able to use the more expensive storage as an option for testing, but in general the line of code should <strong>Not</strong> be commented out in practice.</p>
+</div>
+</div>
+<ol start="2" type="1">
+<li>For us to keep track of the files we are pushing up to s3, we begin this process by creating and switching to a new branch in the project directory. Generally, we use a branch name such as DD-MON-YYYY-AWS-upload to make clear what we are doing. For example:</li>
 </ol>
 <p><code>git checkout -b 15-Aug-2025-AWS-rename-upload</code></p>
 <ol start="3" type="1">
@@ -320,8 +341,9 @@ Table&nbsp;4.1: Arguments required by rename_raw_files_and_upload_to_s3 script
 <li>If you are finished uploading for that session, go ahead and make the pull request on github. Once it is complete, you can merge your branch into main locally and then delete the branch.</li>
 <li>If you have more <code>Raw</code> image files to rename and upload, continue to process them, using the script in the way we have described, and when you are completely finished, then follow the instructions here in step 6.</li>
 </ul></li>
-<li><p>If you are going back and retroactively renaming files and uploading them to s3, be sure to make a note that you did so for each deployment on the <a href="https://docs.google.com/spreadsheets/d/1BOhUKaEgA_SBqcY5-1pQn0K4DWbebujMcA5R0G-3m6k/edit?gid=0#gid=0">master spreadsheet for tracking game camera deployments</a> (privacy protected - link may not work).</p></li>
+<li><p>If you are going back and retroactively renaming files and uploading them to s3, be sure to make a note that files for each deployment were uploaded on the <a href="https://docs.google.com/spreadsheets/d/1BOhUKaEgA_SBqcY5-1pQn0K4DWbebujMcA5R0G-3m6k/edit?gid=0#gid=0">master spreadsheet for tracking game camera deployments</a> (privacy protected - link may not work).</p></li>
 </ol>
+<p>You may wish to check and see which deployments have been stored on s3. For instructions on how to do so, see <a href="Chapter-5.html" class="quarto-xref"><span>Chapter 5</span></a> of this documentation.</p>
 </section>
 <section id="atypical-workflows" class="level2" data-number="4.4">
 <h2 data-number="4.4" class="anchored" data-anchor-id="atypical-workflows"><span class="header-section-number">4.4</span> Atypical Workflows</h2>
@@ -747,8 +769,8 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="../documentation/Chapter-5.html" class="pagination-link" aria-label="Uploading existing files to AWS S3">
-        <span class="nav-page-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Uploading existing files to AWS S3</span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="../documentation/Chapter-5.html" class="pagination-link" aria-label="Checking which camera deployments are on s3">
+        <span class="nav-page-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Checking which camera deployments are on s3</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

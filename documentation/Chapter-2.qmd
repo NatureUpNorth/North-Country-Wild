@@ -67,8 +67,9 @@ For example, until recently, we did not rename images when the were copied from 
 
 -   The script called `rename_raw_files_and_upload_to_s3.py` enables us to go back to old folders in the "Raw" directories and rename those files.
 -   Further information on how to use this script will be covered in @sec-Chapter4.
+-   Information on how to check which deployments have been uploaded to s3 is covered in @sec-Chapter5.
 
 Likewise, our process for pushing copies of our Raw files to AWS S3 is fairly recent. Thus, if we want to go back and move older files to AWS S3, we can do so.
 
 -   The script called `upload_existing_files_to_s3.py` allows us to go back and move images that have not yet been copied up to AWS S3.
--   Further information on how to use this script will be covered in @sec-Chapter5.
+-   Further information on how to use this script will be covered in @sec-Chapter6.

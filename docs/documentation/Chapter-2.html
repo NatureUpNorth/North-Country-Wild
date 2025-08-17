@@ -159,7 +159,13 @@ ul.task-list li input[type="checkbox"] {
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../documentation/Chapter-5.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Uploading existing files to AWS S3</span></span></a>
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Checking which deployments are on s3</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../documentation/Chapter-6.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Uploading existing files to AWS S3</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -218,15 +224,15 @@ ul.task-list li input[type="checkbox"] {
 <h2 data-number="2.2" class="anchored" data-anchor-id="scripts"><span class="header-section-number">2.2</span> Scripts</h2>
 <p>Our current list of scripts in this repository (<code>North-Country-Wild/PythonScripts</code>) are the following:</p>
 <div class="cell">
-<div id="tbl-1" class="cell quarto-float anchored">
+<div id="tbl-2.1" class="cell quarto-float anchored">
 <figure class="quarto-float quarto-float-tbl figure">
-<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-2.1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Table&nbsp;2.1: Current list of python scripts
 </figcaption>
-<div aria-describedby="tbl-1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div aria-describedby="tbl-2.1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="cell-output-display">
-<div class="reactable html-widget html-fill-item" id="htmlwidget-c87f5c7de72897d6e281" style="width:auto;height:auto;"></div>
-<script type="application/json" data-for="htmlwidget-c87f5c7de72897d6e281">{"x":{"tag":{"name":"Reactable","attribs":{"data":{"script_name":["copy_select_files.py","database_helpers.py","google_sheets.py","rename_raw_files_and_upload_to_s3.py","run_config.py","sync_deployments_google_sheet.py","upload_and_process_images.py","upload_existing_files_to_s3.py","upload_from_manifest.py"],"script_purpose":["Audiomoth audio file processing","Relational database","Relational database","Prepare older files for copy to AWS s3","Uploading images to Zooniverse","Relational database","Main image workflows","Prepare older files for copy to AWS s3","Uploading images to Zooniverse"]},"columns":[{"id":"script_name","name":"Script name","type":"character"},{"id":"script_purpose","name":"Script purpose","type":"character"}],"highlight":true,"bordered":true,"striped":true,"dataKey":"3c71bbf928e14906333ed9e08d8b8369"},"children":[]},"class":"reactR_markup"},"evals":[],"jsHooks":[]}</script>
+<div class="reactable html-widget html-fill-item" id="htmlwidget-761086a507c6a08e0a6a" style="width:auto;height:auto;"></div>
+<script type="application/json" data-for="htmlwidget-761086a507c6a08e0a6a">{"x":{"tag":{"name":"Reactable","attribs":{"data":{"script_name":["copy_select_files.py","database_helpers.py","google_sheets.py","rename_raw_files_and_upload_to_s3.py","run_config.py","sync_deployments_google_sheet.py","upload_and_process_images.py","upload_existing_files_to_s3.py","upload_from_manifest.py"],"script_purpose":["Audiomoth audio file processing","Relational database","Relational database","Prepare older files for copy to AWS s3","Uploading images to Zooniverse","Relational database","Main image workflows","Prepare older files for copy to AWS s3","Uploading images to Zooniverse"]},"columns":[{"id":"script_name","name":"Script name","type":"character"},{"id":"script_purpose","name":"Script purpose","type":"character"}],"highlight":true,"bordered":true,"striped":true,"dataKey":"3c71bbf928e14906333ed9e08d8b8369"},"children":[]},"class":"reactR_markup"},"evals":[],"jsHooks":[]}</script>
 </div>
 </div>
 </figure>
@@ -270,11 +276,12 @@ Modify for your use!
 <ul>
 <li>The script called <code>rename_raw_files_and_upload_to_s3.py</code> enables us to go back to old folders in the “Raw” directories and rename those files.</li>
 <li>Further information on how to use this script will be covered in <a href="Chapter-4.html" class="quarto-xref"><span>Chapter 4</span></a>.</li>
+<li>Information on how to check which deployments have been uploaded to s3 is covered in <a href="Chapter-5.html" class="quarto-xref"><span>Chapter 5</span></a>.</li>
 </ul>
 <p>Likewise, our process for pushing copies of our Raw files to AWS S3 is fairly recent. Thus, if we want to go back and move older files to AWS S3, we can do so.</p>
 <ul>
 <li>The script called <code>upload_existing_files_to_s3.py</code> allows us to go back and move images that have not yet been copied up to AWS S3.</li>
-<li>Further information on how to use this script will be covered in <a href="Chapter-5.html" class="quarto-xref"><span>Chapter 5</span></a>.</li>
+<li>Further information on how to use this script will be covered in <a href="Chapter-6.html" class="quarto-xref"><span>Chapter 6</span></a>.</li>
 </ul>
 
 

@@ -18,133 +18,10 @@ Pull in data and extract column with Cam_SD, Year, Month of deployment
 uploaded <- read_csv(here("misc_files/files_uploaded_to_s3.txt"), col_names = F)
 colnames(uploaded) <- "File_name"
 
-uploaded <- uploaded |> mutate(
-  Cam_SD = str_sub(File_name, 1, 10),
-  Year = as.integer(str_sub(File_name,12, 15)),
-  Month = as.integer(str_sub(File_name,16, 17))
-)
+source(here("RScripts/summarize_s3_content.R"))
 ```
-Now write a function that takes the uploaded data frame and returns two tables, one with each deployment and some basic information, and the other with each year of each deployment with some basic information.
-
-Write the function here
-```{r}
-summarize_s3_content <- function(dataframe){
-  require(reactable)
-  require(reactablefmtr)
-  require(tidyverse)
-  
-  #summarise dataframe
-  
-  dataframe <- dataframe |> mutate(
-    Cam_SD = str_sub(File_name, 1, 10),
-    Year = as.integer(str_sub(File_name,12, 15)),
-    Month = as.integer(str_sub(File_name,16, 17))
-)
-  
-  dataframe_by_cam_sd_summary <- dataframe |>
-    group_by(Cam_SD) |>
-    summarise(
-      start_year = min(Year, na.rm = T),
-      end_year = max(Year, na.rm = T), 
-      low_month = min(Month, na.rm = T),
-      high_month = max(Month, na.rm = T),
-      num_months = length(unique(Month))
-    )
-  
-  dataframe_by_year_summary <- dataframe |>
-  group_by(Cam_SD, Year) |>
-  summarise(
-    start_year = min(Year, na.rm = T),
-    end_year = max(Year, na.rm = T), 
-    low_month = min(Month, na.rm = T),
-    high_month = max(Month, na.rm = T),
-    num_months = length(unique(Month))
-  )
-  
-  loop_output <- data.frame(
-  Cam_SD = character(),
-  Year = integer(),
-  first_date = integer(),
-  last_date = integer(),
-  Num_images = integer()
-)
-  
 
 
-#start loop that chunks uploaded by Cam_SD deployment and Year
-
-for (i in 1:nrow(dataframe_by_year_summary)){
-  subset <- dataframe |> 
-    filter(
-      Cam_SD == dataframe_by_year_summary$Cam_SD[i] & Year == dataframe_by_year_summary$Year[i])
-  
-  subset <- subset |> arrange(File_name, Year)
-  
-  ith_cam_sd <- unique(subset$Cam_SD)
-  
-  ith_year <- unique(subset$Year)
-  
-  ith_startdate <- str_sub(subset$File_name[1], 12, 25)
-  
-  ith_enddate <- str_sub(subset$File_name[nrow(subset)], 12, 25)
-  
-  ith_num_images <- nrow(subset)
-  
-  ith_output <- data.frame(
-    Cam_SD = ith_cam_sd, 
-    Year = ith_year, 
-    first_date = ith_startdate, 
-    last_date = ith_enddate, 
-    Num_images = ith_num_images)
-  
-  
-  loop_output <- rbind(loop_output, ith_output)
-  
-}
-  loop_output$first_date <- ymd_hms(loop_output$first_date)
-  loop_output$last_date <- ymd_hms(loop_output$last_date)
-  
-  #now create the reactable tables to output as list
-  
-  table_1 <- reactable(
-    
-    dataframe_by_cam_sd_summary[,1:3],
-    
-    columns = list(
-      Cam_SD = colDef(name = "Deployment name"), #assign first col name
-      start_year = colDef(name = "First year", align = "center"), #assign second col name
-      end_year = colDef(name = "Last year", align = "center")),
-    
-    bordered = TRUE,
-    striped = TRUE,
-    highlight = TRUE,
-    defaultSorted = c("Cam_SD"))
-  
-  table_1 <- table_1 |> 
-    add_title("List of game camera deployments uploaded to s3")
-   
- table_2 <- reactable(
-   loop_output,
-   
-   columns = list(
-     Cam_SD = colDef(name = "Deployment name"),
-     Year = colDef(name = "Deployment year"),
-     first_date = colDef(name = "First deployed on", format = colFormat(date = TRUE)),
-     last_date = colDef(name = "Last deployed on", format = colFormat(date = TRUE)),
-     Num_images = colDef(name = "Number images produced")),
-   
-   bordered = TRUE,
-   striped = TRUE,
-   highlight = TRUE,
-   defaultSorted = c("Cam_SD")
- )
- 
- table_2 <- table_2 |> 
-    add_title("Further information about uploads in case of date issues")
- 
- return(list(table1 = table_1, table2 = table_2))
-}
-```
 
 Use the function
 
@@ -160,4 +37,5 @@ my_tables[1]
 ```{r}
 my_tables[2]
 ```
+
 

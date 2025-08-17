@@ -18,6 +18,7 @@ book:
     - documentation/Chapter-3.qmd
     - documentation/Chapter-4.qmd
     - documentation/Chapter-5.qmd
+    - documentation/Chapter-6.qmd
     - documentation/references.qmd
 
 bibliography: documentation/references.bib
