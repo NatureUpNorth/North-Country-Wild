@@ -151,7 +151,13 @@ ul.task-list li input[type="checkbox"] {
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../documentation/Chapter-5.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Uploading existing files to AWS S3</span></span></a>
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Checking which camera deployments are on s3</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../documentation/Chapter-6.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Uploading existing files to AWS S3</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -245,7 +251,7 @@ Plan ahead of time!
 <section id="our-workflow" class="level2" data-number="1.2">
 <h2 data-number="1.2" class="anchored" data-anchor-id="our-workflow"><span class="header-section-number">1.2</span> Our workflow</h2>
 <p>The general workflow we have developed for processing and logging image data from game cameras is depicted in <a href="#fig-1.1" class="quarto-xref">Figure&nbsp;<span>1.1</span></a>.</p>
-<div id="fig-1.1" class="quarto-figure quarto-figure-center quarto-float anchored" data-fig-align="center" alt="Image processing workflow">
+<div id="fig-1.1" class="quarto-figure quarto-figure-center quarto-float anchored" alt="Image processing workflow" data-fig-align="center">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-1.1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="images/north-country-wild-camera-workflow.png" class="img-fluid quarto-figure quarto-figure-center figure-img" alt="Image processing workflow">
@@ -269,8 +275,8 @@ Figure&nbsp;1.1: General workflow for processing and logging game camera images
 <section id="raw-and-processed-subdirectories" class="level3" data-number="1.3.2">
 <h3 data-number="1.3.2" class="anchored" data-anchor-id="raw-and-processed-subdirectories"><span class="header-section-number">1.3.2</span> Raw and Processed Subdirectories</h3>
 <p>Within each year’s subdirectory, we include two subdirectories. One is called “Raw” and the other is called “Processed” (<a href="#fig-1.2" class="quarto-xref">Figure&nbsp;<span>1.2</span></a>).</p>
-<p>Nested within each of these directories is a unique directory for each camera deployment. Each of those subfolders is named with a combination of the Camera number and SD card number that was used for each deployment. The overall organization therefore looks something like what is shown in <span class="quarto-unresolved-ref">?fig-2</span>.</p>
-<div id="fig-1.2" class="quarto-figure quarto-figure-center quarto-float anchored" data-fig-align="center" alt="Hard drive organization">
+<p>Nested within each of these directories is a unique directory for each camera deployment. Each of those subfolders is named with a combination of the Camera number and SD card number that was used for each deployment. The overall organization therefore looks something like what is shown in <a href="#fig-1.2" class="quarto-xref">Figure&nbsp;<span>1.2</span></a>.</p>
+<div id="fig-1.2" class="quarto-figure quarto-figure-center quarto-float anchored" alt="Hard drive organization" data-fig-align="center">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-1.2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="images/hard-drive-folder-structure.png" class="img-fluid quarto-figure quarto-figure-center figure-img" alt="Hard drive organization">

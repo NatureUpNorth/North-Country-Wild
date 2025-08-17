@@ -64,7 +64,7 @@
     "href": "documentation/Chapter-1.html#hard-drive-organization",
     "title": "1  Process Overview",
     "section": "1.3 Hard Drive Organization",
-    "text": "1.3 Hard Drive Organization\n\n1.3.1 Year-by-year directories\nOur external hard drive is organized so that there is a subdirectory on the hard drive for each year in which game cameras were deployed. Our “year” more-or-less follows the academic calendar, and images are saved in folders based on the deployment date for the camera. We do the majority of our deployments from August through December each year.\nOur practice is to include images from deployments conducted during the summer (outside of our normal academic year) with the academic year that precedes the summer. So, for example, if we deploy cameras in July 2025, they will be located in the folder 2024_Game_Camera_Photos since they are associated with the 2024-2025 academic year and come before the start of the 2025-2026 academic year.\n\n\n1.3.2 Raw and Processed Subdirectories\nWithin each year’s subdirectory, we include two subdirectories. One is called “Raw” and the other is called “Processed” (Figure 1.2).\nNested within each of these directories is a unique directory for each camera deployment. Each of those subfolders is named with a combination of the Camera number and SD card number that was used for each deployment. The overall organization therefore looks something like what is shown in ?fig-2.\n\n\n\n\n\n\nFigure 1.2: Schematic of external hard drive organization\n\n\n\nNotice in Figure 1.2 that the “Raw” and “Processed” directories follow the same folder structure. Within each, there is a single folder for each camera deployment. We name these folders by the combination of camera number and SD card number associated with the deployment. For example, the deployment of Camera 23 that used SD card 45 is assigned the folder name C023_SD045.\n\n\n\n\n\n\nConsider ahead of time!\n\n\n\nOur shop started using game cameras in 2019 and we didn’t think as much as we should have about how we would organize files at that time. We were just starting out, and assumed that each camera + sd card combination would be unique. It didn’t take long before we had a repeat instance of the same camera + sd card. That’s why we started adding the timestamp as well as the camera and sd card number to each image file name. If you are just starting, give some serious thought to how you want to organize all this data!",
+    "text": "1.3 Hard Drive Organization\n\n1.3.1 Year-by-year directories\nOur external hard drive is organized so that there is a subdirectory on the hard drive for each year in which game cameras were deployed. Our “year” more-or-less follows the academic calendar, and images are saved in folders based on the deployment date for the camera. We do the majority of our deployments from August through December each year.\nOur practice is to include images from deployments conducted during the summer (outside of our normal academic year) with the academic year that precedes the summer. So, for example, if we deploy cameras in July 2025, they will be located in the folder 2024_Game_Camera_Photos since they are associated with the 2024-2025 academic year and come before the start of the 2025-2026 academic year.\n\n\n1.3.2 Raw and Processed Subdirectories\nWithin each year’s subdirectory, we include two subdirectories. One is called “Raw” and the other is called “Processed” (Figure 1.2).\nNested within each of these directories is a unique directory for each camera deployment. Each of those subfolders is named with a combination of the Camera number and SD card number that was used for each deployment. The overall organization therefore looks something like what is shown in Figure 1.2.\n\n\n\n\n\n\nFigure 1.2: Schematic of external hard drive organization\n\n\n\nNotice in Figure 1.2 that the “Raw” and “Processed” directories follow the same folder structure. Within each, there is a single folder for each camera deployment. We name these folders by the combination of camera number and SD card number associated with the deployment. For example, the deployment of Camera 23 that used SD card 45 is assigned the folder name C023_SD045.\n\n\n\n\n\n\nConsider ahead of time!\n\n\n\nOur shop started using game cameras in 2019 and we didn’t think as much as we should have about how we would organize files at that time. We were just starting out, and assumed that each camera + sd card combination would be unique. It didn’t take long before we had a repeat instance of the same camera + sd card. That’s why we started adding the timestamp as well as the camera and sd card number to each image file name. If you are just starting, give some serious thought to how you want to organize all this data!",
     "crumbs": [
       "<span class='chapter-number'>1</span>  <span class='chapter-title'>Process Overview</span>"
     ]
@@ -160,26 +160,6 @@
     ]
   },
   {
-    "objectID": "documentation/Chapter-5.html",
-    "href": "documentation/Chapter-5.html",
-    "title": "5  Checking which camera deployments are on s3",
-    "section": "",
-    "text": "5.1 Introduction\nIt is possible that you may not be sure of which/what files have been uploaded to s3. Because we store the files in “glacier” - the long-term storage arm of s3, it is not possible to quickly get a list of uploaded files (glacier costs less because you have to wait a few days to access files). However, there are a few things you can do to check.",
-    "crumbs": [
-      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Checking which camera deployments are on s3</span>"
-    ]
-  },
-  {
-    "objectID": "documentation/references.html",
-    "href": "documentation/references.html",
-    "title": "References",
-    "section": "",
-    "text": "Coming soon!",
-    "crumbs": [
-      "References"
-    ]
-  },
-  {
     "objectID": "documentation/Chapter-4.html#the-script-and-its-arguments",
     "href": "documentation/Chapter-4.html#the-script-and-its-arguments",
     "title": "4  Renaming raw files and uploading to AWS S3",
@@ -190,21 +170,11 @@
     ]
   },
   {
-    "objectID": "documentation/Chapter-4.html#workflow",
-    "href": "documentation/Chapter-4.html#workflow",
-    "title": "4  Renaming raw files and uploading to AWS S3",
-    "section": "4.3 Workflow",
-    "text": "4.3 Workflow\n\nOpen a terminal window. CD into the PythonScripts folder of this repository.\nFor us to keep track of the files we are pushing up to s3, we begin this process by creating and switching to a new branch in the project directory. Generally, we use a branch name such as DD-MON-YYYY-AWS-upload to make clear what we are doing. For example:\n\ngit checkout -b 15-Aug-2025-AWS-rename-upload\n\nYou will use the rename_raw_files_and_upload_to_s3.py script, with arguments as specified in Table tbl-4.1 above.",
-    "crumbs": [
-      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Renaming raw files and uploading to AWS S3</span>"
-    ]
-  },
-  {
     "objectID": "documentation/Chapter-4.html#normal-workflow",
     "href": "documentation/Chapter-4.html#normal-workflow",
     "title": "4  Renaming raw files and uploading to AWS S3",
     "section": "4.3 Normal Workflow",
-    "text": "4.3 Normal Workflow\n\nOpen a terminal window. CD into the PythonScripts folder of this repository.\n\n\n\n\n\n\n\nMake sure script is set for files to go to deep archive\n\n\n\nApproximately line 156 of the rename_raw_files_and_upload_to_s3.py reads extra_args = {\"StorageClass\": \"DEEP_ARCHIVE\"}. If this line is commented out (i.e. #extra_args = {\"StorageClass\": \"DEEP_ARCHIVE\"}, the files will be pushed to the more expensive but quickly accessible region of s3. We want to be able to use the more expensive storage as an option for testing, but in general the line of code should Not be commented out in practice.\n\n\n\nFor us to keep track of the files we are pushing up to s3, we begin this process by creating and switching to a new branch in the project directory. Generally, we use a branch name such as DD-MON-YYYY-AWS-upload to make clear what we are doing. For example:\n\ngit checkout -b 15-Aug-2025-AWS-rename-upload\n\nYou will use the rename_raw_files_and_upload_to_s3.py script, with arguments as specified in Table tbl-4.1 above.\n\nAgain, note that --camera-number and --sd-card-number are optional.\n\nRun the code in the terminal by stringing together the following lines code, all as one continuous command in the terminal, but replace each case of FILEPATH, CAMERA-NUMBER, SD-CARD-NUMBER or BUCKET-NAME with either the requested file path or the correct argument.\n\npython3 rename_raw_files_and_upload_to_s3.py --path-to-raw-directory FILEPATH --camera-number CAMERA-NUMBER --sd-card-number SD-CARD-NUMBER —-path-to-uploaded-files-file FILEPATH —-bucket-name BUCKET-NAME\n\nAs the script processes:\n\nIf you do not provide --camera-number or --sd-card-number the script will output No camera or sd card number provided. Will check for all folders in raw directory.\nFor the first subdirectory of images that the script encounters, it will tell you the number of files in the directory, the directory name, and will give several examples of old file names and new file names as output in the terminal:\nFound XXX files in /START-OF-PATH/CXXX_SDXXX\nExample old file names:\n['/START-OF-PATH/CXXX_SDXXX/IMG_0017.JPG',``'/START-OF-PATH/CXXX_SDXXX/IMG_0003.JPG', '/START-OF-PATH/CXXX_SDXXX/IMG_0005.JPG'``]\nExample new file names:\n['/START-OF-PATH/CXXX_SDXXX/CXXX_SDXXX_20250628143219_IMG_0017.JPG', '/START-OF-PATH/CXXX_SDXXX/CXXX_SDXXX_20250628142637_IMG_0003.JPG', '/START-OF-PATH/CXXX_SDXXX/CXXX_SDXXX_20250628142640_IMG_0005.JPG']\nNext the script will ask if you wish to go ahead and rename the raw files:\nRename raw files to new renaming convention? (y/n)\nSelect y to continue.\nThe script will rename the images in the first subdirectory and let you know by printing Added XXX from folder CXXX_SDXXX\nIf there is more than one folder to be processed, the script will then move on to the next folder and will again tell you the number of files in the directory, the directory name, and will give several examples of old file names and new file names as output in the terminal. It will again ask if you would like to continue renaming the raw files to the new naming convention and wait for your input.\nWhen the script is finished renaming files, it will then check to see if any of these files have already been uploaded to s3, and will print the result. Then it will tell you the total number of files it is planning to upload to s3 (equal to the sum of images in each of the subdirectories it has processed), and will give you a few examples of the uploads it is planning to undertake. Then it will ask if you wish to continue with the upload:\n0 files in year directory already uploaded to s3\nWill upload XXX files to BUCKET-NAME s3 bucket\nExample uploads:\n/START-OF-PATH/CXXX_SDXXX/CXXX_SDXXX_20250628143219_IMG_0017.JPG -&gt; CXXX_SDXXX_20250628143219_IMG_0017\n/START-OF-PATH/CXXX_SDXXX/CXXX_SDXXX_20250628142640_IMG_0005.JPG -&gt; CXXX_SDXXX_20250628142640_IMG_0005.JPG\n...etc\nDo you want to start upload of XXX files? (y/n)\nWhen you select y, the script will report its progress to the terminal, recording Upload successful! each time it uploads a file.\nFinally, the script will ask if you wish to overwrite the uploaded files file. If you choose y, it will add the names of the files that it just uploaded to /North-Country-Wild/misc_files/files_uploaded_to_s3.txt. If you choose n, it will add the names of the files that it did NOT upload to /North-Country-Wild/PythonScripts/uploaded_files.txt\nAnd that’s it!\n\nOnce the script has processed, you need to create a pull request from the branch you are working on in the terminal:\n\nuse git add . to stage any files that were changed (which should just be /North-Country-Wild/misc_files/files_uploaded_to_s3.txt if everything went smoothly)\nuse git commit -m \"commit message here\" to commit your changes\nAssuming that the branch you just created does not exist on github, then to push the changes to a new branch on git hub for making a pull request, use git push --set-upstream origin name-of-branch-you-are-working-from\nif you read along in the terminal output, you will see a link to github where you can make the pull request.\nIf you are finished uploading for that session, go ahead and make the pull request on github. Once it is complete, you can merge your branch into main locally and then delete the branch.\nIf you have more Raw image files to rename and upload, continue to process them, using the script in the way we have described, and when you are completely finished, then follow the instructions here in step 6.\n\nIf you are going back and retroactively renaming files and uploading them to s3, be sure to make a note that files for each deployment were uploaded on the master spreadsheet for tracking game camera deployments (privacy protected - link may not work).\n\nYou may wish to check and see which deployments have been stored on s3. For instructions on how to do so, see sec-Chapter5 of this documentation.",
+    "text": "4.3 Normal Workflow\n\nOpen a terminal window. CD into the PythonScripts folder of this repository.\n\n\n\n\n\n\n\nMake sure script is set for files to go to deep archive\n\n\n\nApproximately line 156 of the rename_raw_files_and_upload_to_s3.py reads extra_args = {\"StorageClass\": \"DEEP_ARCHIVE\"}. If this line is commented out (i.e. #extra_args = {\"StorageClass\": \"DEEP_ARCHIVE\"}, the files will be pushed to the more expensive but quickly accessible region of s3. We want to be able to use the more expensive storage as an option for testing, but in general the line of code should Not be commented out in practice.\n\n\n\nFor us to keep track of the files we are pushing up to s3, we begin this process by creating and switching to a new branch in the project directory. Generally, we use a branch name such as DD-MON-YYYY-AWS-upload to make clear what we are doing. For example:\n\ngit checkout -b 15-Aug-2025-AWS-rename-upload\n\nYou will use the rename_raw_files_and_upload_to_s3.py script, with arguments as specified in Table 4.1 above.\n\nAgain, note that --camera-number and --sd-card-number are optional.\n\nRun the code in the terminal by stringing together the following lines code, all as one continuous command in the terminal, but replace each case of FILEPATH, CAMERA-NUMBER, SD-CARD-NUMBER or BUCKET-NAME with either the requested file path or the correct argument.\n\npython3 rename_raw_files_and_upload_to_s3.py --path-to-raw-directory FILEPATH --camera-number CAMERA-NUMBER --sd-card-number SD-CARD-NUMBER —-path-to-uploaded-files-file FILEPATH —-bucket-name BUCKET-NAME\n\nAs the script processes:\n\nIf you do not provide --camera-number or --sd-card-number the script will output No camera or sd card number provided. Will check for all folders in raw directory.\nFor the first subdirectory of images that the script encounters, it will tell you the number of files in the directory, the directory name, and will give several examples of old file names and new file names as output in the terminal:\nFound XXX files in /START-OF-PATH/CXXX_SDXXX\nExample old file names:\n['/START-OF-PATH/CXXX_SDXXX/IMG_0017.JPG',``'/START-OF-PATH/CXXX_SDXXX/IMG_0003.JPG', '/START-OF-PATH/CXXX_SDXXX/IMG_0005.JPG'``]\nExample new file names:\n['/START-OF-PATH/CXXX_SDXXX/CXXX_SDXXX_20250628143219_IMG_0017.JPG', '/START-OF-PATH/CXXX_SDXXX/CXXX_SDXXX_20250628142637_IMG_0003.JPG', '/START-OF-PATH/CXXX_SDXXX/CXXX_SDXXX_20250628142640_IMG_0005.JPG']\nNext the script will ask if you wish to go ahead and rename the raw files:\nRename raw files to new renaming convention? (y/n)\nSelect y to continue.\nThe script will rename the images in the first subdirectory and let you know by printing Added XXX from folder CXXX_SDXXX\nIf there is more than one folder to be processed, the script will then move on to the next folder and will again tell you the number of files in the directory, the directory name, and will give several examples of old file names and new file names as output in the terminal. It will again ask if you would like to continue renaming the raw files to the new naming convention and wait for your input.\nWhen the script is finished renaming files, it will then check to see if any of these files have already been uploaded to s3, and will print the result. Then it will tell you the total number of files it is planning to upload to s3 (equal to the sum of images in each of the subdirectories it has processed), and will give you a few examples of the uploads it is planning to undertake. Then it will ask if you wish to continue with the upload:\n0 files in year directory already uploaded to s3\nWill upload XXX files to BUCKET-NAME s3 bucket\nExample uploads:\n/START-OF-PATH/CXXX_SDXXX/CXXX_SDXXX_20250628143219_IMG_0017.JPG -&gt; CXXX_SDXXX_20250628143219_IMG_0017\n/START-OF-PATH/CXXX_SDXXX/CXXX_SDXXX_20250628142640_IMG_0005.JPG -&gt; CXXX_SDXXX_20250628142640_IMG_0005.JPG\n...etc\nDo you want to start upload of XXX files? (y/n)\nWhen you select y, the script will report its progress to the terminal, recording Upload successful! each time it uploads a file.\nFinally, the script will ask if you wish to overwrite the uploaded files file. If you choose y, it will add the names of the files that it just uploaded to /North-Country-Wild/misc_files/files_uploaded_to_s3.txt. If you choose n, it will add the names of the files that it did NOT upload to /North-Country-Wild/PythonScripts/uploaded_files.txt\nAnd that’s it!\n\nOnce the script has processed, you need to create a pull request from the branch you are working on in the terminal:\n\nuse git add . to stage any files that were changed (which should just be /North-Country-Wild/misc_files/files_uploaded_to_s3.txt if everything went smoothly)\nuse git commit -m \"commit message here\" to commit your changes\nAssuming that the branch you just created does not exist on github, then to push the changes to a new branch on git hub for making a pull request, use git push --set-upstream origin name-of-branch-you-are-working-from\nif you read along in the terminal output, you will see a link to github where you can make the pull request.\nIf you are finished uploading for that session, go ahead and make the pull request on github. Once it is complete, you can merge your branch into main locally and then delete the branch.\nIf you have more Raw image files to rename and upload, continue to process them, using the script in the way we have described, and when you are completely finished, then follow the instructions here in step 6.\n\nIf you are going back and retroactively renaming files and uploading them to s3, be sure to make a note that files for each deployment were uploaded on the master spreadsheet for tracking game camera deployments (privacy protected - link may not work).\n\nYou may wish to check and see which deployments have been stored on s3. For instructions on how to do so, see Chapter 5 of this documentation.",
     "crumbs": [
       "<span class='chapter-number'>4</span>  <span class='chapter-title'>Renaming raw files and uploading to AWS S3</span>"
     ]
@@ -220,33 +190,13 @@
     ]
   },
   {
-    "objectID": "documentation/Chapter-4.html#checking-the-status-of-files-on-s3",
-    "href": "documentation/Chapter-4.html#checking-the-status-of-files-on-s3",
-    "title": "4  Renaming raw files and uploading to AWS S3",
-    "section": "4.4 Checking the status of files on s3",
-    "text": "4.4 Checking the status of files on s3\nIt is possible that you may not be sure of which/what files have been uploaded to s3. Because we store the files in “glacier” - the long-term storage arm of s3, it is not possible to quickly get a list of uploaded files (glacier costs less because you have to wait a few days to access files).\nHowever, it is still possible to do some checking.\nFirst, on AWS s3, if you are logged in,",
-    "crumbs": [
-      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Renaming raw files and uploading to AWS S3</span>"
-    ]
-  },
-  {
-    "objectID": "documentation/Chapter-6.html",
-    "href": "documentation/Chapter-6.html",
-    "title": "6  Uploading existing files to AWS S3",
+    "objectID": "documentation/Chapter-5.html",
+    "href": "documentation/Chapter-5.html",
+    "title": "5  Checking which camera deployments are on s3",
     "section": "",
-    "text": "6.1 Introduction",
+    "text": "5.1 Introduction\nIt is possible that you may not be sure of which/what files have been uploaded to s3. Because we store the files in “glacier” - the long-term storage arm of s3, it is not possible to quickly get a list of uploaded files (glacier costs less because you have to wait a few days to access files). However, there are a few things you can do to check.",
     "crumbs": [
-      "<span class='chapter-number'>6</span>  <span class='chapter-title'>Uploading existing files to AWS S3</span>"
-    ]
-  },
-  {
-    "objectID": "documentation/Chapter-5.html#checking-the-status-of-files-on-s3",
-    "href": "documentation/Chapter-5.html#checking-the-status-of-files-on-s3",
-    "title": "5  Checking which deployments are on s3",
-    "section": "5.2 Checking the status of files on s3",
-    "text": "5.2 Checking the status of files on s3\nIt is possible that you may not be sure of which/what files have been uploaded to s3. Because we store the files in “glacier” - the long-term storage arm of s3, it is not possible to quickly get a list of uploaded files (glacier costs less because you have to wait a few days to access files).\nHowever, it is still possible to do some checking.\nFirst, on AWS s3, if you are logged in,",
-    "crumbs": [
-      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Checking which deployments are on s3</span>"
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Checking which camera deployments are on s3</span>"
     ]
   },
   {
@@ -267,6 +217,26 @@
     "text": "5.3 Summarize information in the log file\nAssuming that the log file is up-to-date, it is possilbe to use some R code to quickly generate summary information about the deployments that are stored on s3.\nTo do so, navigate in this repository to /RScripts/ and open the file called return_list_of_deployments_on_s3.qmd. Run the code in that file, which calls the RScript summarize_s3_content.R to get a summary of all of the deployments that have been stored on s3.",
     "crumbs": [
       "<span class='chapter-number'>5</span>  <span class='chapter-title'>Checking which camera deployments are on s3</span>"
+    ]
+  },
+  {
+    "objectID": "documentation/Chapter-6.html",
+    "href": "documentation/Chapter-6.html",
+    "title": "6  Uploading existing files to AWS S3",
+    "section": "",
+    "text": "6.1 Introduction",
+    "crumbs": [
+      "<span class='chapter-number'>6</span>  <span class='chapter-title'>Uploading existing files to AWS S3</span>"
+    ]
+  },
+  {
+    "objectID": "documentation/references.html",
+    "href": "documentation/references.html",
+    "title": "References",
+    "section": "",
+    "text": "Coming soon!",
+    "crumbs": [
+      "References"
     ]
   }
 ]
