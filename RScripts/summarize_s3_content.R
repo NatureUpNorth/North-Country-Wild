@@ -142,8 +142,8 @@ summarize_s3_content <- function(dataframe){
     pagination = FALSE
   )
   
-  table_1 <- table_1 |> 
-    add_title("List of game camera deployments uploaded to s3")
+  #table_1 <- table_1 |> 
+    #add_title("List of game camera deployments uploaded to s3")
   
   #second table
   table_2 <- reactable(
@@ -163,8 +163,8 @@ summarize_s3_content <- function(dataframe){
     pagination = FALSE
   )
   
-  table_2 <- table_2 |> 
-    add_title("Further information about uploads in case of date issues")
+  #table_2 <- table_2 |> 
+    #add_title("Further information about uploads in case of date issues")
   
   #return two tables as list
   return(list(table1 = table_1, table2 = table_2))

@@ -1,9 +1,11 @@
 ---
-title: "return_list_of_deployments_on_s3"
 format: html
 execute: 
   preview: true
 ---
+
+## Instructions
+If you simply render this file, it will execute the code and display two helpful summary tables about what camera deployments are uploaded to s3 in a browser window. 
 
 ```{r}
 #| include: false
@@ -15,27 +17,30 @@ library(reactablefmtr)
 library(htmlwidgets)
 ```
 
-Pull in data and extract column with Cam_SD, Year, Month of deployment
+
 
 ```{r}
 #| include: false
+#Pull in data and extract column with Cam_SD, Year, Month of deployment
 uploaded <- read_csv(here("misc_files/files_uploaded_to_s3.txt"), col_names = F)
 colnames(uploaded) <- "File_name"
 
-source(here("RScripts/summarize_s3_content.R"))
+source(here("RScripts/summarize_s3_content.R")) #calls and "turns on" the function.
 ```
-
-Use the function
 
 ```{r}
 #| include: false
+#Use the function
 my_tables <- summarize_s3_content(uploaded)
 ```
 
+##### Table 1. List of game camera deployments uploaded to s3. Camera deployments for which the First year and Last year cell values are not the same have First year and Last year highlighted in red, as these could be either separate deployments that had the same camera and sd card number, or single deployments in which not all of the images on the SD card had correct timestamps.
 ```{r}
+#| echo: false
 my_tables[[1]] #use double brackets to specify the reactable object and not just the list element.
 ```
-
+##### Table 2. More information on camera deployments. In particular, pay attention to cameras for which the deployment included multiple years. For each deployment, there is a row in the table for each year for which there are pictures.
 ```{r}
+#| echo: false
 my_tables[[2]]
 ```

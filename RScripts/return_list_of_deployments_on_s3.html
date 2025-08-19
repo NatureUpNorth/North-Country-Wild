@@ -20,40 +20,6 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-/* CSS for syntax highlighting */
-pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { line-height: 1.25; }
-pre > code.sourceCode > span:empty { height: 1.2em; }
-.sourceCode { overflow: visible; }
-code.sourceCode > span { color: inherit; text-decoration: inherit; }
-div.sourceCode { margin: 1em 0; }
-pre.sourceCode { margin: 0; }
-@media screen {
-div.sourceCode { overflow: auto; }
-}
-@media print {
-pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
-}
-pre.numberSource code
-  { counter-reset: source-line 0; }
-pre.numberSource code > span
-  { position: relative; left: -4em; counter-increment: source-line; }
-pre.numberSource code > span > a:first-child::before
-  { content: counter(source-line);
-    position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; display: inline-block;
-    -webkit-touch-callout: none; -webkit-user-select: none;
-    -khtml-user-select: none; -moz-user-select: none;
-    -ms-user-select: none; user-select: none;
-    padding: 0 4px; width: 4em;
-  }
-pre.numberSource { margin-left: 3em;  padding-left: 4px; }
-div.sourceCode
-  {   }
-@media screen {
-pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
-}
 </style>
 
 
@@ -85,43 +51,31 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default">
-<div class="quarto-title">
-<h1 class="title">return_list_of_deployments_on_s3</h1>
-</div>
 
 
 
-<div class="quarto-title-meta">
-
-    
-  
-    
-  </div>
-  
-
-
-</header>
-
-
-<p>Pull in data and extract column with Cam_SD, Year, Month of deployment</p>
-<p>Use the function</p>
+<section id="instructions" class="level2">
+<h2 class="anchored" data-anchor-id="instructions">Instructions</h2>
+<p>If you simply render this file, it will execute the code and display two helpful summary tables about what camera deployments are uploaded to s3 in a browser window.</p>
+<section id="table-1.-list-of-game-camera-deployments-uploaded-to-s3.-camera-deployments-for-which-the-first-year-and-last-year-cell-values-are-not-the-same-have-first-year-and-last-year-highlighted-in-red-as-these-could-be-either-separate-deployments-that-had-the-same-camera-and-sd-card-number-or-single-deployments-in-which-not-all-of-the-images-on-the-sd-card-had-correct-timestamps." class="level5">
+<h5 class="anchored" data-anchor-id="table-1.-list-of-game-camera-deployments-uploaded-to-s3.-camera-deployments-for-which-the-first-year-and-last-year-cell-values-are-not-the-same-have-first-year-and-last-year-highlighted-in-red-as-these-could-be-either-separate-deployments-that-had-the-same-camera-and-sd-card-number-or-single-deployments-in-which-not-all-of-the-images-on-the-sd-card-had-correct-timestamps.">Table 1. List of game camera deployments uploaded to s3. Camera deployments for which the First year and Last year cell values are not the same have First year and Last year highlighted in red, as these could be either separate deployments that had the same camera and sd card number, or single deployments in which not all of the images on the SD card had correct timestamps.</h5>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>my_tables[[<span class="dv">1</span>]] <span class="co">#use double brackets to specify the reactable object and not just the list element.</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<h1 style="color:#000;background:#FFFFFF;text-align:left;font-size:32px;font-style:normal;font-weight:bold;text-decoration:;letter-spacing:px;word-spacing:px;text-transform:;text-shadow:;margin-top:0px;margin-right:0px;margin-bottom:0px;margin-left:0px">List of game camera deployments uploaded to s3</h1>
-<div class="reactable html-widget html-fill-item" id="htmlwidget-466a17b9c363c8d3434e" style="width:auto;height:auto;"></div>
-<script type="application/json" data-for="htmlwidget-466a17b9c363c8d3434e">{"x":{"tag":{"name":"Reactable","attribs":{"data":{"Cam_SD":["C021_SD065","C027_SD026","C028_SD001","C032_SD025","C035_SD040","C036_SD018","C036_SD074","C038_SD018","C038_SD042","C038_SD103","C047_SD060","C052_SD005","C056_SD041","C066_SD019"],"start_year":[2025,2017,2025,2017,2025,2024,2019,2025,2025,2025,2024,2024,2024,2020],"end_year":[2025,2017,2025,2017,2025,2024,2025,2025,2025,2025,2025,2025,2025,2025]},"columns":[{"id":"Cam_SD","name":"Deployment name","type":"character"},{"id":"start_year","name":"First year","type":"numeric","align":"center","style":[null,null,null,null,null,null,{"color":"red","fontWeight":"bold"},null,null,null,{"color":"red","fontWeight":"bold"},{"color":"red","fontWeight":"bold"},{"color":"red","fontWeight":"bold"},{"color":"red","fontWeight":"bold"}]},{"id":"end_year","name":"Last year","type":"numeric","align":"center","style":[null,null,null,null,null,null,{"color":"red","fontWeight":"bold"},null,null,null,{"color":"red","fontWeight":"bold"},{"color":"red","fontWeight":"bold"},{"color":"red","fontWeight":"bold"},{"color":"red","fontWeight":"bold"}]}],"defaultSorted":[{"id":"Cam_SD","desc":false}],"pagination":false,"highlight":true,"bordered":true,"striped":true,"dataKey":"d57987d8057a2771a3e8dec26f291ed6"},"children":[]},"class":"reactR_markup"},"evals":[],"jsHooks":[]}</script>
+<div class="reactable html-widget html-fill-item" id="htmlwidget-26cca47e40fefba94a0e" style="width:auto;height:auto;"></div>
+<script type="application/json" data-for="htmlwidget-26cca47e40fefba94a0e">{"x":{"tag":{"name":"Reactable","attribs":{"data":{"Cam_SD":["C021_SD065","C027_SD026","C028_SD001","C032_SD025","C035_SD040","C036_SD018","C036_SD074","C038_SD018","C038_SD042","C038_SD103","C047_SD060","C052_SD005","C056_SD041","C066_SD019"],"start_year":[2025,2017,2025,2017,2025,2024,2019,2025,2025,2025,2024,2024,2024,2020],"end_year":[2025,2017,2025,2017,2025,2024,2025,2025,2025,2025,2025,2025,2025,2025]},"columns":[{"id":"Cam_SD","name":"Deployment name","type":"character"},{"id":"start_year","name":"First year","type":"numeric","align":"center","style":[null,null,null,null,null,null,{"color":"red","fontWeight":"bold"},null,null,null,{"color":"red","fontWeight":"bold"},{"color":"red","fontWeight":"bold"},{"color":"red","fontWeight":"bold"},{"color":"red","fontWeight":"bold"}]},{"id":"end_year","name":"Last year","type":"numeric","align":"center","style":[null,null,null,null,null,null,{"color":"red","fontWeight":"bold"},null,null,null,{"color":"red","fontWeight":"bold"},{"color":"red","fontWeight":"bold"},{"color":"red","fontWeight":"bold"},{"color":"red","fontWeight":"bold"}]}],"defaultSorted":[{"id":"Cam_SD","desc":false}],"pagination":false,"highlight":true,"bordered":true,"striped":true,"dataKey":"d57987d8057a2771a3e8dec26f291ed6"},"children":[]},"class":"reactR_markup"},"evals":[],"jsHooks":[]}</script>
 </div>
 </div>
+</section>
+<section id="table-2.-more-information-on-camera-deployments.-in-particular-pay-attention-to-cameras-for-which-the-deployment-included-multiple-years.-for-each-deployment-there-is-a-row-in-the-table-for-each-year-for-which-there-are-pictures." class="level5">
+<h5 class="anchored" data-anchor-id="table-2.-more-information-on-camera-deployments.-in-particular-pay-attention-to-cameras-for-which-the-deployment-included-multiple-years.-for-each-deployment-there-is-a-row-in-the-table-for-each-year-for-which-there-are-pictures.">Table 2. More information on camera deployments. In particular, pay attention to cameras for which the deployment included multiple years. For each deployment, there is a row in the table for each year for which there are pictures.</h5>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>my_tables[[<span class="dv">2</span>]]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<h1 style="color:#000;background:#FFFFFF;text-align:left;font-size:32px;font-style:normal;font-weight:bold;text-decoration:;letter-spacing:px;word-spacing:px;text-transform:;text-shadow:;margin-top:0px;margin-right:0px;margin-bottom:0px;margin-left:0px">Further information about uploads in case of date issues</h1>
-<div class="reactable html-widget html-fill-item" id="htmlwidget-e2afe52d35f34ab724ae" style="width:auto;height:auto;"></div>
-<script type="application/json" data-for="htmlwidget-e2afe52d35f34ab724ae">{"x":{"tag":{"name":"Reactable","attribs":{"data":{"Cam_SD":["C021_SD065","C027_SD026","C028_SD001","C032_SD025","C035_SD040","C036_SD018","C036_SD074","C036_SD074","C038_SD018","C038_SD042","C038_SD103","C047_SD060","C047_SD060","C052_SD005","C052_SD005","C056_SD041","C056_SD041","C066_SD019","C066_SD019","C066_SD019"],"Year":[2025,2017,2025,2017,2025,2024,2019,2025,2025,2025,2025,2024,2025,2024,2025,2024,2025,2020,2024,2025],"first_date":["2025-06-23T11:44:33Z","2017-01-01T00:00:00Z","2025-06-20T11:28:34Z","2017-01-01T00:00:00Z","2025-06-19T15:28:03Z","2024-06-28T16:09:32Z","2019-01-01T03:50:59Z","2025-06-23T13:14:11Z","2025-07-07T13:36:10Z","2025-06-19T16:07:12Z","2025-07-14T10:47:18Z","2024-11-10T10:37:12Z","2025-01-01T13:18:24Z","2024-11-10T11:46:49Z","2025-01-03T09:34:10Z","2024-10-18T09:59:10Z","2025-01-04T11:16:05Z","2020-01-01T06:34:22Z","2024-10-18T12:27:42Z","2025-01-10T14:16:40Z"],"last_date":["2025-07-14T11:30:10Z","2017-01-05T09:58:00Z","2025-07-11T09:35:33Z","2017-01-01T00:00:08Z","2025-07-03T11:53:12Z","2024-07-17T12:02:47Z","2019-01-01T03:52:12Z","2025-07-14T14:24:55Z","2025-07-14T10:02:34Z","2025-07-03T11:29:53Z","2025-07-21T15:22:48Z","2024-12-31T13:23:53Z","2025-06-09T13:59:18Z","2024-12-31T10:33:49Z","2025-06-08T05:29:20Z","2024-12-29T16:44:21Z","2025-06-06T08:39:05Z","2020-01-01T06:35:32Z","2024-12-31T16:05:56Z","2025-06-06T09:14:04Z"],"Num_images":[116,91,81,54,156,2903,21,111,39,147,123,198,408,270,393,198,1656,6,594,414]},"columns":[{"id":"Cam_SD","name":"Deployment name","type":"character"},{"id":"Year","name":"Deployment year","type":"numeric"},{"id":"first_date","name":"First deployed on","type":"Date","format":{"cell":{"date":true},"aggregated":{"date":true}}},{"id":"last_date","name":"Last deployed on","type":"Date","format":{"cell":{"date":true},"aggregated":{"date":true}}},{"id":"Num_images","name":"Number images produced","type":"numeric"}],"defaultSorted":[{"id":"Cam_SD","desc":false}],"pagination":false,"highlight":true,"bordered":true,"striped":true,"dataKey":"78a9582a9bcaefdc2d1a9f710799a04e"},"children":[]},"class":"reactR_markup"},"evals":[],"jsHooks":[]}</script>
+<div class="reactable html-widget html-fill-item" id="htmlwidget-efe366168ab9cc0ad286" style="width:auto;height:auto;"></div>
+<script type="application/json" data-for="htmlwidget-efe366168ab9cc0ad286">{"x":{"tag":{"name":"Reactable","attribs":{"data":{"Cam_SD":["C021_SD065","C027_SD026","C028_SD001","C032_SD025","C035_SD040","C036_SD018","C036_SD074","C036_SD074","C038_SD018","C038_SD042","C038_SD103","C047_SD060","C047_SD060","C052_SD005","C052_SD005","C056_SD041","C056_SD041","C066_SD019","C066_SD019","C066_SD019"],"Year":[2025,2017,2025,2017,2025,2024,2019,2025,2025,2025,2025,2024,2025,2024,2025,2024,2025,2020,2024,2025],"first_date":["2025-06-23T11:44:33Z","2017-01-01T00:00:00Z","2025-06-20T11:28:34Z","2017-01-01T00:00:00Z","2025-06-19T15:28:03Z","2024-06-28T16:09:32Z","2019-01-01T03:50:59Z","2025-06-23T13:14:11Z","2025-07-07T13:36:10Z","2025-06-19T16:07:12Z","2025-07-14T10:47:18Z","2024-11-10T10:37:12Z","2025-01-01T13:18:24Z","2024-11-10T11:46:49Z","2025-01-03T09:34:10Z","2024-10-18T09:59:10Z","2025-01-04T11:16:05Z","2020-01-01T06:34:22Z","2024-10-18T12:27:42Z","2025-01-10T14:16:40Z"],"last_date":["2025-07-14T11:30:10Z","2017-01-05T09:58:00Z","2025-07-11T09:35:33Z","2017-01-01T00:00:08Z","2025-07-03T11:53:12Z","2024-07-17T12:02:47Z","2019-01-01T03:52:12Z","2025-07-14T14:24:55Z","2025-07-14T10:02:34Z","2025-07-03T11:29:53Z","2025-07-21T15:22:48Z","2024-12-31T13:23:53Z","2025-06-09T13:59:18Z","2024-12-31T10:33:49Z","2025-06-08T05:29:20Z","2024-12-29T16:44:21Z","2025-06-06T08:39:05Z","2020-01-01T06:35:32Z","2024-12-31T16:05:56Z","2025-06-06T09:14:04Z"],"Num_images":[116,91,81,54,156,2903,21,111,39,147,123,198,408,270,393,198,1656,6,594,414]},"columns":[{"id":"Cam_SD","name":"Deployment name","type":"character"},{"id":"Year","name":"Deployment year","type":"numeric"},{"id":"first_date","name":"First deployed on","type":"Date","format":{"cell":{"date":true},"aggregated":{"date":true}}},{"id":"last_date","name":"Last deployed on","type":"Date","format":{"cell":{"date":true},"aggregated":{"date":true}}},{"id":"Num_images","name":"Number images produced","type":"numeric"}],"defaultSorted":[{"id":"Cam_SD","desc":false}],"pagination":false,"highlight":true,"bordered":true,"striped":true,"dataKey":"78a9582a9bcaefdc2d1a9f710799a04e"},"children":[]},"class":"reactR_markup"},"evals":[],"jsHooks":[]}</script>
 </div>
 </div>
+</section>
+</section>
 
 </main>
 <!-- /main column -->
