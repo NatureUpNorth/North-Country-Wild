@@ -1,23 +1,29 @@
-#summarize_s3_conten is a function that can be used to get summary information about what camera deployments are uploaded on AWS s3.
-#It reads the /misc_files/files_uploaded_to_s3.txt file and produces two summary dataframes in a list as output. The dataframes 
-#are presented as sortable visual tables via the reactable package.
+---
+title: "return_list_of_deployments_on_s3"
+format: html
+---
 
-#The function takes one argument, the table of deployments, which is read-in as a single-column listing the file names
-#of all the images on s3. The function extracts the camera_sd (i.e. deployment), Year, and Month for each file into new columns.
+```{r}
+#| include: false
+rm(list = ls())
+library(tidyverse)
+library(here)
+library(reactable)
+library(reactablefmtr)
+```
 
-#The function then makes two summary tables based on that expanded data frame.
+Pull in data and extract column with Cam_SD, Year, Month of deployment
 
-#The function returns a list with two tables of summary information. The reason for two tables of output is that, with some camera
-#deployments, there are date issues associated with some files. For example, if a researcher sets up the camera and lets it begin
-#taking pictures during camera set up, but has not yet checked that the date and time are correct on the camera, some of the files
-#in the folder for that deployment will have different year information. (Example: C066_SD019 which has 6 images from "2020" during camera set up
-#and then an additional 594 images once the date was correctly set on the camera during setup).
+```{r}
+#| include: false
+uploaded <- read_csv(here("misc_files/files_uploaded_to_s3.txt"), col_names = F)
+colnames(uploaded) <- "File_name"
 
-summarize_s3_content <- function(dataframe){
-  require(reactable)
-  require(reactablefmtr)
-  require(tidyverse)
-  
+source(here("RScripts/summarize_s3_content.R"))
+```
+Check the summary tables
+
+```{r}
   #extract Cam_SD, Year and month from File_name
   
   dataframe <- dataframe |> mutate(
@@ -58,7 +64,12 @@ summarize_s3_content <- function(dataframe){
     Num_images = integer()
   )
   
-  #start loop that chunks uploaded by Cam_SD deployment and Year
+```
+
+Ok - that all looks ok - now check loop
+
+```{r}
+#start loop that chunks uploaded by Cam_SD deployment and Year
   
   for (i in 1:nrow(dataframe_by_year_summary)){ #initialize loop across each Year instance of each Cam_SD
     #filter to one Cam_SD and one Year
@@ -98,53 +109,65 @@ summarize_s3_content <- function(dataframe){
     #repeat for each Cam_SD/Year combination
   } #exit loop
   
-  #assign date variables as date via lubridate
+```
+Seems to be working. Now run whole loop
+
+Now check what happens after the loop
+First assigning datetime
+```{r}
+ #assign date variables as date via lubridate
   loop_output$first_date <- ymd_hms(loop_output$first_date)
   loop_output$last_date <- ymd_hms(loop_output$last_date)
-  
+```
+
+Next create table1
+```{r}
   #now create the reactable tables to output as list
   
   #first table
-  #with help from chatGPT, I solved the issue of the table not displaying all rows, 
-  #and also added a feature that highlights the cell values for any rows in table_1 
-  #for which the start_year and end_year don't match. The purpose of this table is to help 
-  #the viewer quickly identify issues.
-  
   table_1 <- reactable(
-    dataframe_by_cam_sd_summary[, 1:3],
-    columns = list(
-      Cam_SD = colDef(name = "Deployment name"),
-      
-      start_year = colDef(
-        name = "First year",
-        align = "center",
-        style = function(value, index) {
-          if (value != dataframe_by_cam_sd_summary$end_year[index]) {
-            list(color = "red", fontWeight = "bold")
-          }
+  dataframe_by_cam_sd_summary[, 1:3],
+  columns = list(
+    Cam_SD = colDef(name = "Deployment name"),
+    
+    start_year = colDef(
+      name = "First year",
+      align = "center",
+      style = function(value, index) {
+        if (value != dataframe_by_cam_sd_summary$end_year[index]) {
+          list(color = "red", fontWeight = "bold")
         }
-      ),
-      
-      end_year = colDef(
-        name = "Last year",
-        align = "center",
-        style = function(value, index) {
-          if (value != dataframe_by_cam_sd_summary$start_year[index]) {
-            list(color = "red", fontWeight = "bold")
-          }
-        }
-      )
+      }
     ),
-    bordered = TRUE,
-    striped = TRUE,
-    highlight = TRUE,
-    defaultSorted = "Cam_SD",
-    pagination = FALSE
-  )
+    
+    end_year = colDef(
+      name = "Last year",
+      align = "center",
+      style = function(value, index) {
+        if (value != dataframe_by_cam_sd_summary$start_year[index]) {
+          list(color = "red", fontWeight = "bold")
+        }
+      }
+    )
+  ),
+  bordered = TRUE,
+  striped = TRUE,
+  highlight = TRUE,
+  defaultSorted = "Cam_SD",
+  pagination = FALSE
+)
+
+#with help from chatGPT, I solved the issue of the table not displaying all rows, and also added a feature that highlights the cell values for any rows in table_1 for which the start_year and end_year don't match. The purpose of this table is to help the viewer quickly identify issues.
   
   table_1 <- table_1 |> 
     add_title("List of game camera deployments uploaded to s3")
   
+```
+For some reason, the table is not returning all rows when it displays.
+
+
+And check the second table
+```{r}
   #second table
   table_2 <- reactable(
     loop_output,
@@ -159,13 +182,31 @@ summarize_s3_content <- function(dataframe){
     bordered = TRUE,
     striped = TRUE,
     highlight = TRUE,
-    defaultSorted = c("Cam_SD"), 
+    defaultSorted = c("Cam_SD"),
     pagination = FALSE
   )
   
   table_2 <- table_2 |> 
     add_title("Further information about uploads in case of date issues")
-  
-  #return two tables as list
-  return(list(table1 = table_1, table2 = table_2))
-}
+
+```
+
+Looks good as long as I use "pagination = FALSE" in table 2. This table doesn't need fancy highlighting. 
+
+
+Use the function
+
+```{r}
+#| include: false
+my_tables <- summarize_s3_content(uploaded)
+```
+
+```{r}
+my_tables[1]
+```
+
+```{r}
+my_tables[2]
+```
+
+

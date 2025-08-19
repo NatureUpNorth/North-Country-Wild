@@ -1,14 +1,18 @@
 ---
 title: "return_list_of_deployments_on_s3"
 format: html
+execute: 
+  preview: true
 ---
 
 ```{r}
+#| include: false
 rm(list = ls())
 library(tidyverse)
 library(here)
 library(reactable)
 library(reactablefmtr)
+library(htmlwidgets)
 ```
 
 Pull in data and extract column with Cam_SD, Year, Month of deployment
@@ -21,8 +25,6 @@ colnames(uploaded) <- "File_name"
 source(here("RScripts/summarize_s3_content.R"))
 ```
 
-
-
 Use the function
 
 ```{r}
@@ -31,11 +33,9 @@ my_tables <- summarize_s3_content(uploaded)
 ```
 
 ```{r}
-my_tables[1]
+my_tables[[1]] #use double brackets to specify the reactable object and not just the list element.
 ```
 
 ```{r}
-my_tables[2]
+my_tables[[2]]
 ```
-
-
