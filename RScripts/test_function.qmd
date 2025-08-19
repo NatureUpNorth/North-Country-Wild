@@ -4,6 +4,7 @@ format: html
 ---
 
 ```{r}
+#| include: false
 rm(list = ls())
 library(tidyverse)
 library(here)
@@ -20,7 +21,177 @@ colnames(uploaded) <- "File_name"
 
 source(here("RScripts/summarize_s3_content.R"))
 ```
+Check the summary tables
 
+```{r}
+  #extract Cam_SD, Year and month from File_name
+  
+  dataframe <- dataframe |> mutate(
+    Cam_SD = str_sub(File_name, 1, 10),
+    Year = as.integer(str_sub(File_name,12, 15)),
+    Month = as.integer(str_sub(File_name,16, 17))
+  )
+  
+  #create first summary table, grouped by Cam_SD
+  
+  dataframe_by_cam_sd_summary <- dataframe |>
+    group_by(Cam_SD) |>
+    summarise(
+      start_year = min(Year, na.rm = T),
+      end_year = max(Year, na.rm = T), 
+      low_month = min(Month, na.rm = T),
+      high_month = max(Month, na.rm = T),
+      num_months = length(unique(Month))
+    )
+  
+  #create second summary dataframe, grouped by Cam_SD and Year
+  dataframe_by_year_summary <- dataframe |>
+    group_by(Cam_SD, Year) |>
+    summarise(
+      start_year = min(Year, na.rm = T),
+      end_year = max(Year, na.rm = T), 
+      low_month = min(Month, na.rm = T),
+      high_month = max(Month, na.rm = T),
+      num_months = length(unique(Month))
+    )
+  
+  #create empty dataframe to receive results
+  loop_output <- data.frame(
+    Cam_SD = character(),
+    Year = integer(),
+    first_date = integer(),
+    last_date = integer(),
+    Num_images = integer()
+  )
+  
+```
+
+Ok - that all looks ok - now check loop
+
+```{r}
+#start loop that chunks uploaded by Cam_SD deployment and Year
+  
+  for (i in 1:nrow(dataframe_by_year_summary)){ #initialize loop across each Year instance of each Cam_SD
+    #filter to one Cam_SD and one Year
+    subset <- dataframe |> 
+      filter(
+        Cam_SD == dataframe_by_year_summary$Cam_SD[i] & Year == dataframe_by_year_summary$Year[i])
+    
+    #make sure files are in chronological order
+    subset <- subset |> arrange(File_name, Year)
+    
+    #extract Cam_SD for this instance as variable
+    ith_cam_sd <- unique(subset$Cam_SD)
+    
+    #extract Year for this instance as variable
+    ith_year <- unique(subset$Year)
+    
+    #extract startdate for this instance as variable
+    ith_startdate <- str_sub(subset$File_name[1], 12, 25)
+    
+    #extract enddate for this instance as variable
+    ith_enddate <- str_sub(subset$File_name[nrow(subset)], 12, 25)
+    
+    #count and extract number of images in this instance
+    ith_num_images <- nrow(subset)
+    
+    #store extracted variables in dataframe
+    ith_output <- data.frame(
+      Cam_SD = ith_cam_sd, 
+      Year = ith_year, 
+      first_date = ith_startdate, 
+      last_date = ith_enddate, 
+      Num_images = ith_num_images)
+    
+    #bind each iteration of loop into results storage dataframe
+    loop_output <- rbind(loop_output, ith_output)
+    
+    #repeat for each Cam_SD/Year combination
+  } #exit loop
+  
+```
+Seems to be working. Now run whole loop
+
+Now check what happens after the loop
+First assigning datetime
+```{r}
+ #assign date variables as date via lubridate
+  loop_output$first_date <- ymd_hms(loop_output$first_date)
+  loop_output$last_date <- ymd_hms(loop_output$last_date)
+```
+
+Next create table1
+```{r}
+  #now create the reactable tables to output as list
+  
+  #first table
+  table_1 <- reactable(
+  dataframe_by_cam_sd_summary[, 1:3],
+  columns = list(
+    Cam_SD = colDef(name = "Deployment name"),
+    
+    start_year = colDef(
+      name = "First year",
+      align = "center",
+      style = function(value, index) {
+        if (value != dataframe_by_cam_sd_summary$end_year[index]) {
+          list(color = "red", fontWeight = "bold")
+        }
+      }
+    ),
+    
+    end_year = colDef(
+      name = "Last year",
+      align = "center",
+      style = function(value, index) {
+        if (value != dataframe_by_cam_sd_summary$start_year[index]) {
+          list(color = "red", fontWeight = "bold")
+        }
+      }
+    )
+  ),
+  bordered = TRUE,
+  striped = TRUE,
+  highlight = TRUE,
+  defaultSorted = "Cam_SD",
+  pagination = FALSE
+)
+
+#with help from chatGPT, I solved the issue of the table not displaying all rows, and also added a feature that highlights the cell values for any rows in table_1 for which the start_year and end_year don't match. The purpose of this table is to help the viewer quickly identify issues.
+  
+  table_1 <- table_1 |> 
+    add_title("List of game camera deployments uploaded to s3")
+  
+```
+For some reason, the table is not returning all rows when it displays.
+
+
+And check the second table
+```{r}
+  #second table
+  table_2 <- reactable(
+    loop_output,
+    
+    columns = list(
+      Cam_SD = colDef(name = "Deployment name"),
+      Year = colDef(name = "Deployment year"),
+      first_date = colDef(name = "First deployed on", format = colFormat(date = TRUE)),
+      last_date = colDef(name = "Last deployed on", format = colFormat(date = TRUE)),
+      Num_images = colDef(name = "Number images produced")),
+    
+    bordered = TRUE,
+    striped = TRUE,
+    highlight = TRUE,
+    defaultSorted = c("Cam_SD"),
+    pagination = FALSE
+  )
+  
+  table_2 <- table_2 |> 
+    add_title("Further information about uploads in case of date issues")
+
+```
+
+Looks good as long as I use "pagination = FALSE" in table 2. This table doesn't need fancy highlighting. 
 
 
 Use the function

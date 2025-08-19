@@ -105,23 +105,45 @@ summarize_s3_content <- function(dataframe){
   #now create the reactable tables to output as list
   
   #first table
-  table_1 <- reactable( 
-    
-    dataframe_by_cam_sd_summary[,1:3],
-    
+  #with help from chatGPT, I solved the issue of the table not displaying all rows, 
+  #and also added a feature that highlights the cell values for any rows in table_1 
+  #for which the start_year and end_year don't match. The purpose of this table is to help 
+  #the viewer quickly identify issues.
+  
+  table_1 <- reactable(
+    dataframe_by_cam_sd_summary[, 1:3],
     columns = list(
-      Cam_SD = colDef(name = "Deployment name"), #assign first col name
-      start_year = colDef(name = "First year", align = "center"), #assign second col name
-      end_year = colDef(name = "Last year", align = "center")),
-    
+      Cam_SD = colDef(name = "Deployment name"),
+      
+      start_year = colDef(
+        name = "First year",
+        align = "center",
+        style = function(value, index) {
+          if (value != dataframe_by_cam_sd_summary$end_year[index]) {
+            list(color = "red", fontWeight = "bold")
+          }
+        }
+      ),
+      
+      end_year = colDef(
+        name = "Last year",
+        align = "center",
+        style = function(value, index) {
+          if (value != dataframe_by_cam_sd_summary$start_year[index]) {
+            list(color = "red", fontWeight = "bold")
+          }
+        }
+      )
+    ),
     bordered = TRUE,
     striped = TRUE,
     highlight = TRUE,
-    defaultSorted = c("Cam_SD"))
+    defaultSorted = "Cam_SD",
+    pagination = FALSE
+  )
   
   table_1 <- table_1 |> 
     add_title("List of game camera deployments uploaded to s3")
-  
   
   #second table
   table_2 <- reactable(
@@ -137,7 +159,8 @@ summarize_s3_content <- function(dataframe){
     bordered = TRUE,
     striped = TRUE,
     highlight = TRUE,
-    defaultSorted = c("Cam_SD")
+    defaultSorted = c("Cam_SD"), 
+    pagination = FALSE
   )
   
   table_2 <- table_2 |> 
