@@ -15,7 +15,7 @@ Our python script `rename_raw_files_and_upload_to_s3.py` takes care of these ste
 The script `rename_raw_files_and_upload_to_s3.py` does not have any subcommands. It has several arguments, as follows:
 
 | argument | status | explanation |
-|------------------------|------------------------|------------------------|
+|----|----|----|
 | `--path-to-raw-directory` | Required | Full path to folder with raw files with old naming convention (e.g., IMG_0001.JPG) |
 | `--camera-number` | Optional | Camera number, as an integer, not exceeding 3 digits. If not specified, script reads through Raw directory and gets list of subdirectories. |
 | `--sd-card-number` | Optional | SD card number, as an integer, not exceeding 3 digits. If not specified, script reads through Raw directory and gets list of subdirectories. |
