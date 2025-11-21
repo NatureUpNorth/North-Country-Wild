@@ -11,7 +11,7 @@ from pathlib import Path
 import boto3
 from botocore.exceptions import ClientError
 from PyPDF2 import PdfMerger, PdfReader
-from PIL import Image
+from PIL import Image, ImageDraw, ImageFont
 from io import BytesIO
 import tempfile
 
@@ -21,16 +21,11 @@ def parse_arguments():
         description="Check S3 storage classes and create PDF from standard storage files"
     )
     
-    input_group = parser.add_mutually_exclusive_group(required=True)
-    input_group.add_argument(
-        '--files', 
-        nargs='+',
-        help='List of filenames (space-separated)'
-    )
-    input_group.add_argument(
+    parser.add_argument(
         '--csv',
         type=str,
-        help='CSV file containing filenames (one per row or in a column)'
+        required=True,
+        help='CSV file with columns: subject_id, img1, img2, img3'
     )
     
     parser.add_argument(
@@ -62,40 +57,33 @@ def parse_arguments():
         help='Output PDF filename'
     )
     
-    parser.add_argument(
-        '--csv-column',
-        type=str,
-        default='filename',
-        help='Column name in CSV containing filenames (default: filename)'
-    )
-    
     return parser.parse_args()
 
 
-def read_filenames_from_csv(csv_path, column_name):
-    """Read filenames from CSV file."""
-    filenames = []
+def read_rows_from_csv(csv_path):
+    """Read rows from CSV file with subject_id, img1, img2, img3 columns."""
+    rows = []
     try:
         with open(csv_path, 'r') as f:
             reader = csv.DictReader(f)
-            if column_name not in reader.fieldnames:
-                # Try first column if specified column doesn't exist
-                print(f"Column '{column_name}' not found. Using first column.")
-                f.seek(0)
-                reader = csv.reader(f)
-                next(reader)  # Skip header
-                filenames = [row[0] for row in reader if row]
-            else:
-                filenames = [row[column_name] for row in reader if row[column_name]]
+            for row in reader:
+                rows.append({
+                    'subject_id': row.get('subject_id', ''),
+                    'img1': row.get('img1', '').strip(),
+                    'img2': row.get('img2', '').strip(),
+                    'img3': row.get('img3', '').strip()
+                })
     except Exception as e:
         print(f"Error reading CSV: {e}")
         sys.exit(1)
     
-    return filenames
+    return rows
 
 
 def check_storage_class(s3_client, bucket, filename):
     """Check the storage class of an S3 object."""
+    if not filename:
+        return {'exists': False, 'storage_class': None}
     try:
         response = s3_client.head_object(Bucket=bucket, Key=filename)
         storage_class = response.get('StorageClass', 'STANDARD')
@@ -143,6 +131,8 @@ def restore_from_glacier(s3_client, bucket, filename, days, tier):
 
 def download_file(s3_client, bucket, filename):
     """Download file from S3 to memory."""
+    if not filename:
+        return None
     try:
         response = s3_client.get_object(Bucket=bucket, Key=filename)
         return response['Body'].read()
@@ -151,86 +141,102 @@ def download_file(s3_client, bucket, filename):
         return None
 
 
-def is_pdf(filename):
-    """Check if file is a PDF based on extension."""
-    return filename.lower().endswith('.pdf')
-
-
-def is_image(filename):
-    """Check if file is an image based on extension."""
-    image_extensions = {'.jpg', '.jpeg', '.png', '.gif', '.bmp', '.tiff', '.tif'}
-    return Path(filename).suffix.lower() in image_extensions
-
-
-def image_to_pdf_bytes(image_data):
-    """Convert image bytes to PDF bytes with image at top of page."""
-    img = Image.open(BytesIO(image_data))
-    
-    # Convert to RGB if necessary
-    if img.mode in ('RGBA', 'LA', 'P'):
-        background = Image.new('RGB', img.size, (255, 255, 255))
-        if img.mode == 'P':
-            img = img.convert('RGBA')
-        background.paste(img, mask=img.split()[-1] if img.mode in ('RGBA', 'LA') else None)
-        img = background
-    elif img.mode != 'RGB':
-        img = img.convert('RGB')
-    
-    # Create letter-sized page (8.5" x 11" at 72 DPI)
+def create_page_with_images(s3_client, bucket, subject_id, img_filenames):
+    """Create a PDF page with up to 3 images side-by-side and subject_id below."""
     page_width, page_height = 612, 792
-    
-    # Scale image to fit page width while maintaining aspect ratio
-    img_width, img_height = img.size
-    scale = page_width / img_width
-    new_height = int(img_height * scale)
-    img_resized = img.resize((page_width, new_height), Image.Resampling.LANCZOS)
-    
-    # Create white page and paste image at top
     page = Image.new('RGB', (page_width, page_height), (255, 255, 255))
-    page.paste(img_resized, (0, 0))
     
+    # Download and process images
+    images = []
+    for filename in img_filenames:
+        if filename:
+            file_data = download_file(s3_client, bucket, filename)
+            if file_data:
+                try:
+                    img = Image.open(BytesIO(file_data))
+                    if img.mode in ('RGBA', 'LA', 'P'):
+                        background = Image.new('RGB', img.size, (255, 255, 255))
+                        if img.mode == 'P':
+                            img = img.convert('RGBA')
+                        background.paste(img, mask=img.split()[-1] if img.mode in ('RGBA', 'LA') else None)
+                        img = background
+                    elif img.mode != 'RGB':
+                        img = img.convert('RGB')
+                    images.append(img)
+                except Exception as e:
+                    print(f"  Error loading {filename}: {e}")
+    
+    if not images:
+        print(f"  No valid images for subject {subject_id}")
+        return None
+    
+    # Calculate dimensions for side-by-side layout
+    num_images = len(images)
+    img_width = page_width // num_images
+    max_img_height = 600  # Leave space for subject_id
+    
+    # Paste images side-by-side
+    x_offset = 0
+    for img in images:
+        # Scale image to fit allocated width while maintaining aspect ratio
+        scale = img_width / img.width
+        new_height = int(img.height * scale)
+        if new_height > max_img_height:
+            scale = max_img_height / img.height
+            new_height = max_img_height
+            new_width = int(img.width * scale)
+        else:
+            new_width = img_width
+        
+        img_resized = img.resize((new_width, new_height), Image.Resampling.LANCZOS)
+        page.paste(img_resized, (x_offset, 0))
+        x_offset += img_width
+    
+    # Add subject_id text below images
+    draw = ImageDraw.Draw(page)
+    try:
+        font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 24)
+    except:
+        font = ImageFont.load_default()
+    
+    text = f"Subject ID: {subject_id}"
+    bbox = draw.textbbox((0, 0), text, font=font)
+    text_width = bbox[2] - bbox[0]
+    text_x = (page_width - text_width) // 2
+    text_y = max_img_height + 20
+    draw.text((text_x, text_y), text, fill=(0, 0, 0), font=font)
+    
+    # Convert to PDF bytes
     pdf_bytes = BytesIO()
     page.save(pdf_bytes, format='PDF')
     pdf_bytes.seek(0)
     return pdf_bytes
 
 
-def create_pdf_from_files(s3_client, bucket, filenames, output_path):
-    """Download files and create merged PDF."""
+def create_pdf_from_rows(s3_client, bucket, rows, output_path):
+    """Create PDF with one page per row showing 3 images and subject_id."""
     merger = PdfMerger()
-    files_processed = 0
+    pages_processed = 0
     
-    for filename in filenames:
-        print(f"Processing {filename}...")
-        file_data = download_file(s3_client, bucket, filename)
+    for row in rows:
+        subject_id = row['subject_id']
+        img_filenames = [row['img1'], row['img2'], row['img3']]
         
-        if file_data is None:
-            continue
+        print(f"Processing subject {subject_id}...")
+        pdf_page = create_page_with_images(s3_client, bucket, subject_id, img_filenames)
         
-        try:
-            if is_pdf(filename):
-                # Handle PDF files
-                pdf_file = BytesIO(file_data)
-                merger.append(pdf_file)
-                files_processed += 1
-            elif is_image(filename):
-                # Convert images to PDF
-                pdf_bytes = image_to_pdf_bytes(file_data)
-                merger.append(pdf_bytes)
-                files_processed += 1
-            else:
-                print(f"  Skipping {filename}: not a PDF or image")
-        except Exception as e:
-            print(f"  Error processing {filename}: {e}")
+        if pdf_page:
+            merger.append(pdf_page)
+            pages_processed += 1
 
-    if files_processed == 0:
-        print("No files were successfully processed.")
+    if pages_processed == 0:
+        print("No pages were successfully processed.")
         return False
     
     try:
         merger.write(output_path)
         merger.close()
-        print(f"\nSuccessfully created PDF with {files_processed} files: {output_path}")
+        print(f"\nSuccessfully created PDF with {pages_processed} pages: {output_path}")
         return True
     except Exception as e:
         print(f"Error writing output PDF: {e}")
@@ -240,16 +246,17 @@ def create_pdf_from_files(s3_client, bucket, filenames, output_path):
 def main():
     args = parse_arguments()
     
-    # Get list of filenames
-    if args.files:
-        filenames = args.files
-    elif args.csv:
-        filenames = read_filenames_from_csv(args.csv, args.csv_column)
-    else:
-        print("No filenames provided.")
-        sys.exit(1)
+    # Get rows from CSV
+    rows = read_rows_from_csv(args.csv)
+    
+    # Get all unique filenames
+    all_filenames = []
+    for row in rows:
+        for img in [row['img1'], row['img2'], row['img3']]:
+            if img and img not in all_filenames:
+                all_filenames.append(img)
 
-    print(f"Processing {len(filenames)} files from bucket '{args.bucket}'")
+    print(f"Processing {len(rows)} subjects with {len(all_filenames)} unique files from bucket '{args.bucket}'")
 
     # Initialize S3 client
     s3_client = boto3.client('s3')
@@ -261,7 +268,7 @@ def main():
     standard_files = []
     missing_files = []
     
-    for filename in filenames:
+    for filename in all_filenames:
         info = check_storage_class(s3_client, args.bucket, filename)
         storage_info[filename] = info
         
@@ -309,7 +316,7 @@ def main():
             print(f"{len(glacier_files)} files in Glacier will be skipped.")
         
         print(f"\nCreating PDF from available files...")
-        success = create_pdf_from_files(s3_client, args.bucket, standard_files, args.output)
+        success = create_pdf_from_rows(s3_client, args.bucket, rows, args.output)
         
         if success:
             sys.exit(0)
