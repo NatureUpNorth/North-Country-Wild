@@ -25,7 +25,7 @@ def parse_arguments():
         '--csv',
         type=str,
         required=True,
-        help='CSV file with columns: subject_id, img1, img2, img3'
+        help='CSV file with columns: subject_ids, Img1, Img2, Img3'
     )
     
     parser.add_argument(
@@ -68,10 +68,10 @@ def read_rows_from_csv(csv_path):
             reader = csv.DictReader(f)
             for row in reader:
                 rows.append({
-                    'subject_id': row.get('subject_id', ''),
-                    'img1': row.get('img1', '').strip(),
-                    'img2': row.get('img2', '').strip(),
-                    'img3': row.get('img3', '').strip()
+                    'subject_id': row.get('subject_ids', ''),
+                    'img1': row.get('Img1', '').strip(),
+                    'img2': row.get('Img2', '').strip(),
+                    'img3': row.get('Img3', '').strip()
                 })
     except Exception as e:
         print(f"Error reading CSV: {e}")
