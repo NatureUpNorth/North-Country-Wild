@@ -266,7 +266,6 @@ def completely_process_images_from_sd_card(
     bucket_name: str,
 ):
     extra_args = {"StorageClass": "DEEP_ARCHIVE"}
-    extra_args = {}
     camera_number_with_leading_zeros = str(camera_number).zfill(3)
     sd_card_number_with_leading_zeros = str(sd_card_number).zfill(3)
 
