@@ -147,10 +147,10 @@ def create_page_with_images(s3_client, bucket, subject_id, img_filenames):
     scale = 3
     
     # Standard page size scaled up
-    page_width = 612 * scale  # 1836 pixels
-    page_height = 792 * scale  # 2376 pixels
+    page_width = 792 * scale  # 1836 pixels
+    page_height = 612 * scale  # 2376 pixels
     page = Image.new('RGB', (page_width, page_height), (255, 255, 255))
-    
+
     # Add margins
     margin = 30 * scale  # margin on all sides
     image_spacing = 20 * scale  # space between images
@@ -190,7 +190,7 @@ def create_page_with_images(s3_client, bucket, subject_id, img_filenames):
     total_spacing = image_spacing * (num_images - 1)  # space between images
     img_width = (usable_width - total_spacing) // num_images
     
-    text_height = 500 * scale  # Space reserved for text
+    text_height = 150 * scale  # Space reserved for text
     max_img_height = page_height - (2 * margin) - text_height
     
     # Paste images side-by-side, maintaining aspect ratio
@@ -304,9 +304,9 @@ def main():
     if missing_files:
         print(f"\nWarning: {len(missing_files)} files not found in bucket")
 
-    # Case 1: All files are in Glacier
-    if glacier_files and not standard_files:
-        print(f"\nAll {len(glacier_files)} files are in Glacier storage.")
+    # Case 1: At least some files are in Glacier
+    if glacier_files:
+        print(f"\n{len(glacier_files)} files are in Glacier storage.")
         response = input(f"Do you want to restore them? (Tier: {args.restore_tier}, Days: {args.restore_days}) [y/N]: ")
         
         if response.lower() in ['y', 'yes']:
@@ -324,15 +324,13 @@ def main():
             print(f"Files will be available for {args.restore_days} days once restored.")
         else:
             print("Restore cancelled.")
-        
-        sys.exit(0)
     
     # Case 2: Some or all files are in standard storage
     if standard_files:
         print(f"\n{len(standard_files)} files available in standard storage.")
         if glacier_files:
             print(f"{len(glacier_files)} files in Glacier will be skipped.")
-        
+
         print(f"\nCreating PDF from available files...")
         success = create_pdf_from_rows(s3_client, args.bucket, rows, args.output)
         
