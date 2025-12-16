@@ -11,7 +11,7 @@ from pathlib import Path
 import boto3
 from botocore.exceptions import ClientError
 from PyPDF2 import PdfMerger, PdfReader
-from PIL import Image, ImageDraw, ImageFont
+from PIL import Image, ImageDraw, ImageFont, ImageOps
 from io import BytesIO
 import tempfile
 
@@ -143,8 +143,17 @@ def download_file(s3_client, bucket, filename):
 
 def create_page_with_images(s3_client, bucket, subject_id, img_filenames):
     """Create a PDF page with up to 3 images side-by-side and subject_id below."""
-    page_width, page_height = 612, 792
+    # Scale factor for higher resolution (2-3x gives good results)
+    scale = 3
+    
+    # Standard page size scaled up
+    page_width = 612 * scale  # 1836 pixels
+    page_height = 792 * scale  # 2376 pixels
     page = Image.new('RGB', (page_width, page_height), (255, 255, 255))
+    
+    # Add margins
+    margin = 30 * scale  # margin on all sides
+    image_spacing = 20 * scale  # space between images
     
     # Download and process images
     images = []
@@ -154,6 +163,11 @@ def create_page_with_images(s3_client, bucket, subject_id, img_filenames):
             if file_data:
                 try:
                     img = Image.open(BytesIO(file_data))
+                    
+                    # Apply EXIF orientation correction
+                    img = ImageOps.exif_transpose(img)
+                    
+                    # Convert to RGB if needed
                     if img.mode in ('RGBA', 'LA', 'P'):
                         background = Image.new('RGB', img.size, (255, 255, 255))
                         if img.mode == 'P':
@@ -170,45 +184,49 @@ def create_page_with_images(s3_client, bucket, subject_id, img_filenames):
         print(f"  No valid images for subject {subject_id}")
         return None
     
-    # Calculate dimensions for side-by-side layout
+    # Calculate dimensions for side-by-side layout (accounting for margins and spacing)
     num_images = len(images)
-    img_width = page_width // num_images
-    max_img_height = 600  # Leave space for subject_id
+    usable_width = page_width - (2 * margin)  # subtract left and right margins
+    total_spacing = image_spacing * (num_images - 1)  # space between images
+    img_width = (usable_width - total_spacing) // num_images
     
-    # Paste images side-by-side
-    x_offset = 0
-    for img in images:
-        # Scale image to fit allocated width while maintaining aspect ratio
-        scale = img_width / img.width
-        new_height = int(img.height * scale)
-        if new_height > max_img_height:
-            scale = max_img_height / img.height
-            new_height = max_img_height
-            new_width = int(img.width * scale)
-        else:
-            new_width = img_width
+    text_height = 500 * scale  # Space reserved for text
+    max_img_height = page_height - (2 * margin) - text_height
+    
+    # Paste images side-by-side, maintaining aspect ratio
+    x_offset = margin
+    for i, img in enumerate(images):
+        # Calculate scale to fit allocated width while maintaining aspect ratio
+        aspect_ratio = img.width / img.height
         
+        # Try fitting by width first
+        new_width = img_width
+        new_height = int(new_width / aspect_ratio)
+        
+        # If too tall, fit by height instead
+        if new_height > max_img_height:
+            new_height = max_img_height
+            new_width = int(new_height * aspect_ratio)
+        
+        # Resize maintaining aspect ratio
         img_resized = img.resize((new_width, new_height), Image.Resampling.LANCZOS)
-        page.paste(img_resized, (x_offset, 0))
-        x_offset += img_width
+        page.paste(img_resized, (x_offset, margin))
+        x_offset += img_width + image_spacing
     
-    # Add subject_id text below images
+    # Add subject_id text below images with much larger font
     draw = ImageDraw.Draw(page)
-    try:
-        font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 24)
-    except:
-        font = ImageFont.load_default()
-    
+    font = ImageFont.load_default(size=80)
+
     text = f"Subject ID: {subject_id}"
     bbox = draw.textbbox((0, 0), text, font=font)
     text_width = bbox[2] - bbox[0]
     text_x = (page_width - text_width) // 2
-    text_y = max_img_height + 20
+    text_y = margin + max_img_height + 30 * scale  # Position below images with spacing
     draw.text((text_x, text_y), text, fill=(0, 0, 0), font=font)
     
-    # Convert to PDF bytes
+    # Convert to PDF with high quality and appropriate DPI
     pdf_bytes = BytesIO()
-    page.save(pdf_bytes, format='PDF')
+    page.save(pdf_bytes, format='PDF', quality=95, resolution=72 * scale)
     pdf_bytes.seek(0)
     return pdf_bytes
 
