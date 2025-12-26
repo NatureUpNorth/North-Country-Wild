@@ -157,6 +157,7 @@ def create_page_with_images(s3_client, bucket, subject_id, img_filenames):
     
     # Download and process images
     images = []
+    filenames_used = []  # Track which filenames were successfully loaded
     for filename in img_filenames:
         if filename:
             file_data = download_file(s3_client, bucket, filename)
@@ -177,6 +178,7 @@ def create_page_with_images(s3_client, bucket, subject_id, img_filenames):
                     elif img.mode != 'RGB':
                         img = img.convert('RGB')
                     images.append(img)
+                    filenames_used.append(filename)
                 except Exception as e:
                     print(f"  Error loading {filename}: {e}")
     
@@ -190,12 +192,16 @@ def create_page_with_images(s3_client, bucket, subject_id, img_filenames):
     total_spacing = image_spacing * (num_images - 1)  # space between images
     img_width = (usable_width - total_spacing) // num_images
     
-    text_height = 150 * scale  # Space reserved for text
-    max_img_height = page_height - (2 * margin) - text_height
+    filename_text_height = 100 * scale  # Space for filename under each image
+    subject_text_height = 150 * scale  # Space reserved for subject ID text
+    max_img_height = page_height - (2 * margin) - filename_text_height - subject_text_height
     
     # Paste images side-by-side, maintaining aspect ratio
+    draw = ImageDraw.Draw(page)
+    filename_font = ImageFont.load_default(size=30)  # Reduced from 40
+    
     x_offset = margin
-    for i, img in enumerate(images):
+    for i, (img, filename) in enumerate(zip(images, filenames_used)):
         # Calculate scale to fit allocated width while maintaining aspect ratio
         aspect_ratio = img.width / img.height
         
@@ -211,18 +217,47 @@ def create_page_with_images(s3_client, bucket, subject_id, img_filenames):
         # Resize maintaining aspect ratio
         img_resized = img.resize((new_width, new_height), Image.Resampling.LANCZOS)
         page.paste(img_resized, (x_offset, margin))
+        
+        # Wrap filename to fit within image width
+        words = filename.split('/')
+        lines = []
+        current_line = ""
+        
+        for word in words:
+            test_line = current_line + ("/" if current_line else "") + word
+            bbox = draw.textbbox((0, 0), test_line, font=filename_font)
+            test_width = bbox[2] - bbox[0]
+            
+            if test_width <= img_width - (10 * scale):  # Leave small margin
+                current_line = test_line
+            else:
+                if current_line:
+                    lines.append(current_line)
+                current_line = word
+        
+        if current_line:
+            lines.append(current_line)
+        
+        # Draw each line centered under the image
+        filename_y = margin + max_img_height + 20 * scale
+        for line in lines:
+            bbox = draw.textbbox((0, 0), line, font=filename_font)
+            line_width = bbox[2] - bbox[0]
+            line_x = x_offset + (img_width - line_width) // 2
+            draw.text((line_x, filename_y), line, fill=(0, 0, 0), font=filename_font)
+            filename_y += 40 * scale  # Line spacing
+        
         x_offset += img_width + image_spacing
     
     # Add subject_id text below images with much larger font
-    draw = ImageDraw.Draw(page)
-    font = ImageFont.load_default(size=80)
+    subject_font = ImageFont.load_default(size=80)
 
     text = f"Subject ID: {subject_id}"
-    bbox = draw.textbbox((0, 0), text, font=font)
+    bbox = draw.textbbox((0, 0), text, font=subject_font)
     text_width = bbox[2] - bbox[0]
     text_x = (page_width - text_width) // 2
-    text_y = margin + max_img_height + 30 * scale  # Position below images with spacing
-    draw.text((text_x, text_y), text, fill=(0, 0, 0), font=font)
+    text_y = margin + max_img_height + filename_text_height + 30 * scale
+    draw.text((text_x, text_y), text, fill=(0, 0, 0), font=subject_font)
     
     # Convert to PDF with high quality and appropriate DPI
     pdf_bytes = BytesIO()
@@ -231,14 +266,23 @@ def create_page_with_images(s3_client, bucket, subject_id, img_filenames):
     return pdf_bytes
 
 
-def create_pdf_from_rows(s3_client, bucket, rows, output_path):
+def create_pdf_from_rows(s3_client, bucket, rows, storage_info, output_path):
     """Create PDF with one page per row showing 3 images and subject_id."""
     merger = PdfMerger()
     pages_processed = 0
     
     for row in rows:
         subject_id = row['subject_id']
-        img_filenames = [row['img1'], row['img2'], row['img3']]
+        # Filter to only include files in standard storage
+        img_filenames = [
+            img for img in [row['img1'], row['img2'], row['img3']]
+            if img and storage_info.get(img, {}).get('exists') 
+            and storage_info[img].get('storage_class') not in ['GLACIER', 'DEEP_ARCHIVE']
+        ]
+        
+        if not img_filenames:
+            print(f"Skipping subject {subject_id} - no files in standard storage")
+            continue
         
         print(f"Processing subject {subject_id}...")
         pdf_page = create_page_with_images(s3_client, bucket, subject_id, img_filenames)
@@ -332,7 +376,7 @@ def main():
             print(f"{len(glacier_files)} files in Glacier will be skipped.")
 
         print(f"\nCreating PDF from available files...")
-        success = create_pdf_from_rows(s3_client, args.bucket, rows, args.output)
+        success = create_pdf_from_rows(s3_client, args.bucket, rows, storage_info, args.output)
         
         if success:
             sys.exit(0)
