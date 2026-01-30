@@ -273,11 +273,12 @@ def create_pdf_from_rows(s3_client, bucket, rows, storage_info, output_path):
     
     for row in rows:
         subject_id = row['subject_id']
-        # Filter to only include files in standard storage
+        # Filter to include files in standard storage OR restored from Glacier
         img_filenames = [
             img for img in [row['img1'], row['img2'], row['img3']]
             if img and storage_info.get(img, {}).get('exists') 
-            and storage_info[img].get('storage_class') not in ['GLACIER', 'DEEP_ARCHIVE']
+            and (storage_info[img].get('storage_class') not in ['GLACIER', 'DEEP_ARCHIVE']
+                 or storage_info[img].get('is_restored'))
         ]
         
         if not img_filenames:
@@ -327,7 +328,7 @@ def main():
     print("\nChecking storage classes...")
     storage_info = {}
     glacier_files = []
-    standard_files = []
+    available_files = []  # Changed from standard_files
     missing_files = []
     
     for filename in all_filenames:
@@ -338,11 +339,13 @@ def main():
             missing_files.append(filename)
             print(f"  {filename}: NOT FOUND")
         elif info['storage_class'] in ['GLACIER', 'DEEP_ARCHIVE']:
-            glacier_files.append(filename)
-            status = "RESTORING" if info['is_restoring'] else "RESTORED" if info['is_restored'] else info['storage_class']
-            print(f"  {filename}: {status}")
+            if info['is_restored']:
+                available_files.append(filename)
+            else:
+                glacier_files.append(filename)
+                status = "RESTORING" if info['is_restoring'] else info['storage_class']
         else:
-            standard_files.append(filename)
+            available_files.append(filename)
             print(f"  {filename}: {info['storage_class']}")
 
     if missing_files:
@@ -369,9 +372,9 @@ def main():
         else:
             print("Restore cancelled.")
     
-    # Case 2: Some or all files are in standard storage
-    if standard_files:
-        print(f"\n{len(standard_files)} files available in standard storage.")
+    # Case 2: Some or all files are available (standard storage or restored)
+    if available_files:
+        print(f"\n{len(available_files)} files available for processing.")
         if glacier_files:
             print(f"{len(glacier_files)} files in Glacier will be skipped.")
 
@@ -383,7 +386,7 @@ def main():
         else:
             sys.exit(1)
     else:
-        print("\nNo files available in standard storage.")
+        print("\nNo files available for processing.")
         sys.exit(1)
 
 
