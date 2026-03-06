@@ -37,21 +37,28 @@ def upload_wav_files_to_s3(
     
     for deployment_dir in deployment_dirs:
         deployment_path = os.path.join(path_to_project_dir, deployment_dir)
-        files = glob.glob(f"{deployment_path}/*.[Ww][Aa][Vv]")
-        
-        for filepath in files:
-            filename = os.path.basename(filepath)
-            base_name = os.path.splitext(filename)[0]
-            destination_filename = f"{deployment_dir}_{base_name}.flac"
-            
-            if destination_filename in uploaded_files:
-                number_of_files_already_uploaded += 1
-                continue
+
+        sub_deployment_dirs = [
+            item for item in os.listdir(deployment_path)
+            if os.path.isdir(os.path.join(deployment_path, item))
+            ]
+
+        for sub_deployment_dir in sub_deployment_dirs:
+            sub_deployment_path = os.path.join(deployment_path, sub_deployment_dir)
+            files = glob.glob(f"{sub_deployment_path}/*.[Ww][Aa][Vv]")
+            for filepath in files:
+                filename = os.path.basename(filepath)
+                base_name = os.path.splitext(filename)[0]
+                destination_filename = f"{deployment_dir}_{base_name}.flac"
                 
-            all_files_to_upload.append(filepath)
-            destination_filenames.append(destination_filename)
-            
-        print(f"Found {len(files)} files in deployment {deployment_dir}")
+                if destination_filename in uploaded_files:
+                    number_of_files_already_uploaded += 1
+                    continue
+                    
+                all_files_to_upload.append(filepath)
+                destination_filenames.append(destination_filename)
+                
+            print(f"Found {len(files)} files in sub-deployment {sub_deployment_dir}")
 
     print(f"\n{number_of_files_already_uploaded} files already uploaded to s3.")
     print(f"Will upload {len(all_files_to_upload)} files to {bucket_name} s3 bucket.")
