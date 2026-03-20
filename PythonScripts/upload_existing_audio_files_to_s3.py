@@ -43,6 +43,23 @@ def upload_wav_files_to_s3(
             if os.path.isdir(os.path.join(deployment_path, item))
             ]
 
+        # Check for WAV files directly in the deployment directory
+        direct_files = glob.glob(f"{deployment_path}/*.[Ww][Aa][Vv]")
+        for filepath in direct_files:
+            filename = os.path.basename(filepath)
+            base_name = os.path.splitext(filename)[0]
+            destination_filename = f"{deployment_dir}_{base_name}.flac"
+
+            if destination_filename in uploaded_files:
+                number_of_files_already_uploaded += 1
+                continue
+
+            all_files_to_upload.append(filepath)
+            destination_filenames.append(destination_filename)
+
+        if direct_files:
+            print(f"Found {len(direct_files)} files directly in deployment dir {deployment_dir}")
+
         for sub_deployment_dir in sub_deployment_dirs:
             sub_deployment_path = os.path.join(deployment_path, sub_deployment_dir)
             files = glob.glob(f"{sub_deployment_path}/*.[Ww][Aa][Vv]")
@@ -50,14 +67,14 @@ def upload_wav_files_to_s3(
                 filename = os.path.basename(filepath)
                 base_name = os.path.splitext(filename)[0]
                 destination_filename = f"{deployment_dir}_{base_name}.flac"
-                
+
                 if destination_filename in uploaded_files:
                     number_of_files_already_uploaded += 1
                     continue
-                    
+
                 all_files_to_upload.append(filepath)
                 destination_filenames.append(destination_filename)
-                
+
             print(f"Found {len(files)} files in sub-deployment {sub_deployment_dir}")
 
     print(f"\n{number_of_files_already_uploaded} files already uploaded to s3.")
