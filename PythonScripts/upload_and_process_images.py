@@ -184,16 +184,20 @@ def change_file_size_and_copyright(
 def copy_raw_images_change_file_size_and_copyright(
     path_to_raw_images: str,
     path_to_processed_images: str,
-    camera_number: str,
-    sd_card_number: str,
     path_to_uploaded_file: str,
     bucket_name: str,
+    rename: bool = False,
+    camera_number: str = None,
+    sd_card_number: str = None,
 ) -> None:
-    # Make sure camera and sd numbers have leading zeros
-    # TO DO: Should add check here that there are no more than three digits
     extra_args = {"StorageClass": "DEEP_ARCHIVE"}
-    camera_number_with_leading_zeros = camera_number.zfill(3)
-    sd_card_number_with_leading_zeros = sd_card_number.zfill(3)
+
+    if rename:
+        if not camera_number or not sd_card_number:
+            print("--camera-number and --sd-card-number are required when --rename is set.")
+            exit()
+        camera_number_with_leading_zeros = camera_number.zfill(3)
+        sd_card_number_with_leading_zeros = sd_card_number.zfill(3)
 
     # Ask if files should be uploaded to s3
     response = input(f"Do you want to upload files to s3 files? (y/n): ").strip().lower()
@@ -213,29 +217,29 @@ def copy_raw_images_change_file_size_and_copyright(
                 if cleaned_line:  # Avoid adding empty strings
                     uploaded_files.append(cleaned_line)
 
-    # Copy and rename images from raw_images_path to processed_images_path
+    # Copy and optionally rename images from raw_images_path to processed_images_path
     files_uploaded = []
     for filename in os.listdir(path_to_raw_images):
         # Only process unhidden images
         if not filename.startswith("."):
             raw_filepath = os.path.join(path_to_raw_images, filename)
-            timestamp_code = get_timestamp_code_for_filename(raw_filepath)
-            filename_with_prefix = f"C{camera_number_with_leading_zeros}_SD{sd_card_number_with_leading_zeros}_{timestamp_code}_{filename}"
-            if filename != filename_with_prefix:
-                renamed_filename = filename_with_prefix
+            if rename:
+                timestamp_code = get_timestamp_code_for_filename(raw_filepath)
+                filename_with_prefix = f"C{camera_number_with_leading_zeros}_SD{sd_card_number_with_leading_zeros}_{timestamp_code}_{filename}"
+                dest_filename = filename_with_prefix
             else:
-                renamed_filename = filename
+                dest_filename = filename
             processed_filepath = os.path.join(
-                path_to_processed_images, renamed_filename
+                path_to_processed_images, dest_filename
             )
             print(f"copying {raw_filepath} to {processed_filepath}")
             shutil.copy(raw_filepath, processed_filepath)
 
-            if response == 'y' and renamed_filename not in uploaded_files:
+            if response == 'y' and dest_filename not in uploaded_files:
                 try:
-                    s3_client.upload_file(str(raw_filepath), bucket_name, renamed_filename, ExtraArgs=extra_args)
+                    s3_client.upload_file(str(raw_filepath), bucket_name, dest_filename, ExtraArgs=extra_args)
                     print("Upload successful!")
-                    files_uploaded.append(renamed_filename)
+                    files_uploaded.append(dest_filename)
                 except Exception as e:
                     print("Error uploading file:", e)
                     raise
@@ -379,16 +383,22 @@ def get_args():
         help="full path to where processed images will be placed",
     )
     copy_raw_image_file_size_and_copyright_parser.add_argument(
+        "--rename",
+        action="store_true",
+        default=False,
+        help="if set, rename files using the camera/SD prefix (C###_SD###_<timestamp>_<original>); requires --camera-number and --sd-card-number",
+    )
+    copy_raw_image_file_size_and_copyright_parser.add_argument(
         "--camera-number",
         type=str,
-        required=True,
-        help="camera number, as an integer, not exceeding three digits",
+        default=None,
+        help="camera number, as an integer, not exceeding three digits; required when --rename is set",
     )
     copy_raw_image_file_size_and_copyright_parser.add_argument(
         "--sd-card-number",
         type=str,
-        required=True,
-        help="sd card number, as an integer, not exceeding three digits",
+        default=None,
+        help="sd card number, as an integer, not exceeding three digits; required when --rename is set",
     )
     copy_raw_image_file_size_and_copyright_parser.add_argument(
         "--path-to-uploaded-file",
