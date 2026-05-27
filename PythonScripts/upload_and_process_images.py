@@ -184,7 +184,6 @@ def change_file_size_and_copyright(
 def copy_raw_images_change_file_size_and_copyright(
     path_to_raw_images: str,
     path_to_processed_images: str,
-    path_to_uploaded_file: str,
     bucket_name: str,
     rename: bool = False,
     camera_number: str = None,
@@ -200,22 +199,22 @@ def copy_raw_images_change_file_size_and_copyright(
         sd_card_number_with_leading_zeros = sd_card_number.zfill(3)
 
     # Ask if files should be uploaded to s3
-    response = input(f"Do you want to upload files to s3 files? (y/n): ").strip().lower()
+    response = input(f"Do you want to upload files to s3? (y/n): ").strip().lower()
     if response != 'y' and response != 'n':
         print("Invalid input. Exiting script.")
         exit()
 
     if response == 'y':
-        # Create a session using the specified profile
         session = boto3.Session(profile_name="default")
         s3_client = session.client("s3")
 
-        uploaded_files = []
-        with open(path_to_uploaded_file, 'r') as file:
-            for line in file:
-                cleaned_line = line.strip()
-                if cleaned_line:  # Avoid adding empty strings
-                    uploaded_files.append(cleaned_line)
+        print(f"Checking existing files in s3 bucket {bucket_name}...")
+        existing_s3_files = set()
+        paginator = s3_client.get_paginator('list_objects_v2')
+        for page in paginator.paginate(Bucket=bucket_name):
+            for obj in page.get('Contents', []):
+                existing_s3_files.add(obj['Key'])
+        print(f"Found {len(existing_s3_files)} existing files in bucket.")
 
     # Copy and optionally rename images from raw_images_path to processed_images_path
     files_uploaded = []
@@ -235,7 +234,7 @@ def copy_raw_images_change_file_size_and_copyright(
             print(f"copying {raw_filepath} to {processed_filepath}")
             shutil.copy(raw_filepath, processed_filepath)
 
-            if response == 'y' and dest_filename not in uploaded_files:
+            if response == 'y' and dest_filename not in existing_s3_files:
                 try:
                     s3_client.upload_file(str(raw_filepath), bucket_name, dest_filename, ExtraArgs=extra_args)
                     print("Upload successful!")
@@ -244,18 +243,8 @@ def copy_raw_images_change_file_size_and_copyright(
                     print("Error uploading file:", e)
                     raise
 
-    response2 = input(f"Do you want to overwrite uploaded files file? (y/n) If not, writes to uploaded_files.txt: ").strip().lower()
-
-    if response2 == 'y':
-        print("Overwriting uploaded files file.")
-        with open(path_to_uploaded_file, "a") as f:
-            for file in files_uploaded:
-                f.write(f"{file}\n")
-    else:
-        print("Writing new uploaded files file.")
-        with open("uploaded_files.txt", "w") as f:
-            for file in files_uploaded:
-                f.write(f"{file}\n")
+    if response == 'y':
+        print(f"\nSuccessfully uploaded {len(files_uploaded)} files.")
 
     change_file_size_and_copyright(path_to_processed_images)
 
@@ -266,7 +255,6 @@ def completely_process_images_from_sd_card(
     path_to_processed_images: str,
     camera_number: int,
     sd_card_number: int,
-    path_to_uploaded_file: str,
     bucket_name: str,
 ):
     extra_args = {"StorageClass": "DEEP_ARCHIVE"}
@@ -288,24 +276,24 @@ def completely_process_images_from_sd_card(
             raw_images_filepath = os.path.join(path_to_raw_images, filename_with_prefix)
             print(f"copying {sd_filepath} to {raw_images_filepath}")
             shutil.copy(sd_filepath, raw_images_filepath)
-    
+
     # Ask if files should be uploaded to s3
-    response = input(f"Do you want to upload files to s3 files? (y/n): ").strip().lower()
+    response = input(f"Do you want to upload files to s3? (y/n): ").strip().lower()
     if response != 'y' and response != 'n':
         print("Invalid input. Exiting script.")
         exit()
 
     if response == 'y':
-        # Create a session using the specified profile
         session = boto3.Session(profile_name="default")
         s3_client = session.client("s3")
 
-        uploaded_files = []
-        with open(path_to_uploaded_file, 'r') as file:
-            for line in file:
-                cleaned_line = line.strip()
-                if cleaned_line:  # Avoid adding empty strings
-                    uploaded_files.append(cleaned_line)
+        print(f"Checking existing files in s3 bucket {bucket_name}...")
+        existing_s3_files = set()
+        paginator = s3_client.get_paginator('list_objects_v2')
+        for page in paginator.paginate(Bucket=bucket_name):
+            for obj in page.get('Contents', []):
+                existing_s3_files.add(obj['Key'])
+        print(f"Found {len(existing_s3_files)} existing files in bucket.")
 
     # Copy and rename images from raw_images_path to processed_images_path
     files_uploaded = []
@@ -318,7 +306,7 @@ def completely_process_images_from_sd_card(
             )
             print(f"copying {raw_filepath} to {processed_filepath}")
             shutil.copy(raw_filepath, processed_filepath)
-            if response == 'y' and filename not in uploaded_files:
+            if response == 'y' and filename not in existing_s3_files:
                 try:
                     s3_client.upload_file(str(raw_filepath), bucket_name, filename, ExtraArgs=extra_args)
                     print("Upload successful!")
@@ -327,18 +315,8 @@ def completely_process_images_from_sd_card(
                     print("Error uploading file:", e)
                     raise
 
-    response2 = input(f"Do you want to overwrite uploaded files file? (y/n) If not, writes to uploaded_files.txt: ").strip().lower()
-
-    if response2 == 'y':
-        print("Overwriting uploaded files file.")
-        with open(path_to_uploaded_file, "a") as f:
-            for file in files_uploaded:
-                f.write(f"{file}\n")
-    else:
-        print("Writing new uploaded files file.")
-        with open("uploaded_files.txt", "w") as f:
-            for file in files_uploaded:
-                f.write(f"{file}\n")
+    if response == 'y':
+        print(f"\nSuccessfully uploaded {len(files_uploaded)} files.")
 
     change_file_size_and_copyright(path_to_processed_images)
 
@@ -401,12 +379,6 @@ def get_args():
         help="sd card number, as an integer, not exceeding three digits; required when --rename is set",
     )
     copy_raw_image_file_size_and_copyright_parser.add_argument(
-        "--path-to-uploaded-file",
-        type=str,
-        required=True,
-        help="full path to txt file that records what files have been uploaded",
-    )
-    copy_raw_image_file_size_and_copyright_parser.add_argument(
         "--bucket-name",
         type=str,
         required=True,
@@ -447,12 +419,6 @@ def get_args():
         type=int,
         required=True,
         help="sd card number, as an integer, not exceeding three digits",
-    )
-    from_sd_card_parser.add_argument(
-        "--path-to-uploaded-file",
-        type=str,
-        required=True,
-        help="full path to txt file that records what files have been uploaded",
     )
     from_sd_card_parser.add_argument(
         "--bucket-name",
