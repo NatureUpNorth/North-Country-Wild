@@ -89,7 +89,7 @@ ul.task-list li input[type="checkbox"] {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../documentation/Chapter-2.html">camera-trap-images.qmd</a></li><li class="breadcrumb-item"><a href="../documentation/Chapter-2.html"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Image Processing With Python Scripts</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../documentation/camera-trap-images.html">Part 1: Camera Trap Images</a></li><li class="breadcrumb-item"><a href="../documentation/Chapter-2.html"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Image Processing With Python Scripts</span></a></li></ol></nav>
         <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="" onclick="window.quartoOpenSearch();">
@@ -134,19 +134,25 @@ ul.task-list li input[type="checkbox"] {
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../documentation/Chapter-1.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Process Overview</span></span></a>
+  <a href="../documentation/workflow-overview.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Process Overview</span></a>
   </div>
 </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">
- <span class="menu-text">camera-trap-images.qmd</span></a>
+            <a href="../documentation/camera-trap-images.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Part 1: Camera Trap Images</span></a>
           <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
       <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../documentation/Chapter-1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Process Overview</span></span></a>
+  </div>
+</li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../documentation/Chapter-2.html" class="sidebar-item-text sidebar-link active">
@@ -181,8 +187,8 @@ ul.task-list li input[type="checkbox"] {
   </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true">
- <span class="menu-text">acoustic-recordings.qmd</span></a>
+            <a href="../documentation/acoustic-recordings.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Part 2: Acoustic Recordings</span></a>
           <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
@@ -225,7 +231,7 @@ ul.task-list li input[type="checkbox"] {
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../documentation/Chapter-2.html">camera-trap-images.qmd</a></li><li class="breadcrumb-item"><a href="../documentation/Chapter-2.html"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Image Processing With Python Scripts</span></a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../documentation/camera-trap-images.html">Part 1: Camera Trap Images</a></li><li class="breadcrumb-item"><a href="../documentation/Chapter-2.html"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Image Processing With Python Scripts</span></a></li></ol></nav>
 <div class="quarto-title">
 <h1 class="title"><span id="sec-chapter2" class="quarto-section-identifier"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Image Processing With Python Scripts</span></span></h1>
 </div>
@@ -259,8 +265,8 @@ Table&nbsp;2.1: Current list of python scripts
 </figcaption>
 <div aria-describedby="tbl-2.1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="cell-output-display">
-<div class="reactable html-widget html-fill-item" id="htmlwidget-06b83ba5207b89f1c973" style="width:auto;height:auto;"></div>
-<script type="application/json" data-for="htmlwidget-06b83ba5207b89f1c973">{"x":{"tag":{"name":"Reactable","attribs":{"data":{"script_name":["copy_select_files.py","database_helpers.py","google_sheets.py","rename_raw_files_and_upload_to_s3.py","run_config.py","sync_deployments_google_sheet.py","upload_and_process_images.py","upload_existing_files_to_s3.py","upload_from_manifest.py"],"script_purpose":["Audiomoth audio file processing","Relational database","Relational database","Prepare older files for copy to AWS s3","Uploading images to Zooniverse","Relational database","Main image workflows","Prepare older files for copy to AWS s3","Uploading images to Zooniverse"]},"columns":[{"id":"script_name","name":"Script name","type":"character"},{"id":"script_purpose","name":"Script purpose","type":"character"}],"highlight":true,"bordered":true,"striped":true,"dataKey":"3c71bbf928e14906333ed9e08d8b8369"},"children":[]},"class":"reactR_markup"},"evals":[],"jsHooks":[]}</script>
+<div class="reactable html-widget html-fill-item" id="htmlwidget-affb21c7848c465791f7" style="width:auto;height:auto;"></div>
+<script type="application/json" data-for="htmlwidget-affb21c7848c465791f7">{"x":{"tag":{"name":"Reactable","attribs":{"data":{"script_name":["copy_select_files.py","database_helpers.py","google_sheets.py","rename_raw_files_and_upload_to_s3.py","run_config.py","sync_deployments_google_sheet.py","upload_and_process_images.py","upload_existing_files_to_s3.py","upload_from_manifest.py"],"script_purpose":["Audiomoth audio file processing","Relational database","Relational database","Prepare older files for copy to AWS s3","Uploading images to Zooniverse","Relational database","Main image workflows","Prepare older files for copy to AWS s3","Uploading images to Zooniverse"]},"columns":[{"id":"script_name","name":"Script name","type":"character"},{"id":"script_purpose","name":"Script purpose","type":"character"}],"highlight":true,"bordered":true,"striped":true,"dataKey":"3c71bbf928e14906333ed9e08d8b8369"},"children":[]},"class":"reactR_markup"},"evals":[],"jsHooks":[]}</script>
 </div>
 </div>
 </figure>
@@ -742,7 +748,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <footer class="footer">
   <div class="nav-footer">
     <div class="nav-footer-left">
-<p>Copyright 2025, Erika L. Barthelmess</p>
+<p>Copyright 2026, Erika L. Barthelmess</p>
 </div>   
     <div class="nav-footer-center">
       &nbsp;

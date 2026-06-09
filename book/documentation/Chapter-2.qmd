@@ -19,7 +19,7 @@ library(here)
 library(reactable)
 library(reactablefmtr)
 
-df <- read_csv(here("documentation/data/script-names.csv")) #read in table of script names
+df <- read_csv(here("data/script-names.csv")) #read in table of script names
 
 table_1 <- reactable(
   df,

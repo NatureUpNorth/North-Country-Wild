@@ -2,26 +2,27 @@ project:
   type: book
   output-dir: docs
   
-
 book:
   title: "North-Country-Wild Documentation"
   author: "Erika Barthelmess"
+  cover-image: images/gus.jpg
   page-navigation: true
   page-footer: 
-    left: "Copyright 2025, Erika L. Barthelmess"
+    left: "Copyright 2026, Erika L. Barthelmess"
   chapters:
     - index.qmd
     - documentation/intro.qmd
     - documentation/who-we-are.qmd
-    - documentation/Chapter-1.qmd
-    - part: camera-trap-images.qmd
+    - documentation/workflow-overview.qmd
+    - part: documentation/camera-trap-images.qmd
       chapters:
+        - documentation/Chapter-1.qmd
         - documentation/Chapter-2.qmd
         - documentation/Chapter-3.qmd
         - documentation/Chapter-4.qmd
         - documentation/Chapter-5.qmd
         - documentation/Chapter-6.qmd
-    - part: acoustic-recordings.qmd
+    - part: documentation/acoustic-recordings.qmd
       chapters:
         - documentation/Chapter-7.qmd
     - documentation/references.qmd
