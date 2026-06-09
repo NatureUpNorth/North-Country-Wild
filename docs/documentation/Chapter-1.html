@@ -130,36 +130,64 @@ ul.task-list li input[type="checkbox"] {
  <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Process Overview</span></span></a>
   </div>
 </li>
-        <li class="sidebar-item">
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">
+ <span class="menu-text">camera-trap-images.qmd</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../documentation/Chapter-2.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Image Processing With Python Scripts</span></span></a>
   </div>
 </li>
-        <li class="sidebar-item">
+          <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../documentation/Chapter-3.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Upload and process images</span></span></a>
   </div>
 </li>
-        <li class="sidebar-item">
+          <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../documentation/Chapter-4.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Renaming raw files and uploading to AWS S3</span></span></a>
   </div>
 </li>
-        <li class="sidebar-item">
+          <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../documentation/Chapter-5.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Checking which camera deployments are on s3</span></span></a>
   </div>
 </li>
-        <li class="sidebar-item">
+          <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../documentation/Chapter-6.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Uploading existing files to AWS S3</span></span></a>
   </div>
 </li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true">
+ <span class="menu-text">acoustic-recordings.qmd</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../documentation/Chapter-7.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Chapter-7</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../documentation/references.html" class="sidebar-item-text sidebar-link">
@@ -215,22 +243,23 @@ ul.task-list li input[type="checkbox"] {
 <section id="introduction" class="level2" data-number="1.1">
 <h2 data-number="1.1" class="anchored" data-anchor-id="introduction"><span class="header-section-number">1.1</span> Introduction</h2>
 <p>So, you go out into the field and deploy a bunch of game cameras. Maybe you deploy passive acoustic recorders at the same time. Then what?! You will have a lot of data to manage.</p>
-<p>Consider this. A single game camera on a single deployment can collect thousands of images. If you deploy several cameras, you will very quickly start to amass tens to hundreds of thousands of images, or more!</p>
+<p>Consider this. A single game camera on a single deployment can collect thousands of images. If you deploy several cameras, you will very quickly start to amass tens to hundreds of thousands of images, or more! A single deployment of an acoustic recorder might garner 45 gb of data! Before you know it, you’ve collected TB of data, and are on your way to a data management nightmare!</p>
 <section id="considerations" class="level3" data-number="1.1.1">
 <h3 data-number="1.1.1" class="anchored" data-anchor-id="considerations"><span class="header-section-number">1.1.1</span> Considerations</h3>
 <p>You will need to consider many questions, such as:</p>
 <ol type="1">
 <li><p>Where will you store all of these image files?</p></li>
 <li><p>Will you back them up? Where? How?</p></li>
-<li><p>How will you organize all the images to that you can:</p></li>
+<li><p>How will you organize all the images and audio files so that you can:</p></li>
 </ol>
 <ul>
-<li>easily find images from any particular deployment?</li>
-<li>avoid confusing images between deployments?</li>
+<li>easily find files from any particular deployment?</li>
+<li>avoid confusing files between deployments?</li>
 <li>prepare images for classification?</li>
+<li>back up the files to the cloud?</li>
 </ul>
 <ol start="4" type="1">
-<li>How will you classify the images? What steps need to happen to prepare images for classification?</li>
+<li>How will you classify the image files? What steps need to happen to prepare images for classification?</li>
 </ol>
 <p>Try to answer these questions early in your project development - doing so will save you headaches further down the road!</p>
 <div class="callout callout-style-default callout-tip callout-titled">
@@ -250,6 +279,8 @@ Plan ahead of time!
 </section>
 <section id="our-workflow" class="level2" data-number="1.2">
 <h2 data-number="1.2" class="anchored" data-anchor-id="our-workflow"><span class="header-section-number">1.2</span> Our workflow</h2>
+<p>Our workflow for dealing with image data is different for our workflow for dealing with acoustic data, because there are extra steps required to prepare the images for upload to the <a href="https://www.zooniverse.org/projects/barthelmess/north-country-wild">Zooniverse</a>.</p>
+<p>This manual is broken into two sections, one for camera trap images and the other for audio files from passive acoustic recorders.</p>
 <p>The general workflow we have developed for processing and logging image data from game cameras is depicted in <a href="#fig-1.1" class="quarto-xref">Figure&nbsp;<span>1.1</span></a>.</p>
 <div id="fig-1.1" class="quarto-figure quarto-figure-center quarto-float anchored" data-fig-align="center" alt="Image processing workflow">
 <figure class="quarto-float quarto-float-fig figure">
@@ -263,7 +294,7 @@ Figure&nbsp;1.1: General workflow for processing and logging game camera images
 </div>
 <p>We use an external hard drive attached to a computer in the lab as the location where we copy all images from our game camera SD cards. We copy raw images from the SD cards, renaming the files as they are copied so that each image file name informs us of the camera and SD card the image is associated with as well as the timestamp for the image.</p>
 <p>To back up our images (in case of hard drive failure - it happens!), we also copy the renamed, raw images to Amazon Web Services S3 cloud storage.</p>
-<p>Our current workflow (Fall 2025) involves using the Zooniverse platform for image classification by volunteers (rather than using machine learning to ID animals in images). As a result, we also have to process all of our images by downsizing them for upload to the Zooniverse. As we downsize them, we also add copyright information the image EXIF data and copy the images to a “Processed” folder with the same directory structure as the “Raw” folder.</p>
+<p>Our current workflow (Summer 2026) involves using the Zooniverse platform for image classification by volunteers (rather than using machine learning to ID animals in images). As a result, we also have to process all of our images by downsizing them for upload to the Zooniverse. As we downsize them, we also add copyright information the image EXIF data and copy the images to a “Processed” folder with the same directory structure as the “Raw” folder.</p>
 </section>
 <section id="hard-drive-organization" class="level2" data-number="1.3">
 <h2 data-number="1.3" class="anchored" data-anchor-id="hard-drive-organization"><span class="header-section-number">1.3</span> Hard Drive Organization</h2>

@@ -37,11 +37,11 @@ You can see that some of the scripts in the repository are used for working with
 
 The historical process by which we created these scripts reflects different stages of the development of this repository.
 
--   First, we wrote scripts to process all new, incoming game camera images to improve our workflow.
+- First, we wrote scripts to process all new, incoming game camera images to improve our workflow.
 
--   Next, we wrote scripts to allow backup of images to AWS S3.
+- Next, we wrote scripts to allow backup of images to AWS S3.
 
--   Our most recent development has been to write scripts that let us go back to already existing folders and images that were created on our hard drive early in our process, before we had certain conventions in place, to allow us to rename and back up those older images.
+- Our most recent development has been to write scripts that let us go back to already existing folders and images that were created on our hard drive early in our process, before we had certain conventions in place, to allow us to rename and back up those older images.
 
 ::: callout-tip
 ## Modify for your use!
@@ -55,9 +55,9 @@ We are providing access to this repository in case others find our work helpful 
 
 Assuming that we deploy a game camera now that we have all of our processes in place, and we bring a SD card back to the lab ready to process, we can completely process all of those images, copy them to S3, and resize them, etc.
 
--   The script `upload_and_process_images.py` is the main script for processing newly collected images.
+- The script `upload_and_process_images.py` is the main script for processing newly collected images.
 
--   Further explanation on how to use this script will be provided in @sec-Chapter3.
+- Further explanation on how to use this script will be provided in @sec-Chapter3.
 
 ### Working with older, existing game camera images
 
@@ -65,11 +65,11 @@ In our lab, because we started working with game camera images before we shaped 
 
 For example, until recently, we did not rename images when the were copied from the SD card to the appropriate folder in the "Raw" directory. As a result, within a folder for any particular deployment, all of the Raw images were named IMG_001.JPG, IMG_002.JPG, etc. As a result, they could be easily confused between camera deployments (since every camera begins numbering on every deployment with IMG_001.JPG...).
 
--   The script called `rename_raw_files_and_upload_to_s3.py` enables us to go back to old folders in the "Raw" directories and rename those files.
--   Further information on how to use this script will be covered in @sec-Chapter4.
--   Information on how to check which deployments have been uploaded to s3 is covered in @sec-Chapter5.
+- The script called `rename_raw_files_and_upload_to_s3.py` enables us to go back to old folders in the "Raw" directories and rename those files.
+- Further information on how to use this script will be covered in @sec-Chapter4.
+- Information on how to check which deployments have been uploaded to s3 is covered in @sec-Chapter5.
 
 Likewise, our process for pushing copies of our Raw files to AWS S3 is fairly recent. Thus, if we want to go back and move older files to AWS S3, we can do so.
 
--   The script called `upload_existing_files_to_s3.py` allows us to go back and move images that have not yet been copied up to AWS S3.
--   Further information on how to use this script will be covered in @sec-Chapter6.
+- The script called `upload_existing_files_to_s3.py` allows us to go back and move images that have not yet been copied up to AWS S3.
+- Further information on how to use this script will be covered in @sec-Chapter6.

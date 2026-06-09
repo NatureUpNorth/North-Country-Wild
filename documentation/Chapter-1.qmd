@@ -4,7 +4,7 @@
 
 So, you go out into the field and deploy a bunch of game cameras. Maybe you deploy passive acoustic recorders at the same time. Then what?! You will have a lot of data to manage.
 
-Consider this. A single game camera on a single deployment can collect thousands of images. If you deploy several cameras, you will very quickly start to amass tens to hundreds of thousands of images, or more!
+Consider this. A single game camera on a single deployment can collect thousands of images. If you deploy several cameras, you will very quickly start to amass tens to hundreds of thousands of images, or more! A single deployment of an acoustic recorder might garner 45 gb of data! Before you know it, you've collected TB of data, and are on your way to a data management nightmare!
 
 ### Considerations
 
@@ -14,13 +14,14 @@ You will need to consider many questions, such as:
 
 2.  Will you back them up? Where? How?
 
-3.  How will you organize all the images to that you can:
+3.  How will you organize all the images and audio files so that you can:
 
--   easily find images from any particular deployment?
--   avoid confusing images between deployments?
--   prepare images for classification?
+- easily find files from any particular deployment?
+- avoid confusing files between deployments?
+- prepare images for classification?
+- back up the files to the cloud?
 
-4.  How will you classify the images? What steps need to happen to prepare images for classification?
+4.  How will you classify the image files? What steps need to happen to prepare images for classification?
 
 Try to answer these questions early in your project development - doing so will save you headaches further down the road!
 
@@ -31,6 +32,9 @@ Plan for how you will manage all of your game camera images early in the develop
 :::
 
 ## Our workflow
+Our workflow for dealing with image data is different for our workflow for dealing with acoustic data, because there are extra steps required to prepare the images for upload to the [Zooniverse](https://www.zooniverse.org/projects/barthelmess/north-country-wild). 
+
+This manual is broken into two sections, one for camera trap images and the other for audio files from passive acoustic recorders. 
 
 The general workflow we have developed for processing and logging image data from game cameras is depicted in @fig-1.1.
 
@@ -40,7 +44,7 @@ We use an external hard drive attached to a computer in the lab as the location 
 
 To back up our images (in case of hard drive failure - it happens!), we also copy the renamed, raw images to Amazon Web Services S3 cloud storage.
 
-Our current workflow (Fall 2025) involves using the Zooniverse platform for image classification by volunteers (rather than using machine learning to ID animals in images). As a result, we also have to process all of our images by downsizing them for upload to the Zooniverse. As we downsize them, we also add copyright information the image EXIF data and copy the images to a "Processed" folder with the same directory structure as the "Raw" folder.
+Our current workflow (Summer 2026) involves using the Zooniverse platform for image classification by volunteers (rather than using machine learning to ID animals in images). As a result, we also have to process all of our images by downsizing them for upload to the Zooniverse. As we downsize them, we also add copyright information the image EXIF data and copy the images to a "Processed" folder with the same directory structure as the "Raw" folder.
 
 ## Hard Drive Organization
 
